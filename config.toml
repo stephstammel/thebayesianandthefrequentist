@@ -1,0 +1,51 @@
+baseurl = "https://thebayesianandthefrequentist.com/"
+languageCode = "en-us"
+copyright = "&copy; 2019 Steph de Silva & John Ormerod"
+title = "The Bayesian and the Frequentist"
+theme = "hugo-lithium"
+googleAnalytics = ""
+disqusShortname = ""
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+enableEmoji = true
+footnotereturnlinkcontents = "<sup>^</sup>"
+
+[permalinks]
+    post = "/:year/:month/:day/:slug/"
+
+[[menu.main]]
+    name = "About"
+    url = "/about/"
+[[menu.main]]
+    name = "GitHub"
+    url = "https://github.com/stephdesilva/thebayesianandthefrequentist"
+[[menu.main]]
+    name = "Twitter"
+    url = "https://twitter.com/thebayesianand1"
+
+[params]
+  name = "Steph de Silva & John Ormerod"
+  description = "A Bayesian and Frequentist walk into bar..."
+  role = "John: Associate Professor, Statistics University of Sydney; Steph: data scientist at large in corporate Australia"
+  email = "steph@rex-analytics.com"
+  twitter = "thebayesianandthefrequentist"
+  github = "github.com/stephdesilva/thebayesianandthefrequentist"
+
+
+    # options for highlight.js (version, additional languages, and theme)
+    highlightjsVersion = "9.12.0"
+    highlightjsCDN = "//cdnjs.cloudflare.com/ajax/libs"
+    highlightjsLang = ["r", "yaml"]
+    highlightjsTheme = "github"
+
+    MathJaxCDN = "//cdnjs.cloudflare.com/ajax/libs"
+    MathJaxVersion = "2.7.5"
+
+    # path to the favicon, under "static"
+    favicon = "favicon.ico"
+
+    [params.logo]
+    url = "logo.png"
+    width = 50
+    height = 50
+    alt = "Logo"
+
