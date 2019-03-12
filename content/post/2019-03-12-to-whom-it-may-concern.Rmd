@@ -1,0 +1,46 @@
+---
+title: To whom it may concern
+author: Steph and John
+date: '2019-03-12'
+slug: to-whom-it-may-concern
+categories:
+  - Bayes
+  - Frequentist
+tags:
+  - Why
+---
+
+To whom it may concern,
+
+Hi! We're The Bayesian and The Frequentist. An academic statistician and a corporate data scientist. Two very different people doing two very different jobs with very different opinions on lots of things. We'll try to play nice.
+
+We've started this blog because there's something we want to add to the conversation about data science. We'd like to add to our readers' understanding of what's going on under the hood of their statistical and data science practices∂.
+
+    * Why do we use the models we do?
+    * Why do we use the methods we do?
+    * Does the central limit theorem always work? If not, when does it break? (Because that could be a problem!)
+    * When would we bother with Bayes in practice?
+    * Do we ever actually make choices about our models and methods, or do we just default to what we know?
+    * What's the cost of default over decision- practically and philosophically?
+    
+This isn't to say that there aren't already some extraordinary thinkers working on issues like this. There's Dani Navarro with work like [Between the devil and the deep blue sea](https://link.springer.com/article/10.1007/s42113-018-0019-z) and there's people like [Mike Betancourt](https://betanalpha.github.io/writing/) and a whole bunch of others adding to this conversation. We highly recommend their work!
+
+But if you don't have an extensive education in statistics or mathematics, dipping your toe into these waters can be very overwhelming. The purpose of this blog is to encourage you to engage with these issues, regardless of your background.
+
+You are the authority on the issues you face in your own work and you have the capacity to make the choices that will make it the best it can be. 
+
+_We'd like to help with that._
+
+
+  
+    
+      
+      
+
+
+
+__A little bit about us:__
+
+John is an associate professor of statistics at the Univesity of Sydney. Steph is a data scientist working for a mangement consulting firm. We face really different problems in our work and we have really different approaches to those problems 
+
+One thing we agree on is that people don't need a Ph.D. in statistics to engage with deep statistical concepts meaningfully.

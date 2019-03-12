@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>The Bayesian and the Frequentist</title>
-    <link>/</link>
-    <description>Recent content on The Bayesian and the Frequentist</description>
+    <title>Bayes on The Bayesian and the Frequentist</title>
+    <link>/categories/bayes/</link>
+    <description>Recent content in Bayes on The Bayesian and the Frequentist</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2019 Steph de Silva &amp; John Ormerod</copyright>
     <lastBuildDate>Tue, 12 Mar 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/categories/bayes/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -21,15 +21,6 @@
       <description>To whom it may concern,
 Hi! We’re The Bayesian and The Frequentist. An academic statistician and a corporate data scientist. Two very different people doing two very different jobs with very different opinions on lots of things. We’ll try to play nice.
 We’ve started this blog because there’s something we want to add to the conversation about data science. We’d like to add to our readers’ understanding of what’s going on under the hood of their statistical and data science practices∂.</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>/about/</link>
-      <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
-      
-      <guid>/about/</guid>
-      <description>This is a &amp;ldquo;hello world&amp;rdquo; example website for the blogdown package. The theme was forked from @jrutheiser/hugo-lithium-theme and modified by Yihui Xie.</description>
     </item>
     
   </channel>
