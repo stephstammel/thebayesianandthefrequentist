@@ -12,9 +12,8 @@ categories:
 Hi, we're _John_ and _Steph_ and together we form "The Bayesian and The Frequentist". 
 
 
- 
-<img src="John.jpg" style="width:25%"><img src="Steph.jpg" style="width:25%">
- 
+![John's headshot](/post/2019-03-12-to-whom-it-may-concern_files/John.jpg)
+![Steph's headshot](/post/2019-03-12-to-whom-it-may-concern_files/Steph.jpg)
 
 &nbsp;
 
