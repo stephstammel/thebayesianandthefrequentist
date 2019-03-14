@@ -1,0 +1,88 @@
+---
+title: "To whom it may concern"
+author: "Steph and John"
+date: '2019-03-12'
+slug: to-whom-it-may-concern
+tags: Why
+categories:
+- Bayes
+- Frequentist
+---
+
+Hi, we're _John_ and _Steph_ and together we form "The Bayesian and The Frequentist". 
+
+
+ 
+<img src="John.jpg" style="width:25%"><img src="Steph.jpg" style="width:25%">
+ 
+
+&nbsp;
+
+As an academic statistician and a corporate data scientist we are two very different people 
+doing two very different jobs with very different opinions on lots of things, but try our 
+best to play nice.
+
+We've started this blog because there's something we want to add to the conversation about 
+data science. We'd like to add to our readers' understanding of what's going on under the 
+hood of their statistical and data science practices in an easy to understand manner. In
+particular we want to discuss
+
+    * Why do we use the models we do?
+    * Why do we use the methods we do?
+    * Does the central limit theorem always work? 
+      If not, when does it break? (Because that could be a problem!)
+    * When would we bother with Bayes in practice?
+    * When do p-values and Bayes factors break?
+    * Do we ever actually make choices about our models and methods, 
+      or do we just default to what we know?
+    * What's the cost of default over decision- practically and philosophically?
+
+<!--
+We will also discss the latest R packages, occassional software engineering
+issues, and report/paper writing. 
+-->
+  
+This isn't to say that there aren't already some extraordinary thinkers working on 
+issues like this. There's Dani Navarro with work like 
+[Between the devil and the deep blue sea](https://link.springer.com/article/10.1007/s42113-018-0019-z),
+there's people like [Mike Betancourt](https://betanalpha.github.io/writing/),
+[Berna Zerdeve](https://www.uidaho.edu/cbe/our-people/business-faculty/berna-devezer),
+and [Deboarah Mayo](https://errorstatistics.com/) and a whole bunch of others adding to this 
+conversation. We highly recommend their work!
+
+One of our goals is to make some of this work accessible to a curious but non-academic audience. 
+If you don't have an extensive education in statistics or mathematics, dipping your toe into 
+these waters can be very overwhelming. The purpose of this blog is to encourage you to engage 
+with these issues, regardless of your background.
+
+You are the authority on the issues you face in your own work and you have the capacity to make the 
+choices that will make it the best it can be. 
+
+_We'd like to empower you to make informed choices._
+
+&nbsp;
+
+
+  
+&nbsp;
+      
+      
+
+
+
+__A little bit about us:__
+
+John is an Associate Professor of statistics at the Univesity of Sydney. 
+Steph is a data scientist working for a mangement consulting firm. 
+We face really different problems in our work and we have really different 
+approaches to those problems .
+
+One thing we agree on is that people don't need a Ph.D. in statistics to 
+engage with deep statistical concepts meaningfully.
+ 
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
