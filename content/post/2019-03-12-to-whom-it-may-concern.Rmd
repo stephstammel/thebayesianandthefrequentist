@@ -12,8 +12,7 @@ categories:
 Hi, we're _John_ and _Steph_ and together we form "The Bayesian and The Frequentist". 
 
 
-![John's headshot](/post/2019-03-12-to-whom-it-may-concern_files/John.jpg)
-![Steph's headshot](/post/2019-03-12-to-whom-it-may-concern_files/Steph.jpg)
+![John's headshot](/post/2019-03-12-to-whom-it-may-concern_files/John.jpg) ![In real life Steph is 40% taller than John](/post/2019-03-12-to-whom-it-may-concern_files/Steph.jpg)
 
 &nbsp;
 
