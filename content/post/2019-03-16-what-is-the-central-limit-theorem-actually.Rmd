@@ -1,0 +1,12 @@
+---
+title: What is the Central Limit Theorem, actually?
+author: Steph and John
+date: '2019-03-16'
+slug: what-is-the-central-limit-theorem-actually
+categories:
+  - Frequentist
+tags:
+  - Why
+---
+
+This post to tell people what the CLT is. And is not.
