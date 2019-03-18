@@ -1,5 +1,5 @@
 ---
-title: "Let's break some p-values"
+title: "Let's break some p-values - Part 1"
 author: "Steph and John"
 date: "`r Sys.Date()`"
 slug: p-values
@@ -12,21 +12,46 @@ output:
   tufte::tufte_handout:
     citation_package: natbib
     latex_engine: xelatex
+    keep_tex: true
   tufte::tufte_book:
     citation_package: natbib
     latex_engine: xelatex
-bibliography: skeleton.bib
+    keep_tex: true
+bibliography: BAF.bib
 link-citations: yes
 ---
 
 ```{r setup, include=FALSE}
-library(tufte)
+# Suppress warnings for all the packages here
+# Then all of the warnings wont come up when we
+# use the library(X) commands in R scripts below.
+suppressPackageStartupMessages(library(tufte))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(stargazer))
+suppressPackageStartupMessages(library(dagitty))
+suppressPackageStartupMessages(library(ggdag))
+suppressPackageStartupMessages(library(tadaatoolbox))
+
 # invalidate cache when the tufte version changes
 knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
 options(htmltools.dir.version = FALSE)
+
+# Set the seed for reproducibility
+set.seed(1)
 ```
 
-
+<!--
+```{r, load_refs, echo=FALSE, cache=FALSE}
+library(RefManageR)
+BibOptions(check.entries = FALSE, 
+           bib.style = "authoryear", 
+           cite.style = 'authoryear', 
+           style = "markdown",
+           hyperlink = FALSE, 
+           dashed = FALSE)
+myBib <- ReadBib("BAF.bib", check = FALSE)
+```
+-->
 
 # Intro banter
 
@@ -40,46 +65,80 @@ testing on principal.
 
 __Steph__: There is a lot of talk about reproducibility, replicability, robustness,
 and practices that lead to finding "truth" in the context of scientific practice. 
-These issues also com
+These issues also complicated.
 It might be a good place to start.
 
-__John__: So what do you think
+__John__: Year it started a few years ago people started looking into whether
+particular bits of medical research were reproducible. In particular 
+[@Ioannidis2005] tried to reproduce
+	49  famous medical publications from
+	1990-2003 resulting from randomized trials; 45 claimed successful
+	intervention.
+ 
+		* 7 (16\%) were contradicted.
+		* 7 others (16\%) found effects sizes were exaggerated
+		* 20 (44\%) were replicated.
+		* 11 (24\%) remained largely unchallenged.
+		
+__John__: There were a number of other papers too, like [@PashlerWagenmakers2012].
+So hypothesis testing is a still much discussed tool.
+But, maybe we can talk about these issues a bit later.
+	
+ 
+__Steph__: You said you had an example where results where (1) reproducible,
+(2) produced reasonable predictions, and (3) had nothing to do with truth.
+Did you want to talk us through it?
 
 __John__: So a few years ago my wife was rear-ended while driving and the
 car was written off so we needed to buy a new car. While we were looking to
 get a new car my sister in law asked is (as a joke) "Are you getting a red car?
-I heard their fast!"
+I heard their fast!" Look a red car!
+
+ 
+<img src="lamborghini_huracan_slideshow_lead.jpg" style="width:90%">
+ 
+
+__John__: Now I don't know much about cars at all. So if I went into a
+car yard I wouldn't want to buy one that looked like this.
+
+__Steph__: Why not?
+
+__John__: Because fast cars are also expensive cars! But that is not the point.
+I wanted to look at a bunch of ways to meddle with hypothesis tests in order
+to get them to break and my first example related to by sister in law's joke.
 
 # Red cars are faster!
 
 Let us imagine a simplified world. 
 Suppose that
 
-* There are only two car colours:
+* There are only two car colours - 
 <span style="color:red">__red__</span> cars and 
-<span style="color:blue">__blue__</span> cars.
+<span style="color:blue">__blue__</span> cars 
+encoded into the variable $\mbox{colour}_i$;
 
 * Cars can eiher be <span style="color:purple">__sports__</span> cars and 
-<span style="color:green">__normal__</span> cars.
+<span style="color:green">__normal__</span> cars;
+encoded into the variable $\mbox{type}_i$;
 
 * <span style="color:purple">__Sports__</span> cars
 are more likely to be <span style="color:red">__red__</span>
 than <span style="color:green">__normal__</span> cars
 
-
 * <span style="color:purple">__sports__</span> cares
 are generally faster than 
 <span style="color:green">__normal__</span> cars.
 
-# Directed acyclic graphs
-
-Directed acyclic graphs can be used to capture the relationships between variables.
-In terms of a directed acyclic graph we have
+The relationship between the three variables can
+be visualized by a directed acyclic graphs.
+There are three nodes type, colour and speed. The car type "causes"
+the car colour and the car speed so there is a directed
+edge from type to colour and type to speed. We can visualize this
+using the `dagitty` and `ggdag` packages [@R-dagitty,@R-ggdag].
 
 ```{r fig-margin1, fig.margin = TRUE, fig.cap = "DAG for speed, colour and type", fig.width=3.5, fig.height=3.5}
-# Using Malcolm Barrett's ggdag package
-suppressPackageStartupMessages(library(dagitty))
-suppressPackageStartupMessages(library(ggdag))
+library(dagitty)
+library(ggdag)
 
 dagified <- dagify(colour ~ type,
                    speed ~ type,
@@ -88,12 +147,7 @@ dagified <- dagify(colour ~ type,
 ggdag(dagified, layout = "circle")
 ```
 
-There are three nodes type, colour and speed. The car type "causes"
-the car colour and the car speed so there are arrows from type to
-colour and speed.
-
 # Simulating data
-
 
 To put some probability structure on this let
 sports cars and normal cars be equally likely
@@ -103,70 +157,81 @@ $$
 {\mathbb P}( \mbox{normal car}  ) = 0.5 \\
 \end{array}
 $$
-and
+and specify conditional probabilities reflecting that sports
+cars are more likely to be red than normal cars via
 $$
 \begin{array}{rl}
-{\mathbb P}( \mbox{red car} | \mbox{sports car}  ) = 0.8 \\
-{\mathbb P}( \mbox{blue car} | \mbox{sports car}  ) = 0.2 \\
-{\mathbb P}( \mbox{red car} | \mbox{normal car}  ) = 0.2 \\
-{\mathbb P}( \mbox{blue car} | \mbox{normal car}  ) = 0.8 \\
+{\mathbb P}( \mbox{red car} | \mbox{sports car}  ) & = 0.8, \\
+{\mathbb P}( \mbox{blue car} | \mbox{sports car}  ) & = 0.2, \\
+{\mathbb P}( \mbox{red car} | \mbox{normal car}  ) & = 0.2, \qquad \mbox{and} \\
+{\mathbb P}( \mbox{blue car} | \mbox{normal car}  ) & = 0.8. \\
 \end{array}
 $$
-Finally, suppose that the speed of the car is
+Finally, suppose that cars travel on average $\beta_0 = 100$km/h,
+with sports cars travelling on average $\beta_1 = 50km/h$ higher, 
+with a common standard deviation of $\sigma=50$km/h. Then we could 
+simulate speed of the $i$th sample via
 $$
-\mbox{speed} = 100 + 50 \times {\mathbb I}(\mbox{sports car}) + N(0,50^2)
+\begin{array}{rl}
+\mbox{speed}_i 
+&  = \beta_0 + \beta_1 \times {\mathbb I}(\mbox{type}_i=\mbox{sports}) + \varepsilon_i  
+\\
+&  = 100 + 50 \times {\mathbb I}(\mbox{type}_i=\mbox{sports}) + \varepsilon_i 
+\end{array}
 $$
+where independently $\varepsilon_i \sim N(0,50^2)$.
 
-Lets simulate some data that captures this scenario.
 ```{marginfigure}
-__Steph__: I think we might want some side banter.
+__Steph__: So you have set up a situation where the speed of the car has 
+only is related to the colour of the car through a correlation between
+red cars and sports cars.
 
-__John__: What a wonderful idea Steph! I think and equation might be nice.
-$$
-1 + 1 = 2
-$$
+__John__: Exactly, and this is going to be relevant later.
 ```
 
-Let's simulate some data using  [@R-base]
+Let's simulate some data that captures this scenario using R [@R-base]
 
 ```{r}
+# Specify true values
 prob_sport <- 0.5
 prob_red_given_sport  <- 0.8
 prob_red_given_normal <- 0.2
+beta0  <- 100
+beta1  <- 50
+sd_Val <- 50
+n_cars <- 50
 
-mu_sport  <- 150
-mu_normal <- 100
-sd <- 50
+# Simulate car type
+type_ind <- rbinom(n_cars,1,prob_sport)
 
-n <- 100
-type   <- rep(NA,n)
-type_ind <- rbinom(n,1,prob_sport)
-type[type_ind==1] <- "sport"
-type[type_ind==0] <- "normal"
-type <- as.factor(type)
+# Calculate colour probs
+prob_colour <- ifelse(type_ind,prob_red_given_sport,prob_red_given_normal)
 
-nSport <- sum(type=="sport")
-nNormal <- sum(type=="normal")
+# Simulate car colours
+colour_ind <- rbinom(n_cars,1,prob_colour)
 
-colour_ind <- rep(NA,n)
-colour_ind[type=="sport"]  <- rbinom(nSport,1,prob_red_given_sport)
-colour_ind[type=="normal"] <- rbinom(nNormal,1,prob_red_given_normal)
+# Simulate car speeds
+speed <- beta0 + beta1*(type_ind==1) + rnorm(n_cars,sd=sd_Val)
 
-colour <- rep(NA,n)
-colour[colour_ind==1] <- "red"
-colour[colour_ind==0] <- "blue"
-colour <- factor(colour,levels=c("red","blue"))
-
-speed <-  mu_normal + (mu_sport - mu_normal)*(type=="sport") + rnorm(n,sd=50)
-
-suppressPackageStartupMessages(library(tidyverse))
-
-tib <- tibble(type=type,
-              colour=colour,
-              speed=speed)
+# Convert to tibble and make categories readible
+tib <- tibble(colour_ind,
+              speed) %>% 
+  mutate(colour=as.factor(ifelse(colour_ind==0,"blue","red")))
 ```
 
-So if we plot a boxplot for speed against colour we get.
+
+```{marginfigure}
+__Steph__: Wait, wait, wait! You didn't record the car type.
+
+__John__: So we are going to break this hypothesis test by dropping
+an important variable.
+```
+
+# Boxplots and Two sample t-tests
+
+Now that we have silulated some data we can some boxplots and perform
+some statistical tests. If we plot a boxplot for speed against colour 
+we get.
 
 ```{r fig-margin2, fig.margin = TRUE, fig.cap = "speed vs colour", fig.width=3.5, fig.height=3.5}
 p <- ggplot(tib, aes(x=colour, y=speed, fill=colour)) + 
@@ -175,45 +240,64 @@ p <- ggplot(tib, aes(x=colour, y=speed, fill=colour)) +
 p
 ```
 
-# Boxplots and Two sample t-tests
-
-So if we plot a boxplot speed against type we get.
-
-```{r fig-margin3, fig.margin = TRUE, fig.cap = "speed vs type", fig.width=3.5, fig.height=3.5}
-p <- ggplot(tib, aes(x=type, y=speed,fill=type)) + 
-  geom_boxplot() +
-  theme_bw()
-p
-```
-
+ 
 So if we wanted to see if red cars were significantly faster than
-blue cars we could perform a $t$ test.
+blue cars we could perform a $t$ test [@R-tadaatoolbox].
+
 ```{r}
-# We use Lukas Burk, Tobias Anton, Daniel Lüdecke, and Gesa Graf's 
-#tadaatoolbox package to nicely summarise the results of a two sample t-test.
 library(tadaatoolbox)
-
-# Two sample t-test grouped using colour
-tadaa_t.test(data = tib, response = speed, group = colour, print = "markdown")
+tadaa_t.test(data=tib, response=speed, group=colour, print="markdown")
 ```
 
-We could also do one where we group on type.
-```{r}
-# Two sample t-test grouped using type.
-tadaa_t.test(data = tib, response = speed, group = type, print = "markdown")
-```
-
-In both cases we get statistical significance.
+We get statistical significance as expected.
 
 
 # Reproducibility, prediction and inference
 
-Suppose that we went to a number of car yards where data was generated
-using the above process and we only observed
+Suppose that we went to a number of "car yards" (i.e., repeated the
+experiment) where data was generatedusing the above process and we 
+__only__ observed
 
-* the Speed of the car and the
+* the speed of the car and the
 
-* the Colour of the car.
+* the colour of the car.
+
+Suppose that we
+repeated the experiment 1000 times, that is we went to 1000 car yards
+and performed the same two sample t-test on different collected 
+samples at each car yard collecting data for $n=50$ different cars
+each time. 
+
+* How often would red be statistically significant? 
+
+* Would our results be reproducible?
+
+```{r}
+n_car_yards <- 1000
+
+p_values <- c()
+for (i in 1:n_car_yards)
+{
+  # Simulate car type
+  type_ind <- rbinom(n_cars,1,prob_sport)
+  
+  # Calculate colour probs
+  prob_colour <- ifelse(type_ind,prob_red_given_sport,prob_red_given_normal)
+  
+  # Simulate car colours
+  colour_ind <- rbinom(n_cars,1,prob_colour)
+  
+  # Simulate car speeds
+  speed <- beta0 + beta1*(type_ind==1) + rnorm(n_cars,sd=sd_Val)
+
+  # Perform two-sample t-test
+  p_values[i] <- t.test(speed[colour_ind==1],speed[colour_ind==1]==0)$p.value
+}
+```
+
+From the above simulations we find that `r {round(100*mean(p_values<0.05),2)}` percent 
+of simulations where red cars were statisticallly significantly faster than blue cars
+even though the colour of the car has nothing to do with the speed of the car!
 
 Then
 
@@ -239,12 +323,6 @@ __John__: Ha ha that was so witty Steph.
 
 
 
- 
- 
-```{r bib, include=FALSE}
-# create a bib file for the R packages used in this document
-knitr::write_bib(c('base', 'rmarkdown'), file = 'BAF.bib')
-```
  
 
 
