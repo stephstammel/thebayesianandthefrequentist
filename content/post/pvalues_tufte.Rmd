@@ -25,12 +25,13 @@ link-citations: yes
 # Suppress warnings for all the packages here
 # Then all of the warnings wont come up when we
 # use the library(X) commands in R scripts below.
-suppressPackageStartupMessages(library(tufte))
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(stargazer))
-suppressPackageStartupMessages(library(dagitty))
-suppressPackageStartupMessages(library(ggdag))
-suppressPackageStartupMessages(library(tadaatoolbox))
+suppressPackageStartupMessages(require(tufte))
+suppressPackageStartupMessages(require(tidyverse))
+suppressPackageStartupMessages(require(stargazer))
+suppressPackageStartupMessages(require(dagitty))
+suppressPackageStartupMessages(require(ggdag))
+suppressPackageStartupMessages(require(tadaatoolbox))
+suppressPackageStartupMessages(require(V8))
 
 # invalidate cache when the tufte version changes
 knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
@@ -53,26 +54,37 @@ myBib <- ReadBib("BAF.bib", check = FALSE)
 ```
 -->
 
-# Intro banter
+## And so it begins.. 
+
+_Our location: an office somewhere in Sydney, Australia. It might be well-appointed corporate digs, a slightly underfunded academic building or a cheap cafe somewhere in central Sydney. Choose your own statistical adventure._[^1]
+
+[^1]: On our Twitter post announcing this blog, Steph made a comment about a would-be podcast, except she and John are the parents of five young kids between them (not together, we hasten to add). Consider this the 'could have been' podcast.
 
 __John__: Where do you want to start Steph?
 
-__Steph__: I don't know John. How about we start with something that everyone 
-reading this is probably familiar with? Did you want to do some $p$-value bashing?
+__Steph__: I don't know, John. I have a lot of pent up rage. Let's break something.
 
-__John__: Yeah, there are some Bayesians out there who refuse to do hypothesis
-testing on principal.
+__John__: We both know you have issues, Steph. We could take a stab at reproducibility, replicability, robustness? Even better, we could take a stab at _truth_.
 
-__Steph__: There is a lot of talk about reproducibility, replicability, robustness,
-and practices that lead to finding "truth" in the context of scientific practice. 
-These issues also complicated.
-It might be a good place to start.
+__Steph__: Literally?
 
-__John__: Year it started a few years ago people started looking into whether
+__John__: Figuratively. We planned to do something useful, remember?
+
+__Steph__: OK. But these concepts are all really complex. Explain it to me like ... I'm a management consultant. There should be a powerpoint and a snappy title.
+
+__John__: No chance. I'll explain it like I'm a professor of statistics.
+
+__Steph__: My way is funnier. You and Microsoft SmartArt. Just give me five minutes to put a bet down with your grad students.
+
+__John__: Mine way at least makes sense and has a point.
+
+__Steph__: Fair call. OK, go!
+
+__John__: Alright, it started a few years ago. People started looking into whether
 particular bits of medical research were reproducible. In particular 
 [@Ioannidis2005] tried to reproduce
 	49  famous medical publications from
-	1990-2003 resulting from randomized trials; 45 claimed successful
+	1990-2003 resulting from randomized trials: 45 claimed successful
 	intervention.
  
 		* 7 (16\%) were contradicted.
@@ -81,18 +93,21 @@ particular bits of medical research were reproducible. In particular
 		* 11 (24\%) remained largely unchallenged.
 		
 __John__: There were a number of other papers too, like [@PashlerWagenmakers2012].
-So hypothesis testing is a still much discussed tool.
-But, maybe we can talk about these issues a bit later.
+The common theme between all of these papers, statistically speaking, is hypothesis testing.
 	
  
-__Steph__: You said you had an example where results where (1) reproducible,
-(2) produced reasonable predictions, and (3) had nothing to do with truth.
-Did you want to talk us through it?
+__Steph__: You know what this dialogue needs, John?
 
-__John__: So a few years ago my wife was rear-ended while driving and the
+__John__: You're going to tell me, whether I want to hear it or not.
+
+__Steph__: Relateable examples, mate.[^1]
+
+[^1]: At this point, Steph attempted to compile this post for the first time. John, we need to talk about dependencies one of these days.
+
+__John__ (thinks): OK so a few years ago my wife was rear-ended while driving and the
 car was written off so we needed to buy a new car. While we were looking to
 get a new car my sister in law asked is (as a joke) "Are you getting a red car?
-I heard their fast!" Look a red car!
+I heard they're fast!" 
 
  
 <img src="lamborghini_huracan_slideshow_lead.jpg" style="width:90%">
@@ -101,40 +116,58 @@ I heard their fast!" Look a red car!
 __John__: Now I don't know much about cars at all. So if I went into a
 car yard I wouldn't want to buy one that looked like this.
 
-__Steph__: Why not?
+__Steph__: Honestly, John, it's really not your style. You're totally not doing the whole mid life crisis thing.
 
-__John__: Because fast cars are also expensive cars! But that is not the point.
-I wanted to look at a bunch of ways to meddle with hypothesis tests in order
-to get them to break and my first example related to by sister in law's joke.
+__John__: Fast cars are also expensive cars! But that's not the point.
 
-# Red cars are faster!
+__Steph__: Your midlife crisis is not the point?
 
-Let us imagine a simplified world. 
-Suppose that
+__John__: I'm not having a midlife crisis.
+
+__Steph__: You're an academic statistician who just started a blog with a management consultant.
+
+__John__: My judgement is lacking sometimes. There's a point to this - I wanted to look at a bunch of ways to mess around with hypothesis tests in order
+to get them to break and my first example related to my sister in law's joke.
+
+__Steph__: _Bayesians_.
+
+# Red cars are faster![^1]
+
+[^1]: Now I've had to make a version update to R itself, John. I'm just saying, if you ever had to put code into production...
+
+Let's imagine a simplified world, such as is suitable for management consultants and students of statistics: 
+
+Suppose that[^1]
+
+[^1]: For the record, this proof is John's but Steph had time to take all the math-speak away while trying to update all those dependencies. Y'all can thank me later.
 
 * There are only two car colours - 
 <span style="color:red">__red__</span> cars and 
 <span style="color:blue">__blue__</span> cars 
-encoded into the variable $\mbox{colour}_i$;
+and we describe them with the variable $\mbox{colour}_i$;
 
-* Cars can eiher be <span style="color:purple">__sports__</span> cars and 
+* Cars can eiher be <span style="color:purple">__sports__</span> cars or 
 <span style="color:green">__normal__</span> cars;
-encoded into the variable $\mbox{type}_i$;
+and we represent them with the variable $\mbox{type}_i$;
 
 * <span style="color:purple">__Sports__</span> cars
 are more likely to be <span style="color:red">__red__</span>
 than <span style="color:green">__normal__</span> cars
 
-* <span style="color:purple">__sports__</span> cares
+* <span style="color:purple">__sports__</span> cars
 are generally faster than 
 <span style="color:green">__normal__</span> cars.
 
 The relationship between the three variables can
-be visualized by a directed acyclic graphs.
-There are three nodes type, colour and speed. The car type "causes"
+be visualized by a directed acyclic graph.[^1]
+
+[^1]: Choose your own adventure, but for probability - Steph.
+
+There are three nodes:type, colour and speed. The car type "causes"
 the car colour and the car speed so there is a directed
 edge from type to colour and type to speed. We can visualize this
 using the `dagitty` and `ggdag` packages [@R-dagitty,@R-ggdag].
+
 
 ```{r fig-margin1, fig.margin = TRUE, fig.cap = "DAG for speed, colour and type", fig.width=3.5, fig.height=3.5}
 library(dagitty)
@@ -149,16 +182,14 @@ ggdag(dagified, layout = "circle")
 
 # Simulating data
 
-To put some probability structure on this let
-sports cars and normal cars be equally likely
+To put some probability structure on this let sports cars and normal cars be equally likely:
 $$
 \begin{array}{rl}
 {\mathbb P}( \mbox{sports car}  ) = 0.5 \\
 {\mathbb P}( \mbox{normal car}  ) = 0.5 \\
 \end{array}
 $$
-and specify conditional probabilities reflecting that sports
-cars are more likely to be red than normal cars via
+and specify conditional probabilities reflecting that sports cars are more likely to be red than normal cars by arbitrarily deciding that:
 $$
 \begin{array}{rl}
 {\mathbb P}( \mbox{red car} | \mbox{sports car}  ) & = 0.8, \\
@@ -167,10 +198,11 @@ $$
 {\mathbb P}( \mbox{blue car} | \mbox{normal car}  ) & = 0.8. \\
 \end{array}
 $$
+
 Finally, suppose that cars travel on average $\beta_0 = 100$km/h,
 with sports cars travelling on average $\beta_1 = 50km/h$ higher, 
-with a common standard deviation of $\sigma=50$km/h. Then we could 
-simulate speed of the $i$th sample via
+with the same standard deviation of $\sigma=50$km/h. Then we can 
+simulate the speed of the $i$th car via
 $$
 \begin{array}{rl}
 \mbox{speed}_i 
@@ -182,14 +214,16 @@ $$
 where independently $\varepsilon_i \sim N(0,50^2)$.
 
 ```{marginfigure}
-__Steph__: So you have set up a situation where the speed of the car has 
-only is related to the colour of the car through a correlation between
-red cars and sports cars.
+__Steph__: John, you know that some people exist who are allergic to maths, right? So to translate, you made up a situation where the speed of the car is 
+only is related to the colour of the car because
+red cars are more likely to be sports cars.
 
 __John__: Exactly, and this is going to be relevant later.
 ```
 
-Let's simulate some data that captures this scenario using R [@R-base]
+Let's simulate some data[^1] that captures this scenario using R [@R-base]
+
+[^1]: For those of you following along on this epic adventure, Steph is now reinstalling the entire tidyverse. On a mobile phone hotspot.
 
 ```{r}
 # Specify true values
@@ -204,7 +238,7 @@ n_cars <- 50
 # Simulate car type
 type_ind <- rbinom(n_cars,1,prob_sport)
 
-# Calculate colour probs
+# Calculate colour probabilities
 prob_colour <- ifelse(type_ind,prob_red_given_sport,prob_red_given_normal)
 
 # Simulate car colours
@@ -221,17 +255,23 @@ tib <- tibble(colour_ind,
 
 
 ```{marginfigure}
-__Steph__: Wait, wait, wait! You didn't record the car type.
+__Steph__: Car type - where's the car type?
 
-__John__: So we are going to break this hypothesis test by dropping
+__John__: We're going to break this hypothesis test by dropping
 an important variable.
+
+__Steph__: Breaking, just like I asked for. I note we're breaking frequentist stuff first.
+
+__John__: We're also simulating a podcast here, for reasons unknown.
 ```
 
-# Boxplots and Two sample t-tests
+# Boxplots and two sample t-tests [^1]
 
-Now that we have silulated some data we can some boxplots and perform
-some statistical tests. If we plot a boxplot for speed against colour 
-we get.
+[^1]: Am now reinstalling all dependencies of ggplot2, we better break something real good, John.
+
+Now that we have simulated some data we can create boxplots and try
+some statistical tests. If we make a boxplot for speed against colour 
+we get:
 
 ```{r fig-margin2, fig.margin = TRUE, fig.cap = "speed vs colour", fig.width=3.5, fig.height=3.5}
 p <- ggplot(tib, aes(x=colour, y=speed, fill=colour)) + 
@@ -241,39 +281,42 @@ p
 ```
 
  
-So if we wanted to see if red cars were significantly faster than
-blue cars we could perform a $t$ test [@R-tadaatoolbox].
+If we wanted to see if red cars were significantly faster than
+blue cars we could perform a $t$ test [@R-tadaatoolbox].[^1]
+
+[^1]: As a corporate data scientist who is currently working through dependency hell, I legit use these all.the.time.
 
 ```{r}
 library(tadaatoolbox)
 tadaa_t.test(data=tib, response=speed, group=colour, print="markdown")
 ```
 
-We get statistical significance as expected.
+We get statistical significance, which we'd expect because we set up our little universe that way. Fantastic, we didn't break our own test! (Just Steph's dev environment.)
 
 
 # Reproducibility, prediction and inference
 
 Suppose that we went to a number of "car yards" (i.e., repeated the
-experiment) where data was generatedusing the above process and we 
+experiment) where data was generated using the above process and we 
 __only__ observed
 
 * the speed of the car and the
 
 * the colour of the car.
 
-Suppose that we
-repeated the experiment 1000 times, that is we went to 1000 car yards
+Suppose that we repeated the experiment 1000 times, that is we went to 1000 car yards
 and performed the same two sample t-test on different collected 
 samples at each car yard collecting data for $n=50$ different cars
-each time. 
+each time.[^1]
+
+[^1]: The idea here is that we have very little certainty about one observation, but about many observations we can be _more_ certain. And if anybody has any idea why this build is _Failed with error:  'package 'ggplot2' could not be loaded'_, I'd be eternally grateful.
 
 * How often would red be statistically significant? 
 
 * Would our results be reproducible?
 
 ```{r}
-n_car_yards <- 1000
+n_car_yards <- 1000 # Authors' note: when Steph had to buy a car, she gave up after the first car yard and asked her friend who worked at said car yard to sort her out. She bought the first car she test drove because she is a great believer in not doing boring things, like car yards.
 
 p_values <- c()
 for (i in 1:n_car_yards)
@@ -295,31 +338,37 @@ for (i in 1:n_car_yards)
 }
 ```
 
-From the above simulations we find that `r {round(100*mean(p_values<0.05),2)}` percent 
+From the above simulations we find that in `r {round(100*mean(p_values<0.05),2)}` percent 
 of simulations where red cars were statisticallly significantly faster than blue cars
 even though the colour of the car has nothing to do with the speed of the car!
 
-Then
+So...[^1]
+
+[^1]: I admit defeat, can't work out the dependency issue, John hit me up with your dependencies and system environment please!
 
 * __Reproducibility__: The results would be largely reproducible since
 if we went from car yard to car yard red cars would be generally faster
-than blue cars. 
-Pre-registration does not work.
+than blue cars. _Pre-registration does not inherently solve this problem of a _spurious relationship_ between these variables._
 
 
 * __Prediction__: If we were to pick a car that we wanted to be fast
 then we would pick a red car and the car would be more likely to be
 faster than if we picked a blue car.
 
-* __Inference__: Painting our car red would not make it any faster.
+* __Inference__: But painting our car red would not make it any faster.
 
 
-# Post example Banter
+__Steph__: Congratulations John, statistics has discovered the age-old econometric problem of the spurious regression. We broke that hypothesis because we were measuring the wrong relationships.
 
-__Steph__: Some witty remark
+__John__: Yes, that was my point. With a relateable example.
+
+__Steph__: This happens in field work all.the.time. You think you're measuring Thing A, when actually Thing B is what's doing the heavy lifting and Thing B just happens to be correlated with Thing A. (Tylyer Vigen's site is full of examples of this in real life)[http://www.tylervigen.com/spurious-correlations], in that case, _time itself_ is the common Thing B. If you're working with time series it's often inevitable without recognising the impact it has.
+
+__John__: Stories for another day?
+
+__Steph__: OK next time let's see what it would look like in a real-world data scientist context.
 
 
-__John__: Ha ha that was so witty Steph.
 
 
 
