@@ -1,0 +1,270 @@
+---
+title: "Let's break some p-values"
+author: "Steph and John"
+date: '2019-03-17'
+slug: p-values
+tags: p-values
+categories:
+- Bayes
+- Frequentist
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Intro banter
+
+__John__: Where do you want to start Steph?
+
+__Steph__: I don't know John. How about we start with something that everyone 
+reading this is probably familiar with? Did you want to do some $p$-value bashing?
+
+__John__: Yeah, there are some Bayesians out there who refuse to do hypothesis
+testing on principal.
+
+__Steph__: There is a lot of talk about reproducibility, replicability, robustness,
+and practices that lead to finding "truth" in the context of scientific practice. 
+These issues also com
+It might be a good place to start.
+
+__John__: So what do you think
+
+__John__: So a few years ago my wife was rear-ended while driving and the
+car was written off so we needed to buy a new car. While we were looking to
+get a new car my sister in law asked is (as a joke) "Are you getting a red car?
+I heard their fast!"
+
+# Red cars are faster!
+
+Let us imagine a simplified world. 
+Suppose that
+
+* There are only two car colours:
+<span style="color:red">__red__</span> cars and 
+<span style="color:blue">__blue__</span> cars.
+
+* Cars can eiher be <span style="color:purple">__sports__</span> cars and 
+<span style="color:green">__normal__</span> cars.
+
+* <span style="color:purple">__Sports__</span> cars
+are more likely to be <span style="color:red">__red__</span>
+than <span style="color:green">__normal__</span> cars
+
+
+* <span style="color:purple">__sports__</span> cares
+are generally faster than 
+<span style="color:green">__normal__</span> cars.
+
+## Directed acyclic graphs
+
+Directed acyclic graphs can be used to capture the relationships between variables.
+In terms of a directed acyclic graph we have
+```{r}
+# Using Malcolm Barrett's ggdag package
+suppressPackageStartupMessages(library(dagitty))
+suppressPackageStartupMessages(library(ggdag))
+
+dagified <- dagify(colour ~ type,
+                   speed ~ type,
+                   exposure = "x",
+                   outcome = "speed")
+ggdag(dagified, layout = "circle")
+```
+
+There are three nodes type, colour and speed. The car type "causes"
+the car colour and the car speed so there are arrows from type to
+colour and speed.
+
+## Simulating data
+
+
+To put some probability structure on this let
+sports cars and normal cars be equally likely
+$$
+\begin{array}{rl}
+{\mathbb P}( \mbox{sports car}  ) = 0.5 \\
+{\mathbb P}( \mbox{normal car}  ) = 0.5 \\
+\end{array}
+$$
+and
+$$
+\begin{array}{rl}
+{\mathbb P}( \mbox{red car} | \mbox{sports car}  ) = 0.8 \\
+{\mathbb P}( \mbox{blue car} | \mbox{sports car}  ) = 0.2 \\
+{\mathbb P}( \mbox{red car} | \mbox{normal car}  ) = 0.2 \\
+{\mathbb P}( \mbox{blue car} | \mbox{normal car}  ) = 0.8 \\
+\end{array}
+$$
+Finally, suppose that the speed of the car is
+$$
+\mbox{speed} = 100 + 50 \times {\mathbb I}(\mbox{sports car}) + N(0,50^2)
+$$
+
+Lets simulate some data that captures this scenario.
+
+```{r}
+prob_sport <- 0.5
+prob_red_given_sport  <- 0.8
+prob_red_given_normal <- 0.2
+
+mu_sport  <- 150
+mu_normal <- 100
+sd <- 50
+
+n <- 100
+type   <- rep(NA,n)
+type_ind <- rbinom(n,1,prob_sport)
+type[type_ind==1] <- "sport"
+type[type_ind==0] <- "normal"
+type <- as.factor(type)
+
+nSport <- sum(type=="sport")
+nNormal <- sum(type=="normal")
+
+colour_ind <- rep(NA,n)
+colour_ind[type=="sport"]  <- rbinom(nSport,1,prob_red_given_sport)
+colour_ind[type=="normal"] <- rbinom(nNormal,1,prob_red_given_normal)
+
+colour <- rep(NA,n)
+colour[colour_ind==1] <- "red"
+colour[colour_ind==0] <- "blue"
+colour <- factor(colour,levels=c("red","blue"))
+
+speed <-  mu_normal + (mu_sport - mu_normal)*(type=="sport") + rnorm(n,sd=50)
+
+suppressPackageStartupMessages(library(tidyverse))
+
+tib <- tibble(type=type,
+              colour=colour,
+              speed=speed)
+```
+
+So if we plot a boxplot for speed against colour we get.
+
+```{r}
+p <- ggplot(tib, aes(x=colour, y=speed, fill=colour)) + 
+  geom_boxplot() +
+  theme_bw()
+p
+```
+
+## Boxplots
+
+So if we plot a boxplot speed against type we get.
+
+```{r}
+p <- ggplot(tib, aes(x=type, y=speed,fill=type)) + 
+  geom_boxplot() +
+  theme_bw()
+p
+```
+
+## Two sample t-tests
+
+So if we wanted to see if red cars were significantly faster than
+blue cars we could perform a $t$ test.
+```{r}
+# We use Lukas Burk, Tobias Anton, Daniel Lüdecke, and Gesa Graf's 
+#tadaatoolbox package to nicely summarise the results of a two sample t-test.
+library(tadaatoolbox)
+
+# Two sample t-test grouped using colour
+tadaa_t.test(data = tib, response = speed, group = colour, print = "markdown")
+```
+
+We could also do one where we group on type.
+```{r}
+# Two sample t-test grouped using type.
+tadaa_t.test(data = tib, response = speed, group = type, print = "markdown")
+```
+
+In both cases we get statistical significance.
+
+
+# Reproducibility, prediction and inference
+
+Suppose that we went to a number of car yards where data was generated
+using the above process and we only observed
+
+* the Speed of the car and the
+
+* the Colour of the car.
+
+Then
+
+* __Reproducibility__: The results would be largely reproducible since
+if we went from car yard to car yard red cars would be generally faster
+than blue cars. 
+Pre-registration does not work.
+
+
+* __Prediction__: If we were to pick a car that we wanted to be fast
+then we would pick a red car and the car would be more likely to be
+faster than if we picked a blue car.
+
+* __Inference__: Painting our car red would not make it any faster.
+
+
+# Post example Banter
+
+__Steph__: Some witty remark
+
+
+__John__: Ha ha that was so witty Steph.
+
+<br>
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+# Hypothsis testing
+
+So hypothsis testing consists of three main components
+
+  1. A set of observed data: ${\bf x} = (x_1,\ldots,x_n)^T$, say.
+
+  2. A hypotesised distribution for the data $X_i \sim F$ 
+  which is often referred to as the null hypothesis denoted $H_0$, i.e.,
+  $$
+  H_0 \colon X_i \sim F.
+  $$
+  
+  3. A test statistic: This is some function $T$ of the data ${\bf x}$, i.e.,
+  $T(x_1,\ldots,x_n)\equiv T({\bf x})$ typically chosen so that large values of 
+  $T({\bf x})$ suggest that the chosen hypotesised distribution in 2. is not 
+  a good model for the data.
+  
+-->
+  
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+ 
