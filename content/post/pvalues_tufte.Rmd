@@ -342,9 +342,7 @@ From the above simulations we find that in `r {round(100*mean(p_values<0.05),2)}
 of simulations where red cars were statisticallly significantly faster than blue cars
 even though the colour of the car has nothing to do with the speed of the car!
 
-So...[^1]
-
-[^1]: I admit defeat, can't work out the dependency issue, John hit me up with your dependencies and system environment please!
+So...
 
 * __Reproducibility__: The results would be largely reproducible since
 if we went from car yard to car yard red cars would be generally faster
@@ -358,7 +356,10 @@ faster than if we picked a blue car.
 * __Inference__: But painting our car red would not make it any faster.
 
 
-__Steph__: Congratulations John, statistics has discovered the age-old econometric problem of the spurious regression. We broke that hypothesis because we were measuring the wrong relationships.
+__Steph__: Congratulations John, statistics has discovered the age-old econometric problem of the spurious regression. We broke that hypothesis because we were measuring the wrong relationships.[^1]
+
+[^1]: I admit defeat, can't work out the dependency issue, John hit me up with your dependencies and system environment please!
+
 
 __John__: Yes, that was my point. With a relateable example.
 
@@ -366,7 +367,7 @@ __Steph__: This happens in field work all.the.time. You think you're measuring T
 
 __John__: Stories for another day?
 
-__Steph__: OK next time let's see what it would look like in a real-world data scientist context.
+__Steph__: Sure- next time let's see what this idea of a _spurious relationship_ would look like in a real-world data scientist context. 
 
 
 
