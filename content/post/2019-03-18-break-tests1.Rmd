@@ -114,7 +114,7 @@ get a new car my sister in law asked (as a joke) "Are you getting a red car?
 I heard they're fast!" 
 
  
-<img src="lamborghini_huracan_slideshow_lead.jpg" style="width:90%">
+<img src="/post/2019-03-18-break-tests1_files/lamborghini_huracan_slideshow_lead.jpg" style="width:90%">
  
 
 __John__: Now I don't know much about cars at all. So if I went into a
