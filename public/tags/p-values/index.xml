@@ -22,17 +22,5 @@
 And so it begins.. Our location: an office somewhere in Sydney, Australia. It might be well-appointed corporate digs, a slightly underfunded academic building or a cheap cafe somewhere in central Sydney.</description>
     </item>
     
-    <item>
-      <title>Too big to fail</title>
-      <link>/2019/03/17/p-values/</link>
-      <pubDate>Sun, 17 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/03/17/p-values/</guid>
-      <description>Intro Banter John: Where do you want to start Steph?
-Steph: I don’t know John. How about we start with something that everyone reading this is probably familiar with? Did you want to do some \(p\)-value bashing?
-John: Yeah, there are some Bayesians out there who refuse to do hypothesis testing on principal.
-Steph: There is a lot of talk about reproducibility, replicability, robustness, and practices that lead to finding “truth” in the context of scientific practice.</description>
-    </item>
-    
   </channel>
 </rss>
