@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on The Bayesian and the Frequentist</title>
-    <link>https://thebayesianandthefrequentist.com/tags/</link>
+    <link>/tags/</link>
     <description>Recent content in Tags on The Bayesian and the Frequentist</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2019 Steph de Silva &amp; John Ormerod</copyright>
     <lastBuildDate>Mon, 18 Mar 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://thebayesianandthefrequentist.com/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>P Values</title>
-      <link>https://thebayesianandthefrequentist.com/tags/p-values/</link>
+      <link>/tags/p-values/</link>
       <pubDate>Mon, 18 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://thebayesianandthefrequentist.com/tags/p-values/</guid>
+      <guid>/tags/p-values/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Why</title>
-      <link>https://thebayesianandthefrequentist.com/tags/why/</link>
+      <link>/tags/why/</link>
       <pubDate>Tue, 12 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://thebayesianandthefrequentist.com/tags/why/</guid>
+      <guid>/tags/why/</guid>
       <description></description>
     </item>
     

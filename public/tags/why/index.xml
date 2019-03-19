@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Why on The Bayesian and the Frequentist</title>
-    <link>https://thebayesianandthefrequentist.com/tags/why/</link>
+    <link>/tags/why/</link>
     <description>Recent content in Why on The Bayesian and the Frequentist</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2019 Steph de Silva &amp; John Ormerod</copyright>
     <lastBuildDate>Tue, 12 Mar 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://thebayesianandthefrequentist.com/tags/why/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/why/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>To whom it may concern</title>
-      <link>https://thebayesianandthefrequentist.com/2019/03/12/to-whom-it-may-concern/</link>
+      <link>/2019/03/12/to-whom-it-may-concern/</link>
       <pubDate>Tue, 12 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://thebayesianandthefrequentist.com/2019/03/12/to-whom-it-may-concern/</guid>
+      <guid>/2019/03/12/to-whom-it-may-concern/</guid>
       <description>Hi, we’re John and Steph and together we form “The Bayesian and The Frequentist”.
 As an academic statistician and a corporate data scientist we are two very different peopledoing two very different jobs with very different opinions on lots of things, but try ourbest to play nice.
 We’ve started this blog because there’s something we want to add to the conversation aboutdata science. We’d like to add to our readers’ understanding of what’s going on under thehood of their statistical and data science practices in an easy to understand manner.</description>

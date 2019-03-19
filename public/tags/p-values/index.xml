@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>P Values on The Bayesian and the Frequentist</title>
-    <link>https://thebayesianandthefrequentist.com/tags/p-values/</link>
+    <link>/tags/p-values/</link>
     <description>Recent content in P Values on The Bayesian and the Frequentist</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2019 Steph de Silva &amp; John Ormerod</copyright>
     <lastBuildDate>Mon, 18 Mar 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://thebayesianandthefrequentist.com/tags/p-values/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/p-values/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Let&#39;s break some p-values - Part 1</title>
-      <link>https://thebayesianandthefrequentist.com/2019/03/18/p-values/</link>
+      <link>/2019/03/18/p-values/</link>
       <pubDate>Mon, 18 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://thebayesianandthefrequentist.com/2019/03/18/p-values/</guid>
+      <guid>/2019/03/18/p-values/</guid>
       <description>Intended level and assumed knowledge: We figure you know a little about probability, a little about R, a little about hypothesis testing and statistics. We’d like to show you how these fit together. If you’re unfamiliar with these concepts, the footnotes will be your guide (some of the time).
 And so it begins..Our location: an office somewhere in Sydney, Australia. It might be well-appointed corporate digs, a slightly underfunded academic building or a cheap cafe somewhere in central Sydney.</description>
     </item>
