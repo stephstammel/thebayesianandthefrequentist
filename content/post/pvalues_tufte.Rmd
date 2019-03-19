@@ -37,7 +37,7 @@ set.seed(1)
 ```
 
 
-__Intended level and assumed knowledge__: We figure you know a little about probability, a little about R, a little about hypothesis testing and statistics. We'd like to show you how these fit together. If you're unfamiliar with these concepts, the footnotes will be your guide (some of the time).
+__Intended level and assumed knowledge__: _We figure you know a little about probability, a little about R, a little about hypothesis testing and statistics. We'd like to show you how these fit together. If you're unfamiliar with these concepts, the footnotes will be your guide (some of the time)._
 
 ## And so it begins.. 
 
@@ -50,22 +50,22 @@ __John__: Where do you want to start Steph?
 __Steph__: I don't know, John. I have a lot of pent up rage. Let's break something.
 
 __John__: We both know you have issues, Steph. We could take a stab[^2] at
-making sense of reproducibility of experiments, prediction, and pre-registration? 
-Even better, we could take a stab at _truth_.
+making sense of the reproducibility of experiments, prediction, and pre-registration? 
+Even better, we could take a stab at _truth_. 
 
 [^2]: Australian slang for try.
 
 __Steph__: Literally?
 
-__John__: Figuratively. We planned to do something useful, remember?
+__John__: Figuratively. We could look at hypothesis testing. We planned to do something useful, remember?
 
-__Steph__: OK. But these concepts are all really complex. Explain it to me like ... I'm a management consultant. There should be a powerpoint and a snappy title.
+__Steph__: OK, let's break a hypothesis test. But these concepts are all really complex. Explain it like ... I'm a management consultant. There should be a powerpoint and a snappy title.
 
-__John__: No chance. I'll explain it like I'm a professor of statistics.
+__John__: No chance. I'll explain it like I'm a professor of statistics. 
 
-__Steph__: My way is funnier. You and Microsoft SmartArt. Just give me five minutes to put a bet down with your grad students.
+__Steph__: My way is funnier. You and Microsoft SmartArt. Just give me five minutes to put a bet down with your grad students. 
 
-__John__: My way at least makes sense and has a point.
+__John__: My way at least makes sense and has an actual point.
 
 __Steph__: Fair call. OK, go!
 
@@ -82,15 +82,24 @@ intervention;
 		
 __John__: There were a number of other papers too, like @PashlerWagenmakers2012.
 The common theme between all of these papers, statistically speaking, is hypothesis testing.
+
 One approach at fixing this problem is to pre-register hypothesis testing procedures.
 
-__Steph__: Why is that? 
+__Steph__: This plan as not dreamed up by management consultants. Why did they take that approach?
 
 __John__: Well people tended to play around with their analysis by playing
 games with statistics to get statistical significance (usually $p$-values
 below 0.05). Pre-registration is the idea that forces researchers to pre-specify
 how they will analyse their data before they collect it to stop this from happening.
  
+__Steph__: And yet we do it all the time with exploratory analysis.
+
+__John__: But causal inference needs a different approach. 
+
+__Steph__: I agree, but as the person who wanted to stab a theoretical concept earlier in this conversation, I can think of a whole bunch of ways this can go wrong.
+
+__John__: Exactly. It's really imperfect, but I think it would help to explain _why_ that's the case.
+
 __Steph__: You know what this dialogue needs, John?
 
 __John__: You're going to tell me, whether I want to hear it or not.
@@ -121,13 +130,15 @@ __John__: I'm not having a midlife crisis.
 
 __Steph__: You're an academic statistician who just started a blog with a management consultant.
 
-__John__: My judgement is lacking sometimes. There's a point to this - I wanted to look at a bunch of ways to mess around with hypothesis tests in order
-to get them to break and my first example related to my sister in law's joke
-- and by break I mean the results of the hypothesis test is misleading
-by telling us that there is a difference between
+__John__: My judgement is lacking sometimes. There's a point to this post though- I wanted to look at a bunch of ways to mess around with hypothesis tests in order
+to get them to break. 
+
+My first example related to my sister in law's joke.
+
+By _break_ I mean that the results of the hypothesis test are misleading - I want to create a situation where the test is telling us there is a difference between
 two things when in fact no difference exists in reality.
 
-__Steph__: _Bayesians_.
+__Steph__: _Bayesians_. Let's do this, let's break some hypothesis tests, I might be the frequentist in this conversation, but the fact is that inference is really, really breakable in the field, so I think this is inherently useful. Bring on the cars!
 
 # Red cars are faster![^4]
 
@@ -152,14 +163,14 @@ and we represent them with the variable $\mbox{type}_i$;
 are more likely to be <span style="color:red">__red__</span>
 than <span style="color:green">__normal__</span> cars
 
-* <span style="color:purple">__sports__</span> cars
+* <span style="color:purple">__Sports__</span> cars
 are generally faster than 
 <span style="color:green">__normal__</span> cars.
 
 The relationship between the three variables can
 be visualized by a directed acyclic graph.[^6]
 
-[^6]: Choose your own adventure, but for probability - Steph.
+[^6]:  _Some maths help_: This is basically just choose your own adventure, but for probability - Steph.
 
 There are three nodes: type, colour and speed. The car type "causes"
 the car colour and the car speed so there is a directed
@@ -167,7 +178,7 @@ edge from type to colour and type to speed. We can visualize this
 using the `dagitty` and `ggdag` packages [@R-dagitty,@R-ggdag].
 
 
-```{r fig-margin1, fig.margin = TRUE, fig.cap = "DAG for speed, colour and type", fig.width=3.5, fig.height=3.5}
+```{r fig-margin1, fig.margin = TRUE, fig.cap = "DAG for speed, colour and type", fig.width=3.5, fig.height=3.5, suppressMessages = TRUE, suppressWarnings = TRUE}
 library(dagitty)
 library(ggdag)
 
@@ -178,17 +189,25 @@ dagified <- dagify(colour ~ type,
 ggdag(dagified, layout = "circle")
 ```
 
+That was all a bit _mathy_, but the general upshot is that we created a little facsimile of the world, one in which there are two types of cars (sports and normal), two colours of cars (blue and red) and cars have a speed that depends on their type (or purpose). Then we represented it with some circles and lines that describe what those relationships are.
 
 # Simulating data
 
-To put some probability structure on this let sports cars and normal cars be equally likely:
+Let's put some numbers around this to create a concrete example: something measurable that we can test, and then show how and where a hypothesis test can (and does) get it wrong.
+
+Let's say that each type of car is equally likely: 
+
 $$
 \begin{array}{rl}
 {\mathbb P}( \mbox{sports car}  ) = 0.5 \\
 {\mathbb P}( \mbox{normal car}  ) = 0.5 \\
 \end{array}
 $$
-and specify conditional probabilities reflecting that sports cars are more likely to be red than normal cars by arbitrarily deciding that:
+
+Next, let's say that the probability of a sports car being red is higher than for a normal car.[^7]
+
+[^7]:  _Some maths help_: These are what we call _conditional probabilities_, the idea that if Thing 1 happens, then Thing 2 may be more or less likely as a result. This makes sense if you think about sports at all (neither John or Steph follow sport, but we hear that normal people often quite like it) - the probability of team A winning the sportsball grandfinal might be 50% overall. This is the _marginal_ probability. But the probability that Team A wins the sportsball grandfinal _given_ Team B's star player mysteriously won free first class tickets to Las Vegas may be 90%. This is the _conditional_ probability.
+
 $$
 \begin{array}{rl}
 {\mathbb P}( \mbox{red car} | \mbox{sports car}  ) & = 0.8, \\
@@ -198,10 +217,14 @@ $$
 \end{array}
 $$
 
-Finally, suppose that cars travel on average $\beta_0 = 100$km/h,
+Finally, suppose that normal cars travel on average $\beta_0 = 100$km/h,
 with sports cars travelling on average $\beta_1 = 50km/h$ higher, 
-with the same standard deviation of $\sigma=25$km/h. Then we can 
-simulate the speed of the $i$th car via
+with the same standard deviation of $\sigma=25$km/h.[^8]
+
+[^8]:  _Some maths help_: This is clearly another fantasy, a simplifying assumption. Using this we can start placing numbers on our facsimile of the real world, measure the effects and then proceed to our test.
+
+Now, say there are lots of cars in the world. Statistics is usually about understanding patterns in repeated things. Then we can simulate the speed of the $i$th car, where $i$ is just any arbitrary car, as:
+
 $$
 \begin{array}{rl}
 \mbox{speed}_i 
@@ -210,19 +233,19 @@ $$
 &  = 100 + 50 \times {\mathbb I}(\mbox{type}_i=\mbox{sports}) + \varepsilon_i 
 \end{array}
 $$
-where independently $\varepsilon_i \sim N(0,25^2)$.
+where independently $\varepsilon_i \sim N(0,25^2)$.[^9]
 
-```{marginfigure}
+[^9]: _Some maths help_: The $I$ function is what's called an _indicator_ function. It's equal to a 1 if the condition inside the bracket is true and a zero if it's not. So the speed of the $i$th car is $150 + \varepsilon_i$ if it's a sports car, but if it's just normal it's $100 + \varepsilon_i$
+
 __Steph__: John, you know that some people exist who are allergic to maths, right? So to translate, you made up a situation where the speed of the car is 
 only is related to the colour of the car because
 red cars are more likely to be sports cars.
 
 __John__: Exactly, and this is going to be relevant later.
-```
 
-Let's simulate some data[^7] that captures this scenario using R [@R-base].
+Let's simulate some data[^10] that captures this scenario using R [@R-base].
 
-[^7]: For those of you following along on this epic adventure, Steph is now reinstalling the entire `tidyverse`. On a mobile phone hotspot.
+[^10]: For those of you following along on this epic adventure, Steph is now reinstalling the entire `tidyverse`. On a mobile phone hotspot.
 
 ```{r}
 # Specify true values of parameters
