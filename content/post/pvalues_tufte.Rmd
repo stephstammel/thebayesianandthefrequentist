@@ -27,12 +27,7 @@ link-citations: yes
 # use the library(X) commands in R scripts below.
 suppressPackageStartupMessages(require(tufte))
 suppressPackageStartupMessages(require(tidyverse))
-suppressPackageStartupMessages(require(stargazer))
-suppressPackageStartupMessages(require(dagitty))
-suppressPackageStartupMessages(require(ggdag))
 suppressPackageStartupMessages(require(tadaatoolbox))
-suppressPackageStartupMessages(require(V8))
-
 # invalidate cache when the tufte version changes
 knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
 options(htmltools.dir.version = FALSE)
@@ -41,18 +36,6 @@ options(htmltools.dir.version = FALSE)
 set.seed(1)
 ```
 
-<!--
-```{r, load_refs, echo=FALSE, cache=FALSE}
-library(RefManageR)
-BibOptions(check.entries = FALSE, 
-           bib.style = "authoryear", 
-           cite.style = 'authoryear', 
-           style = "markdown",
-           hyperlink = FALSE, 
-           dashed = FALSE)
-myBib <- ReadBib("BAF.bib", check = FALSE)
-```
--->
 
 __Intended level__: 2nd year undergraduate.
 
@@ -179,28 +162,6 @@ than <span style="color:green">__normal__</span> cars
 * <span style="color:purple">__sports__</span> cars
 are generally faster than 
 <span style="color:green">__normal__</span> cars.
-
-The relationship between the three variables can
-be visualized by a directed acyclic graph.[^6]
-
-[^6]: Choose your own adventure, but for probability - Steph.
-
-There are three nodes: type, colour and speed. The car type "causes"
-the car colour and the car speed so there is a directed
-edge from type to colour and type to speed. We can visualize this
-using the `dagitty` and `ggdag` packages [@R-dagitty,@R-ggdag].
-
-
-```{r fig-margin1, fig.margin = TRUE, fig.cap = "DAG for speed, colour and type", fig.width=3.5, fig.height=3.5}
-library(dagitty)
-library(ggdag)
-
-dagified <- dagify(colour ~ type,
-                   speed ~ type,
-                   exposure = "x",
-                   outcome = "speed")
-ggdag(dagified, layout = "circle")
-```
 
 # Simulating data
 
@@ -467,4 +428,6 @@ for proof-reading and comments.
 
 <br>
 
-
+```{r session_info, include=TRUE, echo=TRUE, results='markup'}
+devtools::session_info()
+```
