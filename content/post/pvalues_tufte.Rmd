@@ -369,9 +369,9 @@ each time.[^10]
 
 [^10]: The idea here is that we have very little certainty about one observation, but about many observations we can be _more_ certain. And if anybody has any idea why this build is _Failed with error:  'package 'ggplot2' could not be loaded'_, I'd be eternally grateful.
 
-* How often would red be statistically significant? 
-
-* Would our results be reproducible?
+How often would red cars be significantly faster than blue car
+if we were to repeat the same experiment over and over again,
+i.e., would our results be reproducible?
 
 ```{r}
 # Authors' note: when Steph had to buy a car, she gave up after the first 
