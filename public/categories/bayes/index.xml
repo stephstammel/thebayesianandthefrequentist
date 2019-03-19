@@ -2,47 +2,35 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Bayes on The Bayesian and the Frequentist</title>
-    <link>/categories/bayes/</link>
+    <link>https://thebayesianandthefrequentist.com/categories/bayes/</link>
     <description>Recent content in Bayes on The Bayesian and the Frequentist</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2019 Steph de Silva &amp; John Ormerod</copyright>
-    <lastBuildDate>Tue, 19 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 18 Mar 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/categories/bayes/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://thebayesianandthefrequentist.com/categories/bayes/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Let&#39;s break some p-values - Part 1</title>
-      <link>/2019/03/19/p-values/</link>
-      <pubDate>Tue, 19 Mar 2019 00:00:00 +0000</pubDate>
+      <link>https://thebayesianandthefrequentist.com/2019/03/18/p-values/</link>
+      <pubDate>Mon, 18 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>/2019/03/19/p-values/</guid>
+      <guid>https://thebayesianandthefrequentist.com/2019/03/18/p-values/</guid>
       <description>Intended level and assumed knowledge: We figure you know a little about probability, a little about R, a little about hypothesis testing and statistics. We’d like to show you how these fit together. If you’re unfamiliar with these concepts, the footnotes will be your guide (some of the time).
-And so it begins.. Our location: an office somewhere in Sydney, Australia. It might be well-appointed corporate digs, a slightly underfunded academic building or a cheap cafe somewhere in central Sydney.</description>
-    </item>
-    
-    <item>
-      <title>Too big to fail</title>
-      <link>/2019/03/17/p-values/</link>
-      <pubDate>Sun, 17 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/03/17/p-values/</guid>
-      <description>Intro Banter John: Where do you want to start Steph?
-Steph: I don’t know John. How about we start with something that everyone reading this is probably familiar with? Did you want to do some \(p\)-value bashing?
-John: Yeah, there are some Bayesians out there who refuse to do hypothesis testing on principal.
-Steph: There is a lot of talk about reproducibility, replicability, robustness, and practices that lead to finding “truth” in the context of scientific practice.</description>
+And so it begins..Our location: an office somewhere in Sydney, Australia. It might be well-appointed corporate digs, a slightly underfunded academic building or a cheap cafe somewhere in central Sydney.</description>
     </item>
     
     <item>
       <title>To whom it may concern</title>
-      <link>/2019/03/12/to-whom-it-may-concern/</link>
+      <link>https://thebayesianandthefrequentist.com/2019/03/12/to-whom-it-may-concern/</link>
       <pubDate>Tue, 12 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>/2019/03/12/to-whom-it-may-concern/</guid>
+      <guid>https://thebayesianandthefrequentist.com/2019/03/12/to-whom-it-may-concern/</guid>
       <description>Hi, we’re John and Steph and together we form “The Bayesian and The Frequentist”.
-As an academic statistician and a corporate data scientist we are two very different people doing two very different jobs with very different opinions on lots of things, but try our best to play nice.
-We’ve started this blog because there’s something we want to add to the conversation about data science. We’d like to add to our readers’ understanding of what’s going on under the hood of their statistical and data science practices in an easy to understand manner.</description>
+As an academic statistician and a corporate data scientist we are two very different peopledoing two very different jobs with very different opinions on lots of things, but try ourbest to play nice.
+We’ve started this blog because there’s something we want to add to the conversation aboutdata science. We’d like to add to our readers’ understanding of what’s going on under thehood of their statistical and data science practices in an easy to understand manner.</description>
     </item>
     
   </channel>
