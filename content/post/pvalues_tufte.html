@@ -52,8 +52,8 @@ intervention;</p>
 </ul>
 <p><strong>John</strong>: There were a number of other papers too, like <span class="citation">Pashler and Wagenmakers (<a href="#ref-PashlerWagenmakers2012">2012</a>)</span>.
 The common theme between all of these papers, statistically speaking, is hypothesis testing.</p>
-<p>One approach at fixing this problem is to pre-register hypothesis testing procedures.</p>
-<p><strong>Steph</strong>: This plan as not dreamed up by management consultants. Why did they take that approach?</p>
+<p>One approach to fixing this problem is to pre-register hypothesis testing procedures.</p>
+<p><strong>Steph</strong>: This plan was not dreamed up by management consultants. Why did they take that approach?</p>
 <p><strong>John</strong>: Well people tended to play around with their analysis by playing
 games with statistics to get statistical significance (usually <span class="math inline">\(p\)</span>-values
 below 0.05). Pre-registration is the idea that forces researchers to pre-specify
@@ -82,7 +82,7 @@ to get them to break.</p>
 <p>My first example related to my sister in law’s joke.</p>
 <p>By <em>break</em> I mean that the results of the hypothesis test are misleading - I want to create a situation where the test is telling us there is a difference between
 two things when in fact no difference exists in reality.</p>
-<p><strong>Steph</strong>: <em>Bayesians</em>. Let’s do this, let’s break some hypothesis tests, I might be the frequentist in this conversation, but the fact is that inference is really, really breakable in the field, so I think this is inherently useful. Bring on the cars!</p>
+<p><strong>Steph</strong>: <em>Bayesians</em>. Let’s do this, let’s break some hypothesis tests. I might be the frequentist in this conversation, but the fact is that inference is really, really breakable in the field, so I think this is inherently useful. Bring on the cars!</p>
 </div>
 <div id="red-cars-are-faster4" class="section level1">
 <h1>Red cars are faster!<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></h1>
@@ -130,7 +130,7 @@ ggdag(dagified, layout = &quot;circle&quot;)</code></pre>
 Figure 1: DAG for speed, colour and type
 </p>
 </div>
-<p>That was all a bit <em>mathy</em>, but the general upshot is that we created a little facsimile of the world, one in which there are two types of cars (sports and normal), two colours of cars (blue and red) and cars have a speed that depends on their type (or purpose). Then we represented it with some circles and lines that describe what those relationships are.</p>
+<p><strong>Steph</strong>: That was all a bit <em>mathy</em>, but the general upshot is that we created a little facsimile of the world, one in which there are two types of cars (sports and normal), two colours of cars (blue and red) and cars have a speed that depends on their type. Then we represented it with some circles and lines that describe what those relationships are.</p>
 </div>
 <div id="simulating-data" class="section level1">
 <h1>Simulating data</h1>
@@ -169,7 +169,7 @@ only is related to the colour of the car because
 red cars are more likely to be sports cars.</p>
 <p><strong>John</strong>: Exactly, and this is going to be relevant later.</p>
 <p>Let’s simulate some data<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a> that captures this scenario using R <span class="citation">(R Core Team <a href="#ref-R-base">2018</a>)</span>.</p>
-<pre class="r"><code># Specify true values of parameters
+<pre class="r"><code># Specify true values of parameters - these are just the numbers we chose above
 prob_sport &lt;- 0.5
 prob_red_given_sport  &lt;- 0.8
 prob_red_given_normal &lt;- 0.2
@@ -184,13 +184,13 @@ type &lt;- rbinom(n_cars,1,prob_sport)
 # Calculate colour probabilities according to type
 prob_colour &lt;- ifelse(type,prob_red_given_sport,prob_red_given_normal)
 
-# Simulate car colours
+# Simulate car colours - we&#39;re using the binomial distribution for that
 colour &lt;- rbinom(n_cars,1,prob_colour)
 
-# Simulate car speeds
+# Simulate car speeds - we decided on the normal above
 speed &lt;- beta0 + beta1*type + rnorm(n_cars,sd=sd_Val)
 
-# Convert to tibble and make categories readible
+# Convert to tibble and make categories readable
 tib &lt;- tibble(colour, speed) %&gt;% 
   mutate(
     colour=factor(
@@ -198,20 +198,15 @@ tib &lt;- tibble(colour, speed) %&gt;%
           levels=c(&quot;red&quot;,&quot;blue&quot;)
         )
   )</code></pre>
-<pre class="marginfigure"><code>__Steph__: Car type - where&#39;s the car type?
-
-__John__: We&#39;re going to break this hypothesis test by dropping
-an important variable.
-
-__Steph__: Breaking, just like I asked for. I note we&#39;re breaking frequentist stuff first.
-
-__John__: We&#39;re also simulating a podcast here, for reasons unknown.</code></pre>
+<p><strong>Steph</strong>: Car type - where’s the car type?</p>
+<p><strong>John</strong>: We’re going to break this hypothesis test by dropping
+an important variable.</p>
+<p><strong>Steph</strong>: Breaking, just like I asked for. Great. I note we’re breaking frequentist stuff first.</p>
+<p><strong>John</strong>: We’re also simulating a podcast here, for reasons unknown.</p>
 </div>
-<div id="boxplots-and-two-sample-t-tests-8" class="section level1">
+<div id="boxplots-and-two-sample-t-tests-11" class="section level1">
 <h1>Boxplots and two sample t-tests<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a></h1>
-<p>Now that we have simulated some data we can create boxplots and try
-some statistical tests. If we make a boxplot for speed against colour
-we get:</p>
+<p>Now that we have simulated some data we can create boxplots to get a view of the differences between the cars. Then we can try some statistical tests. If we make a boxplot for speed against colour we get:</p>
 <pre class="r"><code>p &lt;- ggplot(tib, aes(x=colour, y=speed, fill=colour)) + 
   geom_boxplot() +
   theme_bw()
@@ -222,34 +217,38 @@ p</code></pre>
 Figure 2: speed vs colour
 </p>
 </div>
-<p>We see that there appears to be a clear difference between the speeds of
+<p>We can see that there appears to be a clear difference between the speeds of
 red and blue cars from the boxplots.</p>
-<p>To quantify the difference a two sample <span class="math inline">\(t\)</span>-test could be used.
-We have two sets of points
-<span class="math display">\[
-{\bf x} = (x_1,\ldots,x_n) \qquad \mbox{and} \qquad {\bf y} = (y_1,\ldots,y_m),
+<p><strong>Steph</strong>: If we saw this result in exploratory analysis in the field, this would be our signal to keep digging. And that’s where domain knowledge wins every time, John. At this point in a real piece of field work, as a corporate data scientist, I want my analysts to be jumping up and down at me telling me this isn’t a real causal effect.</p>
+<p><strong>John</strong>: That’s true, this is a simulated, simplified reality. Out of interest, do they often jump up and down when you’re around?</p>
+<p><strong>Steph</strong>: I run a high energy team. Let’s pretend like we don’t understand that there isn’t a real relationship between speed and colour. Let’s say we <em>don’t</em> understand the causal relationships between the variables and we go ahead and do a test.</p>
+<p>To quantify the difference a two sample <span class="math inline">\(t\)</span>-test could be used.</p>
+<p>We have two sets of points - one for red cars, one for blue cars:</p>
+<p><span class="math display">\[
+{\bf r} = (r_1,\ldots,r_n) \qquad \mbox{and} \qquad {\bf b} = (b_1,\ldots,b_m),
 \]</span>
-corresponding to the speeds of the red and blue cars respectively.
-We assume that both the <span class="math inline">\({\bf x}\)</span> and <span class="math inline">\({\bf y}\)</span> samples are
+these correspond to the speeds of the red and blue cars respectively.<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
+<p>We assume that both the <span class="math inline">\({\bf r}\)</span> and <span class="math inline">\({\bf b}\)</span> samples are
 normally distributed:
 <span class="math display">\[
-x_i \stackrel{iid.}{\sim} N(\mu_1,\sigma^2), 
+r_i \stackrel{iid.}{\sim} N(\mu_1,\sigma^2), 
 \qquad \mbox{and} \qquad
-y_i \stackrel{iid.}{\sim} N(\mu_2,\sigma^2) 
+b_i \stackrel{iid.}{\sim} N(\mu_2,\sigma^2) 
 \]</span>
 where the index ranges are <span class="math inline">\(i=1,\ldots,n\)</span> and <span class="math inline">\(i=1,\ldots,m\)</span>,
 <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span> are the mean speeds of the red and blue cars
 respectively, and <span class="math inline">\(\sigma^2\)</span> is a common
-variance parameter. Let’s
-consider a hypothesis test of the form
+variance parameter.<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a></p>
+<p>Let’s take a hypothesis test of the form
 <span class="math display">\[
 H_0 \colon \mu_1 = \mu_2 \qquad \mbox{versus} \qquad H_1 \colon \mu_1 &gt; \mu_2  
 \]</span>
 where we have chosen a one sided alternative to indicate our prior
 belief that red cars are faster than blue cars.</p>
+<p><strong>Steph</strong>: What that <em>means</em> is we have a conservative belief that, eh, maybe our two types of cars have the same average speed. This is the <em>null hypothesis</em>, the thing we’re beating up against. We’re going to test that against the <em>alternative hypothesis</em> that actually the red cars are faster on average. We choose to test that they are faster, because that’s the hypothesis we identified earlier with John’s sister in law: <em>red cars are faster</em>.</p>
 <p>If we wanted to see if red cars were significantly faster than
 blue cars we could perform a <span class="math inline">\(t\)</span> test using the
-<code>tadaatoolbox</code> package <span class="citation">(Burk and Anton <a href="#ref-R-tadaatoolbox">2018</a>)</span>.<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
+<code>tadaatoolbox</code> package <span class="citation">(Burk and Anton <a href="#ref-R-tadaatoolbox">2018</a>)</span>.<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a></p>
 <pre class="r"><code>library(tadaatoolbox)
 tadaa_t.test(data=tib, 
              response=speed, 
@@ -289,7 +288,11 @@ tadaa_t.test(data=tib,
 </table>
 <p><br></p>
 <p><br></p>
-<p>We get statistical significance, which we’d expect because we set up our little universe that way. Fantastic, we didn’t break our own test! (Just Steph’s development environment).</p>
+<p>And voila, we have a p-value &lt; 0.05. We reject the null hypothesis in favour of an alternative where red cars are faster.</p>
+<p>We got statistical significance, which we’d expect because we set up our little universe that way. Fantastic, it worked like we thought it might! (Just not Steph’s development environment).</p>
+<p><strong>Steph</strong>: But the problem is we <em>know</em> that the colour of the car does not make for a fast car. The hypothesis test is performed correctly, under perfect conditions - but our understanding of causality is totally flawed and as a consequence it’s entirely misleading.</p>
+<p><strong>John</strong>: Exactly. But statistics is about making inferences into a broader population. We had one caryard in our little facsimile of reality. We really need to understand if this could happen more than once - if it’s a generalisable result. Otherwise it’s just an interesting anomaly.</p>
+<p><strong>Steph</strong>: Always with the generalising. But I agree. Interesting anomalies are rarely any use to me in the field or in the corporate world. I would need to understand whether this test is fundamentally broken, for all the cars. Or if it’s a fluke.</p>
 </div>
 <div id="reproducibility-prediction-and-inference" class="section level1">
 <h1>Reproducibility, prediction and inference</h1>
@@ -300,18 +303,13 @@ experiment) where data was generated using the above process and we
 <li><p>the speed of the cars and the</p></li>
 <li><p>the colour of the cars.</p></li>
 </ul>
-<p>Suppose that we repeated the experiment 1000 times, that is we went to 1000 car yards
-and performed the same two sample t-test on different collected
+<p>Suppose that we repeated the experiment 1000 times, that is we went to 1000 car yards<a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a> and performed the same two sample t-test on different collected
 samples at each car yard collecting data for <span class="math inline">\(n=50\)</span> different cars
-each time.<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a></p>
+each time.<a href="#fn16" class="footnote-ref" id="fnref16"><sup>16</sup></a></p>
 <p>How often would red cars be significantly faster than blue car
 if we were to repeat the same experiment over and over again,
 i.e., would our results be reproducible?</p>
-<pre class="r"><code># Authors&#39; note: when Steph had to buy a car, she gave up after the first 
-# car yard and asked her friend who worked at said car yard to sort her 
-# out. She bought the first car she test drove because she is a great 
-# believer in not doing boring things, like car yards.
-n_car_yards &lt;- 1000 
+<pre class="r"><code>n_car_yards &lt;- 1000 
 
 p_values &lt;- c()
 for (i in 1:n_car_yards)
@@ -335,7 +333,7 @@ for (i in 1:n_car_yards)
 }</code></pre>
 <p>From the above simulations we find that in 94.1 percent
 of simulations where red cars were statistically significantly faster than blue cars
-even though the colour of the car has nothing to do with the speed of the car!</p>
+even though the colour of the car has nothing to do with the speed of the car. This is a generalisable result, not a fluke.</p>
 <p>So…</p>
 <ul>
 <li><p><strong>Reproducibility</strong>: The results would be reproducible roughly
@@ -343,14 +341,16 @@ even though the colour of the car has nothing to do with the speed of the car!</
 if we went from car yard to car yard red cars would be generally faster
 than blue cars. <em>Pre-registration does not inherently solve this problem of a <em>spurious relationship</em> between these variables.</em></p></li>
 <li><p><strong>Prediction</strong>: Even though there is no direct relationship
-between speend and car colour, if we were to pick a car that we wanted
+between speed and car colour, if we were to pick a car that we wanted
 to be fast then we would pick a red car and the car would be more likely to be
 faster than if we picked a blue car.
-We can still make good predictions from incorrect models.</p></li>
-<li><p><strong>Truth</strong>: But painting our car red would not make it any faster.</p></li>
+We can still make good predictions from incorrect models.<a href="#fn17" class="footnote-ref" id="fnref17"><sup>17</sup></a></p></li>
 </ul>
-<p><strong>Steph</strong>: Congratulations John, statistics has discovered the age-old econometric problem of the spurious regression. We broke that hypothesis because we were measuring the wrong relationships.<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a></p>
-<p><strong>John</strong>: Yes, that was my point. With a relateable example. It occurs all the time
+<ul>
+<li><strong>Truth</strong>: Painting our car red would not make it any faster.</li>
+</ul>
+<p><strong>Steph</strong>: Congratulations John, statistics has discovered the age-old econometric problem of the spurious regression. We broke that hypothesis because we were measuring the wrong relationships.<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a></p>
+<p><strong>John</strong>: Yes, that was my point - with a relateable example. It occurs all the time
 in science. Researchers don’t know what the true relationship between measurements
 are so they</p>
 <ul>
@@ -358,7 +358,7 @@ are so they</p>
 <li><p>measure what it is possible or convenient to measure; or</p></li>
 <li><p>measure a whole bunch of stuff and hope that something they measure is important.</p></li>
 </ul>
-<p><strong>Steph</strong>: This happens in field work all.the.time. You think you’re measuring Thing A, when actually Thing B is what’s doing the heavy lifting and Thing B just happens to be correlated with Thing A. (Tylyer Vigen’s site is full of examples of this in real life)[<a href="http://www.tylervigen.com/spurious-correlations" class="uri">http://www.tylervigen.com/spurious-correlations</a>], in that case, <em>time itself</em> is the common Thing B. If you’re working with time series it’s often inevitable without recognising the impact it has.</p>
+<p><strong>Steph</strong>: This happens in business all.the.time. You think you’re measuring Thing A, when actually Thing B is what’s doing the heavy lifting and Thing B just happens to be correlated with Thing A. <a href="http://www.tylervigen.com/spurious-correlations">Tylyer Vigen’s site is full of examples of this in real life</a>, in those cases, <em>time itself</em> is the common Thing B. If you’re working with time series it’s often inevitable if you don’t recognise the impact it has.</p>
 <p><strong>John</strong>: Stories for another day?</p>
 <p><strong>Steph</strong>: Sure- next time let’s see what this idea of a <em>spurious relationship</em> would look like in a real-world data science context.</p>
 <p><br></p>
@@ -399,14 +399,18 @@ for proof-reading and comments.</p>
 <li id="fn3"><p>At this point, Steph attempted to compile this post for the first time. John, we need to talk about dependencies one of these days.<a href="#fnref3" class="footnote-back">↩</a></p></li>
 <li id="fn4"><p>Now I’ve had to make a version update to R itself, John. I’m just saying, if you ever had to put code into production…<a href="#fnref4" class="footnote-back">↩</a></p></li>
 <li id="fn5"><p>For the record, this proof is John’s but Steph had time to take all the math-speak away while trying to update all those dependencies. Y’all can thank me later.<a href="#fnref5" class="footnote-back">↩</a></p></li>
-<li id="fn6"><p><em>Some maths help</em>: This is basically just choose your own adventure, but for probability - Steph.<a href="#fnref6" class="footnote-back">↩</a></p></li>
-<li id="fn7"><p><em>Some maths help</em>: These are what we call <em>conditional probabilities</em>, the idea that if Thing 1 happens, then Thing 2 may be more or less likely as a result. This makes sense if you think about sports at all (neither John or Steph follow sport, but we hear that normal people often quite like it) - the probability of team A winning the sportsball grandfinal might be 50% overall. This is the <em>marginal</em> probability. But the probability that Team A wins the sportsball grandfinal <em>given</em> Team B’s star player mysteriously won free first class tickets to Las Vegas may be 90%. This is the <em>conditional</em> probability.<a href="#fnref7" class="footnote-back">↩</a></p></li>
-<li id="fn8"><p>Am now reinstalling all dependencies of ggplot2, we better break something real good, John.<a href="#fnref8" class="footnote-back">↩</a></p></li>
-<li id="fn9"><p>As a corporate data scientist who is currently working through dependency hell, I legit use these all.the.time.<a href="#fnref9" class="footnote-back">↩</a></p></li>
-<li id="fn10"><p>The idea here is that we have very little certainty about one observation, but about many observations we can be <em>more</em> certain. And if anybody has any idea why this build is <em>Failed with error: ‘package ’ggplot2’ could not be loaded’</em>, I’d be eternally grateful.<a href="#fnref10" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p><em>Some maths help</em>: This is basically just choose your own adventure, but for probability. The subscript <span class="math inline">\(i\)</span> just refers to a specific, generic car - it could be anything, red or blue, sport a normal soccer mum mobile full of junk.<a href="#fnref6" class="footnote-back">↩</a></p></li>
+<li id="fn7"><p><em>Some maths help</em>: These are what we call <em>conditional probabilities</em>, the idea that if Thing 1 happens, then Thing 2 may be more or less likely as a result. This makes sense if you think about sports at all (neither John or Steph follow sport, but we hear that normal people often quite like it) - the probability of team A winning the sportsball grandfinal might be 50% overall. This is the <em>marginal</em> probability. But the probability that Team A wins the sportsball grandfinal <em>given</em> Team B’s star player mysteriously won free first class tickets to Las Vegas may be 90%. This is the <em>conditional</em> probability. We signify that with the | sign - so <span class="math inline">\(P(thing 1 | thing 2)\)</span> means ‘the probability of thing 1 happening, given thing 2 happens as well’.<a href="#fnref7" class="footnote-back">↩</a></p></li>
+<li id="fn8"><p><em>Some maths help</em>: This is clearly another fantasy, a simplifying assumption. Using this we can start placing numbers on our facsimile of the real world, measure the effects and then proceed to our test.<a href="#fnref8" class="footnote-back">↩</a></p></li>
+<li id="fn9"><p><em>Some maths help</em>: The <span class="math inline">\(I\)</span> function is what’s called an <em>indicator</em> function. It’s equal to a 1 if the condition inside the bracket is true and a zero if it’s not. So the speed of the <span class="math inline">\(i\)</span>th car is <span class="math inline">\(150 + \varepsilon_i\)</span> if it’s a sports car, but if it’s just a normal, rather dirty car full of empty happy meal boxes, it’s <span class="math inline">\(100 + \varepsilon_i\)</span><a href="#fnref9" class="footnote-back">↩</a></p></li>
+<li id="fn10"><p>For those of you following along on this epic adventure, Steph is now reinstalling the entire <code>tidyverse</code>. On a mobile phone hotspot.<a href="#fnref10" class="footnote-back">↩</a></p></li>
 <li id="fn11"><p>Am now reinstalling all dependencies of ggplot2, we better break something real good, John.<a href="#fnref11" class="footnote-back">↩</a></p></li>
-<li id="fn12"><p>As a corporate data scientist who is currently working through dependency hell, I legit use these all.the.time.<a href="#fnref12" class="footnote-back">↩</a></p></li>
-<li id="fn13"><p>The idea here is that we have very little certainty about one observation, but about many observations we can be <em>more</em> certain. And if anybody has any idea why this build is <em>Failed with error: ‘package ’ggplot2’ could not be loaded’</em>, I’d be eternally grateful.<a href="#fnref13" class="footnote-back">↩</a></p></li>
-<li id="fn14"><p>I admit defeat, can’t work out the dependency issue, John hit me up with your dependencies and system environment please!<a href="#fnref14" class="footnote-back">↩</a></p></li>
+<li id="fn12"><p><em>Some maths help</em>: those <span class="math inline">\(r\)</span>s and <span class="math inline">\(b\)</span>s you can really just think of as a list of all the relevant points. Or, even better - they’re just two columns in a spreadsheet, one marked “red cars” the other is marked “blue cars”. The <span class="math inline">\(n\)</span> and the <span class="math inline">\(m\)</span> just refers to the length of each of those columns. They could have the same number of observations, or different. <span class="math inline">\(m\)</span> could be 20 and <span class="math inline">\(n\)</span> could be 25. Or 200 and 250 or 20000 and 25000. The idea of the maths here is to generalise. Whenever you see mathematics like this, that’s all it’s doing - generalising to the point where you could throw any number in there at all.<a href="#fnref12" class="footnote-back">↩</a></p></li>
+<li id="fn13"><p><em>Some maths help</em>: Yep, John’s generalising again here. All he’s trying to say is that the two car speeds could have any mean, but they have a common variance. So they have the same <em>shape</em> of the bell curve, but it’s sitting in a different spot. If you’re wondering what that might look like, <a href="https://rexanalytics.shinyapps.io/mean_and_variance_app/">check out this app</a>.<a href="#fnref13" class="footnote-back">↩</a></p></li>
+<li id="fn14"><p>As a corporate data scientist who is currently working through dependency hell, I legit use these tests all.the.time.<a href="#fnref14" class="footnote-back">↩</a></p></li>
+<li id="fn15"><p>Steph would prefer to stab herself in the hand with a fork than do this, just saying.<a href="#fnref15" class="footnote-back">↩</a></p></li>
+<li id="fn16"><p>The idea here is that we have very little certainty about one observation, one car yard, but about many observations we can be <em>more</em> certain. And if anybody has any idea why this build is <em>Failed with error: ‘package ’ggplot2’ could not be loaded’</em>, I’d be eternally grateful.<a href="#fnref16" class="footnote-back">↩</a></p></li>
+<li id="fn17"><p>Steph’s note: Alot of seriously good field work is based around understanding this, working within the limitations it creates <em>and acknowledging these</em>. But understanding the domain is always critical to doing this successfully.<a href="#fnref17" class="footnote-back">↩</a></p></li>
+<li id="fn18"><p>I admit defeat, can’t work out the dependency issue, John hit me up with your dependencies and system environment please!<a href="#fnref18" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
