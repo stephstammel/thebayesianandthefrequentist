@@ -269,8 +269,7 @@ if (window.hljs) {
 
 
 
-<p><strong>Intended level</strong>: 2nd year undergraduate.</p>
-<p><strong>Assumed background</strong>: hypothesis testing; two sample t-test; conditional probability; binomial distribution; normal distribution.</p>
+<p><strong>Intended level and assumed knowledge</strong>: We figure you know a little about probability, a little about R, a little about hypothesis testing and statistics. We’d like to show you how these fit together. If you’re unfamiliar with these concepts, the footnotes will be your guide (some of the time).</p>
 <div id="and-so-it-begins.." class="section level2">
 <h2>And so it begins..</h2>
 <p><em>Our location: an office somewhere in Sydney, Australia. It might be well-appointed corporate digs, a slightly underfunded academic building or a cheap cafe somewhere in central Sydney. Choose your own statistical adventure.</em><label for="tufte-sn-1" class="margin-toggle sidenote-number">1</label><input type="checkbox" id="tufte-sn-1" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">1</span> On our Twitter post announcing this blog, Steph made a comment about a would-be podcast, except she and John are the parents of five young kids between them (not together, we hasten to add). Consider this the ‘could have been’ podcast.</span></p>
@@ -318,6 +317,29 @@ if (window.hljs) {
 <li><p><span style="color:purple"><strong>Sports</strong></span> cars are more likely to be <span style="color:red"><strong>red</strong></span> than <span style="color:green"><strong>normal</strong></span> cars</p></li>
 <li><p><span style="color:purple"><strong>sports</strong></span> cars are generally faster than <span style="color:green"><strong>normal</strong></span> cars.</p></li>
 </ul>
+<p>The relationship between the three variables can be visualized by a directed acyclic graph.<label for="tufte-sn-6" class="margin-toggle sidenote-number">6</label><input type="checkbox" id="tufte-sn-6" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">6</span> Choose your own adventure, but for probability - Steph.</span></p>
+<p>There are three nodes: type, colour and speed. The car type “causes” the car colour and the car speed so there is a directed edge from type to colour and type to speed. We can visualize this using the <code>dagitty</code> and <code>ggdag</code> packages <span class="citation">(Textor and van der Zander <label for="tufte-mn-3" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle">2016<span class="marginnote">Textor, Johannes, and Benito van der Zander. 2016. <em>Dagitty: Graphical Analysis of Structural Causal Models</em>. <a href="https://CRAN.R-project.org/package=dagitty">https://CRAN.R-project.org/package=dagitty</a>.</span>,<span class="citation">@R-ggdag</span>)</span>.</p>
+<pre class="r"><code>library(dagitty)</code></pre>
+<pre><code>## Warning: package &#39;dagitty&#39; was built under R version 3.5.1</code></pre>
+<pre class="r"><code>library(ggdag)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;ggdag&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     expand_scale</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     filter</code></pre>
+<p>
+<span class="marginnote shownote"> <!--
+<div class="figure">--> <img src="data:image/png;base64,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" alt="DAG for speed, colour and type" width="336" /> <!--
+<p class="caption marginnote">-->DAG for speed, colour and type<!--</p>--> <!--</div>--></span>
+</p>
+<pre class="r"><code>dagified &lt;- dagify(colour ~ type,
+                   speed ~ type,
+                   exposure = &quot;x&quot;,
+                   outcome = &quot;speed&quot;)
+ggdag(dagified, layout = &quot;circle&quot;)</code></pre>
 </div>
 <div id="simulating-data" class="section level1">
 <h1>Simulating data</h1>
@@ -342,8 +364,8 @@ if (window.hljs) {
 &amp;  = 100 + 50 \times {\mathbb I}(\mbox{type}_i=\mbox{sports}) + \varepsilon_i 
 \end{array}
 \]</span> where independently <span class="math inline">\(\varepsilon_i \sim N(0,25^2)\)</span>.</p>
-<p><label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>Steph</strong>: John, you know that some people exist who are allergic to maths, right? So to translate, you made up a situation where the speed of the car is only is related to the colour of the car because red cars are more likely to be sports cars.</span> <span style="display: block;"><strong>John</strong>: Exactly, and this is going to be relevant later.</span></span></p>
-<p>Let’s simulate some data<label for="tufte-sn-6" class="margin-toggle sidenote-number">6</label><input type="checkbox" id="tufte-sn-6" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">6</span> For those of you following along on this epic adventure, Steph is now reinstalling the entire <code>tidyverse</code>. On a mobile phone hotspot.</span> that captures this scenario using R <span class="citation">(R Core Team <label for="tufte-mn-4" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle">2018<span class="marginnote">R Core Team. 2018. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.</span>)</span>.</p>
+<p><label for="tufte-mn-4" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>Steph</strong>: John, you know that some people exist who are allergic to maths, right? So to translate, you made up a situation where the speed of the car is only is related to the colour of the car because red cars are more likely to be sports cars.</span> <span style="display: block;"><strong>John</strong>: Exactly, and this is going to be relevant later.</span></span></p>
+<p>Let’s simulate some data<label for="tufte-sn-7" class="margin-toggle sidenote-number">7</label><input type="checkbox" id="tufte-sn-7" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">7</span> For those of you following along on this epic adventure, Steph is now reinstalling the entire <code>tidyverse</code>. On a mobile phone hotspot.</span> that captures this scenario using R <span class="citation">(R Core Team <label for="tufte-mn-5" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-5" class="margin-toggle">2018<span class="marginnote">R Core Team. 2018. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.</span>)</span>.</p>
 <pre class="r"><code># Specify true values of parameters
 prob_sport &lt;- 0.5
 prob_red_given_sport  &lt;- 0.8
@@ -373,10 +395,10 @@ tib &lt;- tibble(colour, speed) %&gt;%
           levels=c(&quot;red&quot;,&quot;blue&quot;)
         )
   )</code></pre>
-<p><label for="tufte-mn-5" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-5" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>Steph</strong>: Car type - where’s the car type?</span> <span style="display: block;"><strong>John</strong>: We’re going to break this hypothesis test by dropping an important variable.</span> <span style="display: block;"><strong>Steph</strong>: Breaking, just like I asked for. I note we’re breaking frequentist stuff first.</span> <span style="display: block;"><strong>John</strong>: We’re also simulating a podcast here, for reasons unknown.</span></span></p>
+<p><label for="tufte-mn-6" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-6" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>Steph</strong>: Car type - where’s the car type?</span> <span style="display: block;"><strong>John</strong>: We’re going to break this hypothesis test by dropping an important variable.</span> <span style="display: block;"><strong>Steph</strong>: Breaking, just like I asked for. I note we’re breaking frequentist stuff first.</span> <span style="display: block;"><strong>John</strong>: We’re also simulating a podcast here, for reasons unknown.</span></span></p>
 </div>
 <div id="boxplots-and-two-sample-t-tests-8" class="section level1">
-<h1>Boxplots and two sample t-tests<label for="tufte-sn-7" class="margin-toggle sidenote-number">7</label><input type="checkbox" id="tufte-sn-7" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">7</span> Am now reinstalling all dependencies of ggplot2, we better break something real good, John.</span></h1>
+<h1>Boxplots and two sample t-tests<label for="tufte-sn-8" class="margin-toggle sidenote-number">8</label><input type="checkbox" id="tufte-sn-8" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">8</span> Am now reinstalling all dependencies of ggplot2, we better break something real good, John.</span></h1>
 <p>Now that we have simulated some data we can create boxplots and try some statistical tests. If we make a boxplot for speed against colour we get:</p>
 <p>
 <span class="marginnote shownote"> <!--
@@ -397,7 +419,7 @@ y_i \stackrel{iid.}{\sim} N(\mu_2,\sigma^2)
 \]</span> where the index ranges are <span class="math inline">\(i=1,\ldots,n\)</span> and <span class="math inline">\(i=1,\ldots,m\)</span>, <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span> are the mean speeds of the red and blue cars respectively, and <span class="math inline">\(\sigma^2\)</span> is a common variance parameter. Let’s consider a hypothesis test of the form <span class="math display">\[
 H_0 \colon \mu_1 = \mu_2 \qquad \mbox{versus} \qquad H_1 \colon \mu_1 &gt; \mu_2  
 \]</span> where we have chosen a one sided alternative to indicate our prior belief that red cars are faster than blue cars.</p>
-<p>If we wanted to see if red cars were significantly faster than blue cars we could perform a <span class="math inline">\(t\)</span> test using the <code>tadaatoolbox</code> package <span class="citation">(Burk and Anton <label for="tufte-mn-6" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-6" class="margin-toggle">2018<span class="marginnote">Burk, Lukas, and Tobias Anton. 2018. <em>Tadaatoolbox: Helpers for Data Analysis and Presentation Focused on Undergrad Psychology</em>. <a href="https://CRAN.R-project.org/package=tadaatoolbox">https://CRAN.R-project.org/package=tadaatoolbox</a>.</span>)</span>.<label for="tufte-sn-8" class="margin-toggle sidenote-number">8</label><input type="checkbox" id="tufte-sn-8" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">8</span> As a corporate data scientist who is currently working through dependency hell, I legit use these all.the.time.</span></p>
+<p>If we wanted to see if red cars were significantly faster than blue cars we could perform a <span class="math inline">\(t\)</span> test using the <code>tadaatoolbox</code> package <span class="citation">(Burk and Anton <label for="tufte-mn-7" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-7" class="margin-toggle">2018<span class="marginnote">Burk, Lukas, and Tobias Anton. 2018. <em>Tadaatoolbox: Helpers for Data Analysis and Presentation Focused on Undergrad Psychology</em>. <a href="https://CRAN.R-project.org/package=tadaatoolbox">https://CRAN.R-project.org/package=tadaatoolbox</a>.</span>)</span>.<label for="tufte-sn-9" class="margin-toggle sidenote-number">9</label><input type="checkbox" id="tufte-sn-9" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">9</span> As a corporate data scientist who is currently working through dependency hell, I legit use these all.the.time.</span></p>
 <pre class="r"><code>library(tadaatoolbox)
 tadaa_t.test(data=tib, 
              response=speed, 
@@ -446,7 +468,7 @@ tadaa_t.test(data=tib,
 <li><p>the speed of the cars and the</p></li>
 <li><p>the colour of the cars.</p></li>
 </ul>
-<p>Suppose that we repeated the experiment 1000 times, that is we went to 1000 car yards and performed the same two sample t-test on different collected samples at each car yard collecting data for <span class="math inline">\(n=50\)</span> different cars each time.<label for="tufte-sn-9" class="margin-toggle sidenote-number">9</label><input type="checkbox" id="tufte-sn-9" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">9</span> The idea here is that we have very little certainty about one observation, but about many observations we can be <em>more</em> certain. And if anybody has any idea why this build is <em>Failed with error: ‘package ’ggplot2’ could not be loaded’</em>, I’d be eternally grateful.</span></p>
+<p>Suppose that we repeated the experiment 1000 times, that is we went to 1000 car yards and performed the same two sample t-test on different collected samples at each car yard collecting data for <span class="math inline">\(n=50\)</span> different cars each time.<label for="tufte-sn-10" class="margin-toggle sidenote-number">10</label><input type="checkbox" id="tufte-sn-10" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">10</span> The idea here is that we have very little certainty about one observation, but about many observations we can be <em>more</em> certain. And if anybody has any idea why this build is <em>Failed with error: ‘package ’ggplot2’ could not be loaded’</em>, I’d be eternally grateful.</span></p>
 <p>How often would red cars be significantly faster than blue car if we were to repeat the same experiment over and over again, i.e., would our results be reproducible?</p>
 <pre class="r"><code># Authors&#39; note: when Steph had to buy a car, she gave up after the first 
 # car yard and asked her friend who worked at said car yard to sort her 
@@ -481,7 +503,7 @@ for (i in 1:n_car_yards)
 <li><p><strong>Prediction</strong>: Even though there is no direct relationship between speend and car colour, if we were to pick a car that we wanted to be fast then we would pick a red car and the car would be more likely to be faster than if we picked a blue car. We can still make good predictions from incorrect models.</p></li>
 <li><p><strong>Truth</strong>: But painting our car red would not make it any faster.</p></li>
 </ul>
-<p><strong>Steph</strong>: Congratulations John, statistics has discovered the age-old econometric problem of the spurious regression. We broke that hypothesis because we were measuring the wrong relationships.<label for="tufte-sn-10" class="margin-toggle sidenote-number">10</label><input type="checkbox" id="tufte-sn-10" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">10</span> I admit defeat, can’t work out the dependency issue, John hit me up with your dependencies and system environment please!</span></p>
+<p><strong>Steph</strong>: Congratulations John, statistics has discovered the age-old econometric problem of the spurious regression. We broke that hypothesis because we were measuring the wrong relationships.<label for="tufte-sn-11" class="margin-toggle sidenote-number">11</label><input type="checkbox" id="tufte-sn-11" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">11</span> I admit defeat, can’t work out the dependency issue, John hit me up with your dependencies and system environment please!</span></p>
 <p><strong>John</strong>: Yes, that was my point. With a relateable example. It occurs all the time in science. Researchers don’t know what the true relationship between measurements are so they</p>
 <ul>
 <li><p>measure what their current theory tells them what is important to measure;</p></li>
@@ -496,110 +518,6 @@ for (i in 1:n_car_yards)
 <p><strong>Acknowledgements</strong>: We would like to thank Sarah Romanes, Isabella Ghement, and Shila Ghazanfar for proof-reading and comments.</p>
 <p><br></p>
 <p><br></p>
-<pre class="r"><code>devtools::session_info()</code></pre>
-<pre><code>## Session info -------------------------------------------------------------</code></pre>
-<pre><code>##  setting  value                       
-##  version  R version 3.5.0 (2018-04-23)
-##  system   x86_64, mingw32             
-##  ui       RTerm                       
-##  language (EN)                        
-##  collate  English_Australia.1252      
-##  tz       Australia/Sydney            
-##  date     2019-03-19</code></pre>
-<pre><code>## Packages -----------------------------------------------------------------</code></pre>
-<pre><code>##  package      * version    date       source                         
-##  abind          1.4-5      2016-07-21 CRAN (R 3.5.0)                 
-##  assertthat     0.2.0      2017-04-11 CRAN (R 3.5.0)                 
-##  backports      1.1.2      2017-12-13 CRAN (R 3.5.0)                 
-##  base         * 3.5.0      2018-04-23 local                          
-##  bindr          0.1.1      2018-03-13 CRAN (R 3.5.0)                 
-##  bindrcpp     * 0.2.2      2018-03-29 CRAN (R 3.5.0)                 
-##  boot           1.3-20     2017-08-06 CRAN (R 3.5.0)                 
-##  broom          0.5.0      2018-07-17 CRAN (R 3.5.1)                 
-##  car            3.0-2      2018-08-23 CRAN (R 3.5.1)                 
-##  carData        3.0-1      2018-03-28 CRAN (R 3.5.0)                 
-##  cellranger     1.1.0      2016-07-27 CRAN (R 3.5.0)                 
-##  checkmate      1.8.5      2017-10-24 CRAN (R 3.5.0)                 
-##  cli            1.0.0      2017-11-05 CRAN (R 3.5.0)                 
-##  colorspace     1.3-2      2016-12-14 CRAN (R 3.5.0)                 
-##  compiler       3.5.0      2018-04-23 local                          
-##  crayon         1.3.4      2017-09-16 CRAN (R 3.5.0)                 
-##  curl           3.2        2018-03-28 CRAN (R 3.5.0)                 
-##  data.table     1.11.6     2018-09-19 CRAN (R 3.5.1)                 
-##  datasets     * 3.5.0      2018-04-23 local                          
-##  DescTools      0.99.24    2018-03-19 CRAN (R 3.5.1)                 
-##  devtools       1.13.6     2018-06-27 CRAN (R 3.5.1)                 
-##  digest         0.6.15     2018-01-28 CRAN (R 3.5.0)                 
-##  dplyr        * 0.7.6      2018-06-29 CRAN (R 3.5.1)                 
-##  evaluate       0.11       2018-07-17 CRAN (R 3.5.1)                 
-##  expm           0.999-2    2017-03-29 CRAN (R 3.5.1)                 
-##  forcats      * 0.3.0      2018-02-19 CRAN (R 3.5.0)                 
-##  foreign        0.8-71     2018-07-20 CRAN (R 3.5.1)                 
-##  ggplot2      * 3.0.0      2018-07-03 CRAN (R 3.5.1)                 
-##  glue           1.3.0.9000 2019-01-07 Github (tidyverse/glue@3f7012c)
-##  graphics     * 3.5.0      2018-04-23 local                          
-##  grDevices    * 3.5.0      2018-04-23 local                          
-##  grid           3.5.0      2018-04-23 local                          
-##  gridExtra      2.3        2017-09-09 CRAN (R 3.5.1)                 
-##  gtable         0.2.0      2016-02-26 CRAN (R 3.5.0)                 
-##  haven          1.1.2      2018-06-27 CRAN (R 3.5.1)                 
-##  highr          0.7        2018-06-09 CRAN (R 3.5.1)                 
-##  hms            0.4.2      2018-03-10 CRAN (R 3.5.0)                 
-##  htmltools      0.3.6      2017-04-28 CRAN (R 3.5.0)                 
-##  httr           1.3.1      2017-08-20 CRAN (R 3.5.0)                 
-##  jsonlite       1.5        2017-06-01 CRAN (R 3.5.0)                 
-##  knitr          1.22.4     2019-03-19 Github (yihui/knitr@7ece117)   
-##  labeling       0.3        2014-08-23 CRAN (R 3.5.0)                 
-##  lattice        0.20-35    2017-03-25 CRAN (R 3.5.0)                 
-##  lazyeval       0.2.1      2017-10-29 CRAN (R 3.5.0)                 
-##  lubridate      1.7.4      2018-04-11 CRAN (R 3.5.0)                 
-##  magrittr       1.5        2014-11-22 CRAN (R 3.5.0)                 
-##  manipulate     1.0.1      2014-12-24 CRAN (R 3.5.0)                 
-##  MASS           7.3-50     2018-04-30 CRAN (R 3.5.1)                 
-##  Matrix         1.2-14     2018-04-13 CRAN (R 3.5.0)                 
-##  memoise        1.1.0      2017-04-21 CRAN (R 3.5.0)                 
-##  methods      * 3.5.0      2018-04-23 local                          
-##  modelr         0.1.2      2018-05-11 CRAN (R 3.5.0)                 
-##  munsell        0.5.0      2018-06-12 CRAN (R 3.5.1)                 
-##  mvtnorm        1.0-8      2018-05-31 CRAN (R 3.5.0)                 
-##  nlme           3.1-137    2018-04-07 CRAN (R 3.5.0)                 
-##  nortest        1.0-4      2015-07-30 CRAN (R 3.5.0)                 
-##  openxlsx       4.1.0      2018-05-26 CRAN (R 3.5.0)                 
-##  pillar         1.3.0      2018-07-14 CRAN (R 3.5.1)                 
-##  pixiedust      0.8.5      2018-07-16 CRAN (R 3.5.1)                 
-##  pkgconfig      2.0.2      2018-08-16 CRAN (R 3.5.1)                 
-##  plyr           1.8.4      2016-06-08 CRAN (R 3.5.0)                 
-##  purrr        * 0.2.5      2018-05-29 CRAN (R 3.5.0)                 
-##  pwr            1.2-2      2018-03-03 CRAN (R 3.5.1)                 
-##  R6             2.2.2      2017-06-17 CRAN (R 3.5.0)                 
-##  Rcpp           0.12.18    2018-07-23 CRAN (R 3.5.1)                 
-##  readr        * 1.1.1      2017-05-16 CRAN (R 3.5.0)                 
-##  readxl         1.1.0      2018-04-20 CRAN (R 3.5.0)                 
-##  rio            0.5.10     2018-03-29 CRAN (R 3.5.0)                 
-##  rlang          0.2.2      2018-08-16 CRAN (R 3.5.1)                 
-##  rmarkdown      1.10       2018-06-11 CRAN (R 3.5.1)                 
-##  rprojroot      1.3-2      2018-01-03 CRAN (R 3.5.0)                 
-##  rstudioapi     0.7        2017-09-07 CRAN (R 3.5.0)                 
-##  rvest          0.3.2      2016-06-17 CRAN (R 3.5.0)                 
-##  scales         0.5.0      2017-08-24 CRAN (R 3.5.1)                 
-##  stats        * 3.5.0      2018-04-23 local                          
-##  stringi        1.2.4      2018-07-20 CRAN (R 3.5.0)                 
-##  stringr      * 1.3.1      2018-05-10 CRAN (R 3.5.0)                 
-##  tadaatoolbox * 0.16.0     2018-01-10 CRAN (R 3.5.1)                 
-##  tibble       * 1.4.2      2018-01-22 CRAN (R 3.5.0)                 
-##  tidyr        * 0.8.1      2018-05-18 CRAN (R 3.5.0)                 
-##  tidyselect     0.2.4      2018-02-26 CRAN (R 3.5.0)                 
-##  tidyverse    * 1.2.1      2017-11-14 CRAN (R 3.5.0)                 
-##  tools          3.5.0      2018-04-23 local                          
-##  tufte        * 0.4        2018-07-15 CRAN (R 3.5.1)                 
-##  utils        * 3.5.0      2018-04-23 local                          
-##  viridis        0.5.1      2018-03-29 CRAN (R 3.5.0)                 
-##  viridisLite    0.3.0      2018-02-01 CRAN (R 3.5.0)                 
-##  withr          2.1.2      2018-03-15 CRAN (R 3.5.0)                 
-##  xfun           0.3        2018-07-06 CRAN (R 3.5.1)                 
-##  xml2           1.2.0      2018-01-24 CRAN (R 3.5.0)                 
-##  yaml           2.2.0      2018-07-25 CRAN (R 3.5.1)                 
-##  zip            1.0.0      2017-04-25 CRAN (R 3.5.0)</code></pre>
 </div>
 
 
