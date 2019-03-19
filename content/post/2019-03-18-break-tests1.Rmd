@@ -113,8 +113,8 @@ car was written off so we needed to buy a new car. While we were looking to
 get a new car my sister in law asked (as a joke) "Are you getting a red car?
 I heard they're fast!" 
 
- 
-<img src="![](/post/2019-03-18-break-tests1_files/lamborghini_huracan_slideshow_lead.jpg)" style="width:90%">
+![lamborghini_huracan](/post/2019-03-18-break-tests1_files/lamborghini_huracan_slideshow_lead.jpg){width=80%}
+<img src="![]()" style="width:90%">
  
 
 __John__: Now I don't know much about cars at all. So if I went into a
