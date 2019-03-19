@@ -178,7 +178,7 @@ edge from type to colour and type to speed. We can visualize this
 using the `dagitty` and `ggdag` packages [@R-dagitty,@R-ggdag].
 
 
-```{r fig-margin1, fig.margin = TRUE, fig.cap = "DAG for speed, colour and type", fig.width=3.5, fig.height=3.5, suppressMessages = TRUE, suppressWarnings = TRUE}
+```{r fig-margin1, fig.margin = TRUE, fig.cap = "DAG for speed, colour and type", fig.width=3.5, fig.height=3.5, suppressMessages = TRUE, suppressWarnings = TRUE, warning=FALSE, message=FALSE}
 library(dagitty)
 library(ggdag)
 
