@@ -175,7 +175,7 @@ be visualized by a directed acyclic graph.[^6]
 There are three nodes: type, colour and speed. The car type "causes"
 the car colour and the car speed so there is a directed
 edge from type to colour and type to speed. We can visualize this
-using the `dagitty` and `ggdag` packages [@R-dagitty,@R-ggdag].
+using the `dagitty` and `ggdag` packages [@R-dagitty][@R-ggdag].
 
 
 ```{r fig-margin1, fig.margin = TRUE, fig.cap = "DAG for speed, colour and type", fig.width=3.5, fig.height=3.5, suppressMessages = TRUE, suppressWarnings = TRUE, warning=FALSE, message=FALSE}
