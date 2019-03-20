@@ -184,7 +184,7 @@ library(ggdag)
 
 dagified <- dagify(colour ~ type,
                    speed ~ type,
-                   exposure = "x",
+                   exposure = "colour",
                    outcome = "speed")
 ggdag(dagified, layout = "circle")
 ```
