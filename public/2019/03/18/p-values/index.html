@@ -167,7 +167,7 @@ library(ggdag)
 
 dagified &lt;- dagify(colour ~ type,
                    speed ~ type,
-                   exposure = &quot;x&quot;,
+                   exposure = &quot;colour&quot;,
                    outcome = &quot;speed&quot;)
 ggdag(dagified, layout = &quot;circle&quot;)</code></pre>
 <div class="figure"><span id="fig:fig-margin1"></span>
