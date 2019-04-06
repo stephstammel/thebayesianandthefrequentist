@@ -1,0 +1,244 @@
+---
+title: "The Central Limit Theorem"
+author: "Steph and John"
+date: '2019-04-04'
+slug: p-values
+tags: p-values
+categories:
+- Bayes
+- Frequentist
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+    keep_tex: true
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+    keep_tex: true
+link-citations: yes
+
+---
+
+
+ 
+
+```{r setup, include=FALSE}
+# Suppress warnings for all the packages here
+# Then all of the warnings wont come up when we
+# use the library(X) commands in R scripts below.
+suppressPackageStartupMessages(require(tufte))
+suppressPackageStartupMessages(require(tidyverse))
+suppressPackageStartupMessages(library(plotly))
+# invalidate cache when the tufte version changes
+knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
+options(htmltools.dir.version = FALSE)
+
+# Set the seed for reproducibility
+set.seed(1)
+```
+
+
+ 
+ 
+
+```{r}
+generate_plot_data <- function(N,n_val,rdist,...)
+{  
+  # Initialize data for N datasets of size n
+  X_mat <- matrix(rdist(N*n_val, ...),N,n_val)
+  
+  # Calculate the means
+  x_bar <- apply(X_mat,1,mean)
+
+  # Approximate the distribution of x_bar
+  dens <- density(x_bar)
+  
+  # Stores the data
+  dat1 <- cbind(x=dens$x,y=dens$y, n_val)
+  colnames(dat1) <- c("x","y","n_val")
+  
+  # Approximate the mean and variance of the distribution
+  mu <- mean(X_mat)
+  sigma2 <- var(as.vector(X_mat))
+  
+  # Calculate the parameters of the CLT distribution
+  mu_CLT     <- mu
+  sigma2_CLT <- sigma2/n_val
+  sigma_CLT  <- sqrt(sigma2_CLT)
+  
+  # 
+  xg <- seq(mu_CLT - 5*sigma_CLT,mu_CLT + 5*sigma_CLT,,1000)
+  fg <- dnorm(xg,mu_CLT,sigma_CLT)
+  dat2 <- cbind(xg,fg,n_val)
+  colnames(dat2) <- c("x","y","n_val")
+
+  tib1 <- as_tibble(dat1)
+  tib2 <- as_tibble(dat2)
+  tib1 <- tib1 %>% add_column(method="exact")
+  tib2 <- tib2 %>% add_column(method="CLT")
+  tib <- bind_rows(tib1,tib2)
+  
+  return(tib)
+}
+```
+  
+
+
+```{r, cache=TRUE, eval=FALSE}
+vn <- seq(1,50, by=1)
+tib_comb <- c()
+for (i in 1:length(vn)) 
+{
+  tib_bit <- generate_plot_data(N=100000, 
+                                n=vn[i], 
+                                rweibull, 
+                                shape=k, scale=lambda) %>% 
+                        add_column(dist="weibull")
+  tib_comb <- bind_rows(tib_comb,tib_bit)
+  
+  
+  tib_bit <- generate_plot_data(N=100000, 
+                                n=vn[i], 
+                                rt, 
+                                df=2) %>% 
+                        add_column(dist="t(df=2)")  
+  tib_comb <- bind_rows(tib_comb,tib_bit)
+  
+  
+  tib_bit <- generate_plot_data(N=100000, 
+                                n=vn[i], 
+                                rchisq, 
+                                df=2) %>% 
+                        add_column(dist="chi-squared(df=2)")  
+  tib_comb <- bind_rows(tib_comb,tib_bit)
+  
+  
+  tib_bit <- generate_plot_data(N=100000, 
+                                n=vn[i], 
+                                rt, 
+                                df=1) %>% 
+                        add_column(dist="Cauchy")  
+  tib_comb <- bind_rows(tib_comb,tib_bit)  
+  
+
+  tib_bit <- generate_plot_data(N=100000, 
+                                n=vn[i], 
+                                rt, 
+                                df=4) %>% 
+                        add_column(dist="t(df=4)")  
+  tib_comb <- bind_rows(tib_comb,tib_bit)    
+  
+  rbimod <- function(n) {
+    y <- rbinom(n,1,0.5)
+    x <- y*rnorm(n,mean=2) + (1-y)*rnorm(n,mean=-2)
+  }
+  
+  tib_bit <- generate_plot_data(N=100000, 
+                                n=vn[i], 
+                                rbimod) %>% 
+                        add_column(dist="bimodal")  
+  tib_comb <- bind_rows(tib_comb,tib_bit)  
+}
+save(tib_comb,"clt.Rdata")
+```
+
+
+```{r, eval=FALSE}
+library(gganimate)
+
+tib_use <- tib_comb %>% filter(dist=="Cauchy")
+g1 <- ggplot(tib_use,aes(x=x,y=y,color=method)) +
+  geom_line(size=1.5) +
+  theme_bw(base_size = 22) + 
+  theme(legend.position= c(0.8, 0.8)) +
+  coord_cartesian(xlim = c(-1000,1000)) +
+  labs(color="Methods",x='X bar',y='density', title = "Cauchy - n: { round(frame_time) }") + 
+  transition_time(time=n_val) 
+g1
+anim_save("clt_Cauchy.gif")
+
+tib_use <- tib_comb %>% filter(dist=="t(df=2)")
+g2 <- ggplot(tib_use,aes(x=x,y=y,color=method)) +
+  geom_line(size=1.5) +
+  theme_bw(base_size = 22) + 
+  theme(legend.position= c(0.8, 0.8)) +
+  coord_cartesian(xlim = c(-50,50)) +
+  labs(color="Methods",x='X bar',y='density', title = "t(df=2) - n: { round(frame_time) }") + 
+  transition_time(time=n_val) 
+g2
+anim_save("clt_t2.gif")
+
+tib_use <- tib_comb %>% filter(dist=="chi-squared(df=2)")
+g3 <- ggplot(tib_use,aes(x=x,y=y,color=method)) +
+  geom_line(size=1.5) +
+  theme_bw(base_size = 22) + 
+  theme(legend.position= c(0.8, 0.8)) +
+  coord_cartesian(xlim = c(0,7)) +
+  labs(color="Methods",x='X bar',y='density', title = "chi-squared(df=2) - n: { round(frame_time) }") + 
+  transition_time(time=n_val) 
+g3
+anim_save("clt_chi2.gif")
+
+tib_use <- tib_comb %>% filter(dist=="weibull")
+g4 <- ggplot(tib_use,aes(x=x,y=y,color=method)) +
+  geom_line(size=1.5) +
+  theme_bw(base_size = 22) + 
+  theme(legend.position= c(0.8, 0.8)) +
+  coord_cartesian(xlim = c(0,30)) +
+  labs(color="Methods",x='X bar',y='density', title = "Weibull(k=1.1,lambda=10) - n: { round(frame_time) }") + 
+  transition_time(time=n_val) 
+g4
+anim_save("clt_weibull.gif")
+
+tib_use <- tib_comb %>% filter(dist=="t(df=4)")
+g5 <- ggplot(tib_use,aes(x=x,y=y,color=method)) +
+  geom_line(size=1.5) +
+  theme_bw(base_size = 22) + 
+  theme(legend.position= c(0.8, 0.8)) +
+  coord_cartesian(xlim = c(-10,10)) +
+  labs(color="Methods",x='X bar',y='density', title = "t(df=4) - n: { round(frame_time) }") + 
+  transition_time(time=n_val) 
+g5
+anim_save("clt_t4.gif")
+
+tib_use <- tib_comb %>% filter(dist=="bimodal")
+g6 <- ggplot(tib_use,aes(x=x,y=y,color=method)) +
+  geom_line(size=1.5) +
+  theme_bw(base_size = 22) + 
+  theme(legend.position= c(0.8, 0.8)) +
+  coord_cartesian(xlim = c(-5,5)) +
+  labs(color="Methods",x='X bar',y='density', title = "bimodal - n: { round(frame_time) }") + 
+  transition_time(time=n_val) 
+g6
+anim_save("clt_bimodal.gif")
+```
+
+```{r, eval=FALSE}
+library(magick)
+g1_mgif <- image_read("clt_Cauchy.gif")
+g2_mgif <- image_read("clt_t2.gif")
+g3_mgif <- image_read("clt_chi2.gif")
+g4_mgif <- image_read("clt_weibull.gif")
+g5_mgif <- image_read("clt_t4.gif")
+g6_mgif <- image_read("clt_bimodal.gif")
+
+top_gif <- image_append(c(g3_mgif[1], g4_mgif[1], g5_mgif[1]))
+bot_gif <- image_append(c(g2_mgif[1], g1_mgif[1], g6_mgif[1]))
+new_gif <- image_append(c(top_gif,bot_gif),stack=TRUE)
+for(i in 2:100){
+  top_gif_bit <- image_append(c(g3_mgif[i], g4_mgif[i], g5_mgif[i]))
+  bot_gif_bit <- image_append(c(g2_mgif[i], g1_mgif[i], g6_mgif[i]))
+  comb_gif <- image_append(c(top_gif_bit,bot_gif_bit),stack=TRUE)
+  new_gif <- c(new_gif,comb_gif)
+}
+
+image_write(new_gif,"two_by_three.gif")
+```
+
+<center>
+<img src="two_by_three.gif" style="width:75%">
+</center>
+ 
+
