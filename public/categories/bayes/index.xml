@@ -7,10 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2019 Steph de Silva &amp; John Ormerod</copyright>
-    <lastBuildDate>Tue, 19 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Apr 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/bayes/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The Central Limit Theorem</title>
+      <link>/2019/04/04/p-values/</link>
+      <pubDate>Thu, 04 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/04/04/p-values/</guid>
+      <description>Why are we here and how did this become a blog about theoretical statistics? Most people find theoretical statistics garbage. Both Steph and John have stopped many a dinner party in its tracks with long and passionate discourses on the subject. However, we’ve both found a lot of value under the years in understanding what’s going on under the hood.
+* When do statistics break? (We like to break things alot around here) * When can we expect them to work?</description>
+    </item>
+    
+    <item>
+      <title>The Central Limit Theorem</title>
+      <link>/2019/04/04/p-values/</link>
+      <pubDate>Thu, 04 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/04/04/p-values/</guid>
+      <description>generate_plot_data &amp;lt;- function(N,n_val,rdist,...) { # Initialize data for N datasets of size n X_mat &amp;lt;- matrix(rdist(N*n_val, ...),N,n_val) # Calculate the means x_bar &amp;lt;- apply(X_mat,1,mean) # Approximate the distribution of x_bar dens &amp;lt;- density(x_bar) # Stores the data dat1 &amp;lt;- cbind(x=dens$x,y=dens$y, n_val) colnames(dat1) &amp;lt;- c(&amp;quot;x&amp;quot;,&amp;quot;y&amp;quot;,&amp;quot;n_val&amp;quot;) # Approximate the mean and variance of the distribution mu &amp;lt;- mean(X_mat) sigma2 &amp;lt;- var(as.vector(X_mat)) # Calculate the parameters of the CLT distribution mu_CLT &amp;lt;- mu sigma2_CLT &amp;lt;- sigma2/n_val sigma_CLT &amp;lt;- sqrt(sigma2_CLT) # xg &amp;lt;- seq(mu_CLT - 5*sigma_CLT,mu_CLT + 5*sigma_CLT,,1000) fg &amp;lt;- dnorm(xg,mu_CLT,sigma_CLT) dat2 &amp;lt;- cbind(xg,fg,n_val) colnames(dat2) &amp;lt;- c(&amp;quot;x&amp;quot;,&amp;quot;y&amp;quot;,&amp;quot;n_val&amp;quot;) tib1 &amp;lt;- as_tibble(dat1) tib2 &amp;lt;- as_tibble(dat2) tib1 &amp;lt;- tib1 %&amp;gt;% add_column(method=&amp;quot;exact&amp;quot;) tib2 &amp;lt;- tib2 %&amp;gt;% add_column(method=&amp;quot;CLT&amp;quot;) tib &amp;lt;- bind_rows(tib1,tib2) return(tib) } vn &amp;lt;- seq(1,50, by=1) tib_comb &amp;lt;- c() for (i in 1:length(vn)) { tib_bit &amp;lt;- generate_plot_data(N=100000, n=vn[i], rweibull, shape=k, scale=lambda) %&amp;gt;% add_column(dist=&amp;quot;weibull&amp;quot;) tib_comb &amp;lt;- bind_rows(tib_comb,tib_bit) tib_bit &amp;lt;- generate_plot_data(N=100000, n=vn[i], rt, df=2) %&amp;gt;% add_column(dist=&amp;quot;t(df=2)&amp;quot;) tib_comb &amp;lt;- bind_rows(tib_comb,tib_bit) tib_bit &amp;lt;- generate_plot_data(N=100000, n=vn[i], rchisq, df=2) %&amp;gt;% add_column(dist=&amp;quot;chi-squared(df=2)&amp;quot;) tib_comb &amp;lt;- bind_rows(tib_comb,tib_bit) tib_bit &amp;lt;- generate_plot_data(N=100000, n=vn[i], rt, df=1) %&amp;gt;% add_column(dist=&amp;quot;Cauchy&amp;quot;) tib_comb &amp;lt;- bind_rows(tib_comb,tib_bit) tib_bit &amp;lt;- generate_plot_data(N=100000, n=vn[i], rt, df=4) %&amp;gt;% add_column(dist=&amp;quot;t(df=4)&amp;quot;) tib_comb &amp;lt;- bind_rows(tib_comb,tib_bit) rbimod &amp;lt;- function(n) { y &amp;lt;- rbinom(n,1,0.</description>
+    </item>
     
     <item>
       <title>Let&#39;s break some p-values - Part 1</title>
