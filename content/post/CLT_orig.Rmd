@@ -195,27 +195,35 @@ where $B_i \sim \mbox{Bernoulli}(1/2)$.
 
 
 ```{r}
+plot_dist <- function(distname,N=300,...)
+{
+  # use get function to, for example,
+  # turn the string "norm" to the 
+  # functions dnorm and qnorm
+  ddist <- get(paste("d",distname,sep=""))
+  qdist <- get(paste("q",distname,sep=""))
+
+  # Calculate a nice grid of x values
+  xlim <- qdist(c(0.01,0.99),...)
+  x <- seq(xlim[1],xlim[2],,N)
+  
+  # Calculate the density
+  y <- ddist(x,...) 
+  
+  return(list(x=x,y=y))
+}
+
 N <- 300
-x1 <- seq(0,10,,N)
-f1 <- dchisq(x1,df=2)
-
-x2 <- seq(0,40,,N)
-f2 <- dweibull(x2,shape=1.1,scale=10)
-
-x3 <- seq(-10,10,,N)
-f3 <- dt(x3,df=4)
-
-x4 <- seq(-10,10,,N)
-f4 <- dt(x4,df=2)
-
-x5 <- seq(-10,10,,N)
-f5 <- dt(x5,df=1)
-
-x6 <- seq(-10,10,,N)
+d1 <- plot_dist("chisq",N,df=2)
+d2 <- plot_dist("weibull",N,shape=1.1,scale=10)
+d3 <- plot_dist("t",N,df=4)
+d4 <- plot_dist("t",N,df=2)
+d5 <- plot_dist("t",N,df=1)
+x6 <- seq(-8,8,,N)
 f6 <- 0.5*dnorm(x6,-2,1) + 0.5*dnorm(x6,2,1)
 
-x <- c(x1,x2,x3,x4,x5,x6)
-f <- c(f1,f2,f3,f4,f5,f6)
+x <- c(d1$x,d2$x,d3$x,d4$x,d5$x,x6)
+f <- c(d1$y,d2$y,d3$y,d4$y,d5$y,f6)
 dists <- c("chisq(2)","weibull(1.1,10)","t_4","t_2","Cauchy","Bimodal")
 d <- rep(dists,each=N)
 
@@ -228,12 +236,9 @@ g <- ggplot(tib,aes(x=x,y=f)) +
 g
 ```
 
-
-
 We will want to do this same thing multiple times so let's put it in a 
 generic function.
  
-
 ```{r}
 generate_plot_data <- function(N,n_val,rdist,...)
 {  
@@ -275,7 +280,7 @@ generate_plot_data <- function(N,n_val,rdist,...)
 }
 ```
 
-Plot the the case when $n=5$
+Plot the the case when $n=5$ for the Weibull case.
 
 ```{r, cache=TRUE}
 # Call the function
@@ -285,9 +290,7 @@ tib <- generate_plot_data(N=100000,
                           shape=1.1, 
                           scale=10) %>% 
   add_column(dist="weibull")
-```
 
-```{r}
 # Plot the results
 g <- ggplot(tib,aes(x=x,y=y,color=method)) +
   geom_line(size=1.5) +
@@ -296,13 +299,16 @@ g <- ggplot(tib,aes(x=x,y=y,color=method)) +
 g 
 ```
 
-
-The code used to create the animation below can be found  
-[here](CLT_supp.html).
+We now create an animation for each of the distributions for
+different values of $n$.
 
 <center>
 <img src="two_by_three.gif" style="width:75%">
 </center>
+
+
+The code used to create the animation above can be found  
+[here](CLT_supp.html).
 
 # A practical example
 
