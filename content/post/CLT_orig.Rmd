@@ -40,37 +40,70 @@ set.seed(1)
 ```
 
 
-# Intro Banter
+# Why are we here and how did this become a blog about theoretical statistics?
 
+Most people find theoretical statistics garbage. Both Steph and John have stopped many a dinner party in its tracks with long and passionate discourses on the subject. However, we've both found a lot of value under the years in understanding _what's going on under the hood_. 
+
+    * When do statistics break? (We like to break things alot around here)
+    * When can we expect them to work? (Despite evidence produced in this blog, they do work at least some of the time)
+    * What does the trade off between broken statistics and not-broken theory mean in practice?
+    
+These questions are where our focus lies.
+
+One of the most important things to understand about theoretical statistics is something called the _Central Limit Theorem_. It's the engine in the [red sports car of statistics](https://www.thebayesianandthefrequentist.com/2019/03/18/p-values/). Many hypothesis tests need it to be true, a bewildering number of models require it to be working [and you can even have a bollocksed up polling model with big consequences if you don't have the right assumptions under the hood](https://fivethirtyeight.com/features/the-polls-missed-trump-we-asked-pollsters-why/), but more on that later.
+
+So let's talk about the Central Limit Theorem. John's going to explain it simply and all the side notes are Steph translating John's simple explanation for retular people.
 
 # Central limit theorem
 
-The central limit theorem is one of the most powerful theorems in statistics.
-There are many versons of it but lets look at the most simple one. Lets
+The Central Limit Theorem is actually a collection of theorems: all have the same general idea, but it comes in different flavours, like icecream. 
+
+Basically, it all boils down to the fact that if you have a bunch of random observations that behave nicely, you can expect the mean of a properly behaved sample of those observations to act in predictable ways - if we have enough of those observations.
+
+For all the parents out there, think of it like this: your children are often fractious and badly behaved at home, because they're kids.[^1] But once you get to a certain number of your kids' friends on a playdate, all of a sudden that behaviour gets alot better and _they go away and entertain themselves and you can have a cup of tea in the middle of the chaos_. 
+
+But you have to get to that critical mass before that's possible - if there aren't enough kids, or if you've got the wrong combination of kids, the wrong environment - it doesn't work. The conditions have to be right. The central limit theorem is the same.[^2]
+
+The basic recipe is as follows:
+
+    * You need a group of random numbers
+    * The random numbers have to be _well behaved_ in certain ways - in the ways they are collected and the process that generates them.
+    * Then good things, i.e. predictable things, happen.
+
+[^1]: Children are the ultimate random variables. They have their moments. You can see why we're obsessed with behaviour.
+[^2]: Our forthcoming parenting book _Parenting by the numbers_ is due out any time now. All we need is a publisher. It's going to be a hit.
+
+To try it John's way, let's look at the mathematical version. Lets
 assume that
 
-(1) ${\bf X} = (X_1,\ldots,X_n)$ is a vector of $n$ random variables,
+(1) ${\bf X} = (X_1,\ldots,X_n)$ is a vector of $n$ random variables, i.e. just a bunch of random numbers in the column of a spreadsheet or something.
 
-(2) that are indepedently drawn,
+(2) That the ${\bf X_i}$ are indepedently drawn, that means the order in which those random numbers are chosen isn't systematic in the sense that if I choose the first number, the second is predictable.
 
-(3) from the same distribution,
+(3) They all come from the same distribution- they're all _generated in the same way_. They come from the same mechanism somehow - whether that's height in humans, or car mileage or some other process with randomness.
 
-(4) with (exisiting) mean $\mu = {\mathbb E}(X_i)$ and 
+(4) They have a mean $\mu = {\mathbb E}(X_i)$ that exists, i.e. we're putting boundaries on our _generating process_ here. We're saying that the mean of this process can't be _infinite_ or _unreal_. Think of this as the 'not totally weird' distributional assumption.
 
-(5) finite variance $\sigma^2 = \mbox{Var}(X_i) < \infty$.
+(5) The series has a finite variance $\sigma^2 = \mbox{Var}(X_i) < \infty$, this is the 'not totally weird assmumption, Part II'.
 
-Let $\overline{X}$ denote the average of the $X_i$'s, i.e.,
+Based on this set of conditions, we can then start talking about the _sample mean_.
+
+Let $\overline{X}$ denote the average of a sample of the $X_i$'s, i.e.,
 $$
 \overline{X} = \frac{1}{n}\sum_{i=1}^n X_i 
 $$
 
-Then for for large enough $n$ we have
+This is just maths for 'grab the Excel formula `AVG()`.
+
+Then for for large enough $n$[^3] we have
 $$
 \overline{X} \stackrel{D}{\to} N\left(\mu,\frac{\sigma^2}{n} \right)
 $$
-where $\stackrel{D}{\to}$ is used to denote convergence in distribution. 
+where $\stackrel{D}{\to}$ means _convergence in distribution_. 
 
-# Understanding the convergence in distribution bit
+[^3]: Remember you need enough kids before they entertain themselves. That's what we mean about 'large enough n': a big enough sample size.
+
+# Understanding the convergence in distribution bit I'M UP TO HERE JOHN
 
 To give some intuition about what "convergence in distribution" means suppose
 we have $N$ collections of samples (of the same size $n$ and assumptions (1) to (5)),
@@ -182,7 +215,7 @@ The code used to create the animation below can be found
 library(Ecdat)
 
 
-N <- 100000
+N <- 1000
 
 trapint <- function(xgrid, fgrid) 
 {
@@ -363,5 +396,4 @@ Hence, the CGF of $Z$ approaches that of a normal distirubiton.
    <iframe width="560" height="315" src="https://player.vimeo.com/video/75089338" frameborder="0" allowfullscreen>
    </iframe>
 </div>
-
 
