@@ -457,7 +457,7 @@ $$
 ```{marginfigure}
 __L'Hopital's rule__ (under appropriate conditions) that
 that for differentiable functions $f(x)$ and $g(x)$ 
-that if $\lim_{x\to c} f(x)/g(x),$
+that if $\lim_{x\to c} f(x)/g(x)$
 is an indetermiant form, e.g., $0/0$, $\infty/\infty$
 then
 $$
