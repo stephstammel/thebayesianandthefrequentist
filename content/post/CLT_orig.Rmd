@@ -182,7 +182,7 @@ The code used to create the animation below can be found
 library(Ecdat)
 
 
-N <- 1000
+N <- 100000
 
 trapint <- function(xgrid, fgrid) 
 {
