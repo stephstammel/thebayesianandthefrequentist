@@ -1,0 +1,259 @@
+---
+title: "How to break a t-test"
+author: "Steph and John"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+library(tufte)
+# invalidate cache when the tufte version changes
+knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
+options(htmltools.dir.version = FALSE)
+
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(sn))
+ 
+
+if (FALSE) {
+  local({
+  	
+  	# The directory where Pandoc will be extracted. Feel free
+  	# to adjust this path as appropriate.
+  	dir <- "~/rstudio-pandoc"
+  	
+  	# The version of Pandoc to be installed.
+  	version <- "2.7.1"
+  	
+  	# Create and move to the requested directory.
+  	dir.create(dir, showWarnings = FALSE, recursive = TRUE)
+  	owd <- setwd(dir)
+  	on.exit(setwd(owd), add = TRUE)
+  	
+  	# Construct path to pandoc.
+  	root <- "https://s3.amazonaws.com/rstudio-buildtools"
+  	suffix <- sprintf("pandoc-%s-windows-x86_64.zip", version)
+  	url <- file.path(root, "pandoc-rstudio", version, suffix)
+  	
+  	# Download and extract pandoc.
+  	file <- basename(url)
+  	utils::download.file(url, destfile = file)
+  	utils::unzip(file)
+  	unlink(file)
+  	
+  	# Write .Renviron to update the version of Pandoc used.
+  	entry <- paste("RSTUDIO_PANDOC", shQuote(path.expand(dir)), sep = " = ")
+  	contents <- if (file.exists("~/.Renviron")) readLines("~/.Renviron")
+  	filtered <- grep("^RSTUDIO_PANDOC", contents, value = TRUE, invert = TRUE)
+  	amended <- union(filtered, entry)
+  	writeLines(amended, "~/.Renviron")
+  	
+  	# Report change to the user.
+  	writeLines("Updated .Renviron:\n")
+  	writeLines(amended)
+  	writeLines("\nPlease restart RStudio for these changes to take effect.")
+  	
+  })
+}
+```
+
+# Intro Banter
+
+__Steph__: How about we take one from the fans this week?
+
+__John__: I'm up for it. Let's go.
+
+__Steph__: Here is a question from Dean.
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Ok so dont all jump on this at once, but thoughts on transforming non-normal data to satisfy assumptions of a t-test? <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/stats?src=hash&amp;ref_src=twsrc%5Etfw">#stats</a></p>&mdash; Dean Marchiori (@deanmarchiori) <a href="https://twitter.com/deanmarchiori/status/1115447019449925632?ref_src=twsrc%5Etfw">April 9, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+__John__: Let's start by reviewing the two sample t-test and then let's break it.
+
+__Steph__: You know how I like to break things!
+
+# The two sample t-test
+
+Suppose that we have two groups of samples 
+${\bf X} = (X_1,\ldots,X_{n_X})$ and
+${\bf Y} = (Y_1,\ldots,Y_{n_Y})$.
+Often we want to test whether the two groups
+of samples come from the same distribution.
+A simplifying assumption to model the $X_i$'s
+and $Y_i$'s using 
+$$
+X_i \stackrel{iid}{\sim} N(\mu_X,\sigma^2) 
+\qquad\mbox{and} \qquad 
+Y_i \stackrel{iid}{\sim} N(\mu_Y,\sigma^2)
+$$
+where the  $X_i$'s and $Y_i$'s are themselves independent
+random variabes, 
+and so we wish to test the hypotheses
+$$
+H_0 \colon \mu_X = \mu_Y 
+\qquad \mbox{versus} \qquad 
+H_1 \colon \mu_X \ne \mu_Y.
+$$
+Then the two-sample test statistic is given by
+$$
+T({\bf X},{\bf Y}) = \frac{\overline{X} - \overline{Y}}{S_p \sqrt{ \frac{1}{n_X} + \frac{1}{n_Y}}}
+$$
+where the "pooled" variance estimate for group $X$ and group $Y$
+is given by
+$$
+S_p^2 = \frac{(n_X - 1)S_X^2 + (n_Y - 1)S_Y^2}{n_X + n_Y - 2}.
+$$
+
+If $X_i \sim N(\mu_X,\sigma^2)$, $Y_i~\sim N(\mu_X,\sigma^2)$ 
+and $\mu_X = \mu_Y$ then
+$$
+T({\bf X},{\bf Y}) \sim t_{n_X + n_Y - 2}
+$$
+
+
+and the (2-sided) $p$-value for this test is
+$$
+p = 2 \ {\mathbb P}( t_{n_X + n_Y - 2} > | T({\bf x},{\bf y})| )
+$$
+where ${\bf x} = (x_1,\ldots,x_{n_X})$ and ${\bf y} = (y_1,\ldots,y_{n_Y})$
+are the observed sampes for group $X$ and group $Y$ respectively.
+
+Futhermore, if the $X_i$'s and the $Y_i$'s are not normally distributed
+but the means and variances of $X$ and $Y$ exist and are finite then
+the central limit theorm can be used to show that
+$$
+T({\bf X},{\bf Y}) \stackrel{approx.}{\sim} N(0,1).
+$$
+and the (2-sided) $p$-value is then calculated via
+$$
+p = 2 \ {\mathbb P}( Z > | T({\bf x},{\bf y})| )
+$$
+where $Z\sim N(0,1)$.
+
+# What are the main assumptions
+
+Can break (give false conclusion that means are different)
+when
+
+1. Not independent observations.
+
+2. Not identically distributed (outliers, confounding)
+
+3. Not normal data.
+
+4. Artificially small variance.
+
+
+# Not normal data
+
+```{r}
+plot_dist <- function(distname,N=300,...)
+{
+  # use get function to, for example,
+  # turn the string "norm" to the 
+  # functions dnorm and qnorm
+  ddist <- get(paste("d",distname,sep=""))
+  qdist <- get(paste("q",distname,sep=""))
+
+  # Calculate a nice grid of x values
+  xlim <- qdist(c(0.0001,0.9999),...)
+  x <- seq(xlim[1],xlim[2],,N)
+  
+  # Calculate the density
+  y <- ddist(x,...) 
+  
+  return(tibble(x=x,y=y))
+}
+```
+
+# Does skewed densities kill the two sample t-test
+
+We are going to simulate data from two skewed normal densities.
+There are a number of different skewed normal densities. We will
+choose skew normal densities of the form
+$$
+f(x;\xi,\omega,\alpha) = 2 \ \phi\left( \frac{x - \xi}{\omega} \right) \Phi\left(  \alpha \left( \frac{x - \xi}{\omega}\right) \right)
+$$
+which is a density on $-\infty < x < \infty$ with
+$\xi$, $\omega$, and $\alpha$ 
+being the being the location, scale and skewness parameters repsectively.
+When $\alpha = 0$ this reduces to the normal distribution.
+
+The mean and variance are given by
+$$
+{\mathbb E}(X) = \xi + \sqrt{\frac{2}{\pi}}  \frac{\omega\alpha}{\sqrt{1 + \alpha}}
+\qquad \mbox{and} \qquad 
+\mbox{Var}(X) = \omega^2\left( 1 - \frac{2}{\pi}\frac{\alpha^2}{1 + \alpha^2} \right )
+$$
+respectively. The `R` functions assoicated with the skew normal
+distirubiton can be found in the `sn` library.
+
+```{r}
+library(sn)
+library(tidyverse)
+
+alpha <- 30
+mu <- sqrt(2/pi)*alpha/sqrt(1 + alpha^2)
+
+dens1 <- plot_dist("sn",N=300,xi=-mu,alpha= alpha)
+dens2 <- plot_dist("sn",N=300,xi= mu,alpha=-alpha)
+
+tib1 <- tibble(x=dens1$x,y=dens1$y,class="x")
+tib2 <- tibble(x=dens2$x,y=dens2$y,class="y")
+tib <- bind_rows(tib1,tib2)   
+
+g <- tib %>% 
+  ggplot(aes(x=x,y=y,color=class))  +
+  geom_line(size=1.5)   
+g
+```
+
+```{r}
+t_stat <- function(x,y)
+{
+  nx <- length(x)
+  ny <- length(y)
+  s2p <- ((nx-1)*var(x) + (ny-1)*var(y))/(nx + ny - 2)
+  tval <- (mean(x) - mean(y))/(sqrt(s2p)*sqrt(1/nx + 1/ny))
+  return(tval)
+}
+```
+
+
+```{r}
+N <- 100000
+nx <- 25
+ny <- 25
+
+t_vec <- c()
+for (i in 1:N)
+{
+  # Simulate a skew-normal with mean 0
+  # for the x's and the y's. One pos skewed
+  # the other neg skewed
+  x <- rsn(nx,xi=-mu,alpha= alpha)
+  y <- rsn(ny,xi= mu,alpha=-alpha)
+  
+  t_vec[i] <- t_stat(x,y)
+}
+```
+
+```{r}
+dens <- density(t_vec) 
+tib1 <- tibble(x=dens$x,y=dens$y,method="simulated")
+tib2 <- tibble(x=dens$x,y=dnorm(dens$x),method="normal")
+tib <- bind_rows(tib1,tib2)   
+
+g <- tib %>% 
+  ggplot(aes(x=x,y=y,color=method))  +
+  geom_line(size=1.5)   
+g
+```
+
