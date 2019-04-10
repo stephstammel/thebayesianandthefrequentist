@@ -294,6 +294,7 @@ X_i \sim SN\left( -\sqrt{\frac{2}{\pi}}\frac{\alpha}{\sqrt{1 + \alpha^2}}, 1, \a
 \qquad\mbox{and} \qquad 
 Y_i \sim t_{3/2}
 $$
+
 Now both densities have zero mean by construction.
 However, now the $Y_i$'s don't have a finite variance.
 
@@ -323,9 +324,50 @@ tib <- bind_rows(tib1,tib2)
 
 g <- tib %>% 
   ggplot(aes(x=x,y=y,color=method))  +
-  geom_line(size=1.5)   
+  geom_line(size=1.5) +
+  labs(title="Devil distrubtion",x='T-statistic',y='density')
 g
 
 ggsave("DevilDist.png")
 ```
 
+# Do outliers kill the two sample t-test?
+
+$$
+X_i \sim SN\left( -\sqrt{\frac{2}{\pi}}\frac{\alpha}{\sqrt{1 + \alpha^2}}, 1, \alpha\right)
+$$
+
+and 
+$$
+Y_i \sim B_i N(0,1) + (1 - B_i) N(4,1) \quad \mbox{with} \quad B_i \sim \mbox{Bernoulli}(0.05)
+$$
+That is the $Y_i$'s except for a set of cases where an outlier
+is normal with mean 4 and variance 1 with 5\% chance.
+
+```{r}
+N <- 100000
+nx <- 100
+ny <- 100
+
+t_vec <- c()
+for (i in 1:N)
+{
+  x <- rsn(nx,xi=-mu,alpha= alpha)
+  b <- rbinom(ny,1,0.05)
+  y <- b*rnorm(ny) + (1 - b)*rnorm(4,1)
+  t_vec[i] <- t_stat(x,y)
+}
+```
+
+
+```{r}
+dens <- density(t_vec) 
+tib1 <- tibble(x=dens$x,y=dens$y,method="simulated")
+tib2 <- tibble(x=dens$x,y=dnorm(dens$x),method="normal")
+tib <- bind_rows(tib1,tib2)   
+
+g <- tib %>% 
+  ggplot(aes(x=x,y=y,color=method))  +
+  geom_line(size=1.5)   
+g
+```
