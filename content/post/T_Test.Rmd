@@ -292,21 +292,21 @@ with very heavy tails.
 $$
 X_i \sim SN\left( -\sqrt{\frac{2}{\pi}}\frac{\alpha}{\sqrt{1 + \alpha^2}}, 1, \alpha\right)
 \qquad\mbox{and} \qquad 
-Y_i \sim t_2
+Y_i \sim t_{3/2}
 $$
 Now both densities have zero mean by construction.
 However, now the $Y_i$'s don't have a finite variance.
 
 ```{r}
-N <- 100000
-nx <- 50
-ny <- 50
+N <- 1000000
+nx <- 100
+ny <- 100
 
 t_vec <- c()
 for (i in 1:N)
 {
   x <- rsn(nx,xi=-mu,alpha= alpha)
-  y <- rt(ny,df=2)
+  y <- rt(ny,df=1.5)
   t_vec[i] <- t_stat(x,y)
 }
 ```
@@ -325,5 +325,7 @@ g <- tib %>%
   ggplot(aes(x=x,y=y,color=method))  +
   geom_line(size=1.5)   
 g
+
+ggsave("DevilDist.png")
 ```
 
