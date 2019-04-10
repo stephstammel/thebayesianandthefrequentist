@@ -150,33 +150,37 @@ when
 
 4. Artificially small variance.
 
-
-# Not normal data
-
 ```{r}
 plot_dist <- function(distname,N=300,...)
 {
-  # use get function to, for example,
-  # turn the string "norm" to the 
-  # functions dnorm and qnorm
+  # use the "get" function to, for example, turn the  
+  # string "norm" into the functions dnorm and qnorm
   ddist <- get(paste("d",distname,sep=""))
   qdist <- get(paste("q",distname,sep=""))
 
-  # Calculate a nice grid of x values
+  # Calculate a nice grid of x values and density
   xlim <- qdist(c(0.0001,0.9999),...)
   x <- seq(xlim[1],xlim[2],,N)
-  
-  # Calculate the density
   y <- ddist(x,...) 
   
   return(tibble(x=x,y=y))
 }
 ```
 
-# Does skewed densities kill the two sample t-test
+# Do skewed densities kill the two sample t-test?
 
-We are going to simulate data from two skewed normal densities.
-There are a number of different skewed normal densities. We will
+The two sample t-test is robust to a whole range of non-normal
+distributions for the $X_i$ and $Y_i$'s thanks to the CLT.
+To look at some of the ways the CLT can break consider
+(How to break the CLT)[./CLT_orig.html]
+
+To explore this in the context of the two sample t-test
+we are going to simulate data from two skewed normal densities.
+There are a number of different skewed normal densities. 
+These are generalizations of normal densities which allow for
+skewness.
+
+We will
 choose skew normal densities of the form
 $$
 f(x;\xi,\omega,\alpha) = 2 \ \phi\left( \frac{x - \xi}{\omega} \right) \Phi\left(  \alpha \left( \frac{x - \xi}{\omega}\right) \right)
@@ -195,13 +199,22 @@ $$
 respectively. The `R` functions assoicated with the skew normal
 distirubiton can be found in the `sn` library.
 
+We will now look at the case where we have 
+two skewed normal distirbutions of the form
+$$
+X_i \sim SN\left( -\sqrt{\frac{2}{\pi}}\frac{\alpha}{\sqrt{1 + \alpha^2}}, 1, \alpha\right)
+\qquad\mbox{and} \qquad 
+Y_i \sim SN\left( \sqrt{\frac{2}{\pi}}\frac{\alpha}{\sqrt{1 + \alpha^2}}, 1, -\alpha\right)
+$$
+
+where $\alpha = 30$ which correspond to very skewed densities.
+
 ```{r}
 library(sn)
 library(tidyverse)
 
 alpha <- 30
 mu <- sqrt(2/pi)*alpha/sqrt(1 + alpha^2)
-
 dens1 <- plot_dist("sn",N=300,xi=-mu,alpha= alpha)
 dens2 <- plot_dist("sn",N=300,xi= mu,alpha=-alpha)
 
@@ -215,6 +228,9 @@ g <- tib %>%
 g
 ```
 
+Let's now create a function to calculate the two sample t-test
+statistic.
+
 ```{r}
 t_stat <- function(x,y)
 {
@@ -226,6 +242,11 @@ t_stat <- function(x,y)
 }
 ```
 
+Let's now simulate from the above skewed densities for
+the $X_i$'s and the $Y_i$'s where $n_X = n_Y = 25$ 
+and cacluate the test statistic $T({\bf X},{\bf Y})$
+for $N = 100000$ different instances of ${\bf X}$ and 
+${\bf Y}$.
 
 ```{r}
 N <- 100000
@@ -235,15 +256,64 @@ ny <- 25
 t_vec <- c()
 for (i in 1:N)
 {
-  # Simulate a skew-normal with mean 0
-  # for the x's and the y's. One pos skewed
-  # the other neg skewed
   x <- rsn(nx,xi=-mu,alpha= alpha)
   y <- rsn(ny,xi= mu,alpha=-alpha)
-  
   t_vec[i] <- t_stat(x,y)
 }
 ```
+
+Let's now plot the distribution of these $N=100000$ test
+statistics against the theoretical standard normal distribution.
+
+```{r}
+dens <- density(t_vec) 
+tib1 <- tibble(x=dens$x,y=dens$y,method="simulated")
+tib2 <- tibble(x=dens$x,y=dnorm(dens$x),method="normal")
+tib <- bind_rows(tib1,tib2)   
+
+g <- tib %>% 
+  ggplot(aes(x=x,y=y,color=method))  +
+  geom_line(size=1.5)   
+g
+```
+
+As we can see the the theoretical standard normal and
+the density estimate of the simulated test statistics
+are very close to one anohter. 
+
+This is expected.
+
+Things that will kill the two sample t-test include densities
+with very heavy tails.
+
+# Do very heavy tailed densities kill the two sample t-test?
+
+
+$$
+X_i \sim SN\left( -\sqrt{\frac{2}{\pi}}\frac{\alpha}{\sqrt{1 + \alpha^2}}, 1, \alpha\right)
+\qquad\mbox{and} \qquad 
+Y_i \sim t_2
+$$
+Now both densities have zero mean by construction.
+However, now the $Y_i$'s don't have a finite variance.
+
+```{r}
+N <- 100000
+nx <- 50
+ny <- 50
+
+t_vec <- c()
+for (i in 1:N)
+{
+  x <- rsn(nx,xi=-mu,alpha= alpha)
+  y <- rt(ny,df=2)
+  t_vec[i] <- t_stat(x,y)
+}
+```
+
+When we look at the density plot of the test statistic
+we get.
+
 
 ```{r}
 dens <- density(t_vec) 

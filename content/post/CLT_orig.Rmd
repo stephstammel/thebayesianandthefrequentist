@@ -171,10 +171,8 @@ then the collection of these
 $$
 \overline{\bf X}^{(1)},\ldots, \overline{\bf X}^{(N)}
 $$
-
 will be approximately normally distributed with mean $\mu$ and variance 
 $\sigma^2/n$.
-
 
 # The CLT in action
 
@@ -314,7 +312,6 @@ The code used to create the animation above can be found
 
 ```{r}
 library(Ecdat)
-
 
 N <- 1000
 
