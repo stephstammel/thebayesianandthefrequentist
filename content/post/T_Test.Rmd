@@ -298,8 +298,8 @@ $$
 Now both densities have zero mean by construction.
 However, now the $Y_i$'s don't have a finite variance.
 
-```{r}
-N <- 1000000
+```{r, eval=FALSE}
+N <- 10000000
 nx <- 100
 ny <- 100
 
@@ -310,6 +310,8 @@ for (i in 1:N)
   y <- rt(ny,df=1.5)
   t_vec[i] <- t_stat(x,y)
 }
+
+save(t_vec,file="t_vec.Rdata")
 ```
 
 When we look at the density plot of the test statistic
@@ -317,6 +319,8 @@ we get.
 
 
 ```{r}
+load("t_vec.Rdata")
+
 dens <- density(t_vec) 
 tib1 <- tibble(x=dens$x,y=dens$y,method="simulated")
 tib2 <- tibble(x=dens$x,y=dnorm(dens$x),method="normal")
@@ -339,7 +343,7 @@ $$
 
 and 
 $$
-Y_i \sim B_i N(0,1) + (1 - B_i) N(4,1) \quad \mbox{with} \quad B_i \sim \mbox{Bernoulli}(0.05)
+Y_i \sim B_i N(0,1) + (1 - B_i) N(4,1) \quad \mbox{with} \quad B_i \sim \mbox{Bernoulli}(0.99)
 $$
 That is the $Y_i$'s except for a set of cases where an outlier
 is normal with mean 4 and variance 1 with 5\% chance.
@@ -353,10 +357,12 @@ t_vec <- c()
 for (i in 1:N)
 {
   x <- rsn(nx,xi=-mu,alpha= alpha)
-  b <- rbinom(ny,1,0.05)
-  y <- b*rnorm(ny) + (1 - b)*rnorm(4,1)
+  b <- rbinom(ny,1,0.99)
+  y <- b*rnorm(ny) + (1 - b)*rnorm(ny,4,1)
   t_vec[i] <- t_stat(x,y)
 }
+
+p_vec <- 2*pnorm(abs(t_vec),lower.tail=FALSE)
 ```
 
 
@@ -370,4 +376,13 @@ g <- tib %>%
   ggplot(aes(x=x,y=y,color=method))  +
   geom_line(size=1.5)   
 g
+
+
+
+```
+
+
+```{r}
+
+hist(p_vec)
 ```
