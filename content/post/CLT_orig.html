@@ -91,9 +91,8 @@ We’re saying that the mean of this process can’t be <em>infinite</em> or <em
 <span class="math display">\[
 \overline{X} = \frac{1}{n}\sum_{i=1}^n X_i.
 \]</span>
-[^7]
-[^7]: This mathematics translates into normal-human readable language roughly as ‘grab the Excel formula <code>AVG()</code>’.</p>
-<p>Then for for large enough <span class="math inline">\(n\)</span><a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> we have
+<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a></p>
+<p>Then for for large enough <span class="math inline">\(n\)</span><a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a> we have
 <span class="math display">\[
 \overline{X} \stackrel{D}{\to} N\left(\mu,\frac{\sigma^2}{n} \right).
 \]</span>
@@ -102,8 +101,8 @@ where <span class="math inline">\(\stackrel{D}{\to}\)</span> means <em>convergen
 </div>
 <div id="understanding-the-convergence-in-distribution-bit" class="section level1">
 <h1>Understanding the convergence in distribution bit</h1>
-<p>To give some intuition about what “convergence in distribution” means suppose
-we have <span class="math inline">\(N\)</span> collections of samples (of the same size <span class="math inline">\(n\)</span> and assumptions 1. to 5.),
+<p>To give you some idea about what “convergence in distribution” means suppose
+we have <span class="math inline">\(N\)</span> collections of samples (of the same size <span class="math inline">\(n\)</span> and with the ‘not totally bonkers’ distributional assumptions 1. to 5.),
 that is,</p>
 <ul>
 <li><p><span class="math inline">\({\bf X}^{(1)} = (X_1^{(1)},\ldots,X_n^{(1)})\)</span></p></li>
@@ -123,12 +122,17 @@ that is,</p>
 \overline{\bf X}^{(1)},\ldots, \overline{\bf X}^{(N)}
 \]</span>
 will be approximately normally distributed with mean <span class="math inline">\(\mu\)</span> and variance
-<span class="math inline">\(\sigma^2/n\)</span>.<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a></p>
+<span class="math inline">\(\sigma^2/n\)</span>.</p>
+<p><em>Warning: Avengers Endgame spoilers:</em> Yes, we went there. Remember how Dr Strange said he looked at all 14 billion (or something to that effect) futures? That’s what we’re doing.</p>
+<p>We’re looking into a whole group of possible samples that may or may not ever happen. Because of our ‘not totally weird’ set of distribution assumptions, these quantities behave in predictable ways even though we don’t observe them.</p>
+<p>We can make <strong>inferences</strong> about how our own real sample (timeline, whatever) is behaving based on the bits we can see. <em>Even though we can’t see the mechanism (distribution) that generated the randomness.</em></p>
+<p>This is the point of the central limit theorems - to basically, be a nattily dressed wizard in a sea of technologically over-powered heroes who lack guidance. Or something.<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a></p>
 </div>
 <div id="the-clt-in-action" class="section level1">
 <h1>The CLT in action</h1>
-<p>The thing about the CLT is that it can make normality contagious. It can make the familiar z-statistic, built from the sample mean, act normally - even when the underlying distribution (mechanism) generating the random numbers is not normal. This is a really useful property that we use alot in hypothesis tests, models etc.</p>
-<p>Let’s try this for a number of non-normal distributions</p>
+<p>The thing about the CLT is that it can make normality contagious. It can make the familiar z-statistic, built from the sample mean, act normally - even when the underlying distribution (mechanism) generating the random numbers is not normal. This is a really useful property that we use alot in hypothesis tests, models and a whole bunch of other use cases.<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a></p>
+<p>Let’s try it out for a few non-normal distributions and see if it actually works.</p>
+<p>Here are our distributions:</p>
 <ul>
 <li><p><span class="math inline">\(X_i \sim \chi_2^2\)</span></p></li>
 <li><p><span class="math inline">\(X_i \sim \mbox{Weibull}(shape=1.1,scale=10)\)</span></p></li>
@@ -138,112 +142,30 @@ will be approximately normally distributed with mean <span class="math inline">\
 <li><p><span class="math inline">\(X_i \sim B_i \times N(-1,1) + (1 - B_i) N(1,1)\)</span>
 where <span class="math inline">\(B_i \sim \mbox{Bernoulli}(1/2)\)</span>.</p></li>
 </ul>
-<pre class="r"><code>plot_dist &lt;- function(distname,N=300,...)
-{
-  # use get function to, for example,
-  # turn the string &quot;norm&quot; to the 
-  # functions dnorm and qnorm
-  ddist &lt;- get(paste(&quot;d&quot;,distname,sep=&quot;&quot;))
-  qdist &lt;- get(paste(&quot;q&quot;,distname,sep=&quot;&quot;))
-
-  # Calculate a nice grid of x values
-  xlim &lt;- qdist(c(0.01,0.99),...)
-  x &lt;- seq(xlim[1],xlim[2],,N)
-  
-  # Calculate the density
-  y &lt;- ddist(x,...) 
-  
-  return(list(x=x,y=y))
-}
-
-N &lt;- 300
-d1 &lt;- plot_dist(&quot;chisq&quot;,N,df=2)
-d2 &lt;- plot_dist(&quot;weibull&quot;,N,shape=1.1,scale=10)
-d3 &lt;- plot_dist(&quot;t&quot;,N,df=4)
-d4 &lt;- plot_dist(&quot;t&quot;,N,df=2)
-d5 &lt;- plot_dist(&quot;t&quot;,N,df=1)
-x6 &lt;- seq(-8,8,,N)
-f6 &lt;- 0.5*dnorm(x6,-2,1) + 0.5*dnorm(x6,2,1)
-
-x &lt;- c(d1$x,d2$x,d3$x,d4$x,d5$x,x6)
-f &lt;- c(d1$y,d2$y,d3$y,d4$y,d5$y,f6)
-dists &lt;- c(&quot;chisq(2)&quot;,&quot;weibull(1.1,10)&quot;,&quot;t_4&quot;,&quot;t_2&quot;,&quot;Cauchy&quot;,&quot;Bimodal&quot;)
-d &lt;- rep(dists,each=N)
-
-tib &lt;- tibble(x,f,d)
-
-g &lt;- ggplot(tib,aes(x=x,y=f)) +
-  geom_line(col=&quot;blue&quot;,size=1.5) + 
-  facet_wrap(~d,nrow=2,ncol=3, scales=&quot;free&quot;) +
-  theme_bw()
-g</code></pre>
+<p>Here’s what they look like:</p>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<p>We will want to do this same thing multiple times so let’s put it in a
-generic function.</p>
-<pre class="r"><code>generate_plot_data &lt;- function(N,n_val,rdist,...)
-{  
-  # Initialize data for N datasets of size n
-  X_mat &lt;- matrix(rdist(N*n_val, ...),N,n_val)
-  
-  # Calculate the means
-  x_bar &lt;- apply(X_mat,1,mean)
-
-  # Approximate the distribution of x_bar
-  dens &lt;- density(x_bar)
-  
-  # Stores the data
-  dat1 &lt;- cbind(x=dens$x,y=dens$y, n_val)
-  colnames(dat1) &lt;- c(&quot;x&quot;,&quot;y&quot;,&quot;n_val&quot;)
-  
-  # Approximate the mean and variance of the distribution
-  mu &lt;- mean(X_mat)
-  sigma2 &lt;- var(as.vector(X_mat))
-  
-  # Calculate the parameters of the CLT distribution
-  mu_CLT     &lt;- mu
-  sigma2_CLT &lt;- sigma2/n_val
-  sigma_CLT  &lt;- sqrt(sigma2_CLT)
-  
-  # 
-  xg &lt;- seq(mu_CLT - 5*sigma_CLT,mu_CLT + 5*sigma_CLT,,1000)
-  fg &lt;- dnorm(xg,mu_CLT,sigma_CLT)
-  dat2 &lt;- cbind(xg,fg,n_val)
-  colnames(dat2) &lt;- c(&quot;x&quot;,&quot;y&quot;,&quot;n_val&quot;)
-
-  tib1 &lt;- as_tibble(dat1)
-  tib2 &lt;- as_tibble(dat2)
-  tib1 &lt;- tib1 %&gt;% add_column(method=&quot;exact&quot;)
-  tib2 &lt;- tib2 %&gt;% add_column(method=&quot;CLT&quot;)
-  tib &lt;- bind_rows(tib1,tib2)
-  
-  return(tib)
-}</code></pre>
-<p>Plot the the case when <span class="math inline">\(n=5\)</span> for the Weibull case.</p>
-<pre class="r"><code># Call the function
-tib &lt;- generate_plot_data(N=100000,
-                          n_val=5, 
-                          rweibull, 
-                          shape=1.1, 
-                          scale=10) %&gt;% 
-  add_column(dist=&quot;weibull&quot;)
-
-# Plot the results
-g &lt;- ggplot(tib,aes(x=x,y=y,color=method)) +
-  geom_line(size=1.5) +
-  theme_bw() +
-  labs(color=&quot;Methods&quot;,x=&#39;X bar&#39;,y=&#39;density&#39;)
-g </code></pre>
-<p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-3-1.png" width="672"  /></p>
-<p>We now create an animation for each of the distributions for
-different values of <span class="math inline">\(n\)</span>.</p>
+<p>Let’s plot the the case when <span class="math inline">\(n=5\)</span> for the Weibull distribution:</p>
+<p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>OK so it works!</p>
+<p>But that was just one distribution, for one sample size.</p>
+<p>We really want to understand what will happen for each of our distributions, over many sample sizes.</p>
 <center>
 <img src="two_by_three.gif" style="width:75%">
 </center>
 <p>The code used to create the animation above can be found<br />
 <a href="CLT_supp.html">here</a>.</p>
 </div>
-<div id="a-practical-example" class="section level1">
-<h1>A practical example</h1>
+<div id="conclusion---john-i-think-we-should-end-it-here-and-break-the-next-two-subsections-off-into-their-own-posts." class="section level1">
+<h1>Conclusion - JOHN I THINK WE SHOULD END IT HERE AND BREAK THE NEXT TWO SUBSECTIONS OFF INTO THEIR OWN POSTS.</h1>
+<p>So what did we get out of all of this?</p>
+<ol style="list-style-type: decimal">
+<li>The central limit theorem <em>works</em>. We saw it happen. As the sample size gets big, the z-statistic acts in a predictable way.</li>
+<li>It works only because we have the <em>not totally bonkers</em> distributional assumptions in play. We also have some assumptions about how the sample to which we apply the theorem is drawn. There are certain rules and without them, the whole thing breaks.</li>
+</ol>
+<p>The most important thing to take away from this post is that while the central limit theorem is powerful, generalisable to many different scenarios and is the bedrock of alot of what we do in statistics and machine learning: <em>it’s not infallible</em>.</p>
+</div>
+<div id="a-practical-example---john-what-are-we-getting-at-in-this-section-this-is-getting-really-long-should-we-break-this-material-off-into-a-separate-post-i-think-we-could-have-a-good-5-minutes-read-just-on-this-section-alone." class="section level1">
+<h1>A practical example - John what are we getting at in this section? This is getting really long should we break this material off into a separate post? I think we could have a good 5 minutes read just on this section alone.</h1>
 <pre class="r"><code>library(Ecdat)</code></pre>
 <pre><code>## Loading required package: Ecfun</code></pre>
 <pre><code>## 
@@ -755,10 +677,10 @@ for (k in 1:ncol(X))
 ## 39 12 200 commune 0.02196801</code></pre>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-4-11.png" width="672" /></p>
 </div>
-<div id="why-it-works---part-110" class="section level1">
-<h1>Why it works - Part 1<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a></h1>
-<p>Assume <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> exists.
-Define
+<div id="why-it-works---part-111-i-think-this-should-be-a-separate-post-john-its-awesome-but-too-much-in-this-context." class="section level1">
+<h1>Why it works - Part 1<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a> I THINK THIS SHOULD BE A SEPARATE POST JOHN! IT’S AWESOME BUT TOO MUCH IN THIS CONTEXT.</h1>
+<p>Assume <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> exists.<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
+<p>Define
 <span class="math display">\[
 Y_i = \frac{X_i - \mu}{\sigma}
 \]</span>
@@ -766,13 +688,14 @@ Define
 <span class="math display">\[
 Z = \frac{1}{\sqrt{n}} \sum_{i=1}^n Y_i
 \]</span>
-Using properties of expectations and variances it can be shown
+Using properties of expectations and variances it can be shown[^13]
 <span class="math display">\[
 {\mathbb E}(Z) = 0 
 \qquad \mbox{and} \qquad 
 \mbox{Var}(Z) = 1. 
 \]</span>
-We are going to use two special functions</p>
+[^13]: Don’t worry about the maths for now, think about it logically - if you take the mean away from a sum of n random variables n times, then you get zero. Same with the variance but with quadratic equations, basically.</p>
+<p>We are going to use two special functions</p>
 <ul>
 <li><p><strong>Moment generating functions</strong>: The moment generating function (MGF)
 of a RV <span class="math inline">\(X\)</span> as a function of <span class="math inline">\(t\)</span> is defined as
@@ -870,9 +793,12 @@ any time now. All we need is a publisher. It’s going to be a hit.<a href="#fnr
 <li id="fn4"><p>We should do a text classifier one day to try and work out who wrote which bits after the fact, John. A key feature for discrimination will be footnotes. - Steph<a href="#fnref4" class="footnote-back">↩</a></p></li>
 <li id="fn5"><p>Think of this as the assumption that requires the process generating these random numbers not to be too weird.<a href="#fnref5" class="footnote-back">↩</a></p></li>
 <li id="fn6"><p>This is the ‘not totally weird assmumption, Part II’.<a href="#fnref6" class="footnote-back">↩</a></p></li>
-<li id="fn7"><p>Remember you need enough kids before they entertain themselves.
-That’s what we mean about ‘large enough n’: a big enough sample size.<a href="#fnref7" class="footnote-back">↩</a></p></li>
-<li id="fn8"><p><em>Warning: Avengers Endgame spoilers:</em> Yes, I went there. Remember how Dr Strange said he looked at all 14 billion (or something to that effect) futures? That’s what we’re doing. We’re looking into a whole group of possible samples that may or may not ever happen. Because of our ‘not totally weird’ set of distribution assumptions, these quantities behave in predictable ways even though we don’t observe them. And we’re making <strong>inferences</strong> about how our own real sample (timeline, whatever) is behaving based on the bits we can see. <em>Even though we can’t see the mechanism (distribution) that generated the randomness we can see.</em> This is the point of the central limit theorems - to basically, be a wizard in a sea of technologically over powered heroes who lack guidance. Or something.<a href="#fnref8" class="footnote-back">↩</a></p></li>
-<li id="fn9"><p>OK we’re going the full stats on you here. But if maths terrifies you <em>that’s ok</em>. You can use these things without having to engage with the maths. We 100% give you permission to skip over this part if you think it’s boring.<a href="#fnref9" class="footnote-back">↩</a></p></li>
+<li id="fn7"><p>This mathematics translates into normal-human readable language roughly as ‘grab the Excel formula <code>AVG()</code>’.<a href="#fnref7" class="footnote-back">↩</a></p></li>
+<li id="fn8"><p>Remember you need enough kids before they entertain themselves.
+That’s what we mean about ‘large enough n’: a big enough sample size.<a href="#fnref8" class="footnote-back">↩</a></p></li>
+<li id="fn9"><p>I want this to be a deep and meaningful metaphor on the synergies and conflicts between the machine learning and statistics disciplines, but I’m running out of laptop battery. Sorry.<a href="#fnref9" class="footnote-back">↩</a></p></li>
+<li id="fn10"><p>There are other use cases, right John?<a href="#fnref10" class="footnote-back">↩</a></p></li>
+<li id="fn11"><p>OK we’re going the full stats on you here. But if maths terrifies you <em>that’s ok</em>. You can use these things without having to engage with the maths. We 100% give you permission to skip over this part if you think it’s boring.<a href="#fnref11" class="footnote-back">↩</a></p></li>
+<li id="fn12"><p>‘Not totally bonkers’ distributional assumptions again. The bonkers ones really do exist.<a href="#fnref12" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
