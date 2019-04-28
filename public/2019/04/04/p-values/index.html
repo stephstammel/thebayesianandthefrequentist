@@ -62,7 +62,7 @@
 
   <article class="article">
     
-    <span class="article-duration">20 min read</span>
+    <span class="article-duration">22 min read</span>
     
 
     <h1 class="article-title">The Central Limit Theorem</h1>
@@ -74,49 +74,84 @@
     <div class="article-content">
       <div id="why-are-we-here-and-how-did-this-become-a-blog-about-theoretical-statistics" class="section level1">
 <h1>Why are we here and how did this become a blog about theoretical statistics?</h1>
-<p>Most people find theoretical statistics garbage. Both Steph and John have stopped many a dinner party in its tracks with long and passionate discourses on the subject. However, we’ve both found a lot of value under the years in understanding <em>what’s going on under the hood</em>.</p>
-<pre><code>* When do statistics break? (We like to break things alot around here)
-* When can we expect them to work? (Despite evidence produced in this blog, they do work at least some of the time)
-* What does the trade off between broken statistics and not-broken theory mean in practice?</code></pre>
-<p>These questions are where our focus lies.</p>
-<p>One of the most important things to understand about theoretical statistics is something called the <em>Central Limit Theorem</em>. It’s the engine in the <a href="https://www.thebayesianandthefrequentist.com/2019/03/18/p-values/">red sports car of statistics</a>. Many hypothesis tests need it to be true, a bewildering number of models require it to be working <a href="https://fivethirtyeight.com/features/the-polls-missed-trump-we-asked-pollsters-why/">and you can even have a bollocksed up polling model with big consequences if you don’t have the right assumptions under the hood</a>, but more on that later.</p>
-<p>So let’s talk about the Central Limit Theorem. John’s going to explain it simply and all the side notes are Steph translating John’s simple explanation for retular people.</p>
+<p>Most people find theoretical statistics garbage.
+Both Steph and John have stopped many a dinner party in its tracks with long
+and passionate discourses on the subject.
+However, we’ve both found a lot of value under the years in understanding
+<em>what’s going on under the hood</em>.</p>
+<ul>
+<li><p>When do statistics break? (We like to break things alot around here.)</p></li>
+<li><p>When can we expect them to work? (Despite evidence produced in this
+blog, they do work at least some of the time.)</p></li>
+<li><p>What does the trade off between broken applied statistics and not-broken theory
+mean in practice?</p></li>
+</ul>
+<p>These are the things that we think (read: argue) about alot.</p>
+<div id="where-can-we-start" class="section level2">
+<h2>Where can we start?</h2>
+<p>One of the most useful things to understand about theoretical statistics
+is something called the <em>Central Limit Theorem</em>.</p>
+<p>It’s the engine in the
+<a href="https://www.thebayesianandthefrequentist.com/2019/03/18/p-values/">red sports car of statistics</a>.
+Many hypothesis tests need it to be true,
+a bewildering number of models require it to be working
+<a href="https://fivethirtyeight.com/features/the-polls-missed-trump-we-asked-pollsters-why/">and you can even have a bollocksed up polling model with big consequences if you don’t have the right assumptions under the hood</a>.</p>
+<p>So let’s talk about the Central Limit Theorem. John’s going to explain it “simply”
+and all the footnotes are Steph translating John’s “simple” explanation for regular people.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 </div>
-<div id="central-limit-theorem" class="section level1">
-<h1>Central limit theorem</h1>
-<p>The Central Limit Theorem is actually a collection of theorems: all have the same general idea, but it comes in different flavours, like icecream.</p>
-<p>Basically, it all boils down to the fact that if you have a bunch of random observations that behave nicely, you can expect the mean of a properly behaved sample of those observations to act in predictable ways - if we have enough of those observations.</p>
-<p>For all the parents out there, think of it like this: your children are often fractious and badly behaved at home, because they’re kids.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> But once you get to a certain number of your kids’ friends on a playdate, all of a sudden that behaviour gets alot better and <em>they go away and entertain themselves and you can have a cup of tea in the middle of the chaos</em>.</p>
-<p>But you have to get to that critical mass before that’s possible - if there aren’t enough kids, or if you’ve got the wrong combination of kids, the wrong environment - it doesn’t work. The conditions have to be right. The central limit theorem is the same.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<div id="the-central-limit-theorem" class="section level2">
+<h2>The central limit theorem</h2>
+<p>The Central Limit Theorem is actually a collection of theorems: all have the
+same general idea, but it comes in different flavours, like icecream.</p>
+<p>Basically, it all boils down to the fact that if you have a bunch of random observations that behave nicely, if you take a sample of those random observations, you can expect the mean of those observations to act in predictable ways - if we have enough of
+those observations.</p>
+<p>For all the parents out there, think of it like this: your children are often
+fractious and badly behaved at home, because they’re kids.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> But once you get
+to a certain number of your kids’ friends on a playdate, all of a sudden that
+behaviour gets alot better and <em>they go away and entertain themselves and you
+can have a cup of tea in the middle of the chaos</em>.</p>
+<p>But you have to get to that critical mass before that’s possible - if there
+aren’t enough kids, or if you’ve got the wrong combination of kids, the wrong
+environment - it doesn’t work. The conditions have to be right. The central
+limit theorem is the same.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
 <p>The basic recipe is as follows:</p>
-<pre><code>* You need a group of random numbers
-* The random numbers have to be _well behaved_ in certain ways - in the ways they are collected and the process that generates them.
-* Then good things, i.e. predictable things, happen.</code></pre>
-<p>To try it John’s way, let’s look at the mathematical version. Lets
+<ul>
+<li><p>You need a group of random numbers</p></li>
+<li><p>The random numbers have to be <em>well behaved</em> - the ways they are collected and the process that generates them has to follow certain rules.</p></li>
+<li><p>Then good things, i.e., predictable ones, happen.</p></li>
+</ul>
+<p>To try it John’s way, let’s look at the mathematical version, with Steph’s translation.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Lets
 assume that</p>
 <ol style="list-style-type: decimal">
-<li><p><span class="math inline">\({\bf X} = (X_1,\ldots,X_n)\)</span> is a vector of <span class="math inline">\(n\)</span> random variables, i.e. just a bunch of random numbers in the column of a spreadsheet or something.</p></li>
-<li><p>That the <span class="math inline">\({\bf X_i}\)</span> are indepedently drawn, that means the order in which those random numbers are chosen isn’t systematic in the sense that if I choose the first number, the second is predictable.</p></li>
-<li><p>They all come from the same distribution- they’re all <em>generated in the same way</em>. They come from the same mechanism somehow - whether that’s height in humans, or car mileage or some other process with randomness.</p></li>
-<li><p>They have a mean <span class="math inline">\(\mu = {\mathbb E}(X_i)\)</span> that exists, i.e. we’re putting boundaries on our <em>generating process</em> here. We’re saying that the mean of this process can’t be <em>infinite</em> or <em>unreal</em>. Think of this as the ‘not totally weird’ distributional assumption.</p></li>
-<li><p>The series has a finite variance <span class="math inline">\(\sigma^2 = \mbox{Var}(X_i) &lt; \infty\)</span>, this is the ‘not totally weird assmumption, Part II’.</p></li>
+<li><p><span class="math inline">\({\bf X} = (X_1,\ldots,X_n)\)</span> is a vector of <span class="math inline">\(n\)</span> random variables, i.e., a bunch of random numbers in the column of a spreadsheet or something.</p></li>
+<li><p>That the random variables <span class="math inline">\(X_1,\ldots,X_n\)</span> are indepedently drawn.
+This means which random numbers are chosen and their order isn’t systematic
+in the sense that if I choose the first number, the second is somehow predictable.</p></li>
+<li><p>They all come from the same distribution - they’re all <em>generated in the same way</em>. They come from the same mechanism - whether that’s height in humans, or car mileage or some other process with randomness.</p></li>
+<li><p>They have a mean <span class="math inline">\(\mu = {\mathbb E}(X_i)\)</span> that exists, i.e.,
+we’re putting boundaries on our <em>generating process</em> here.
+We’re saying that the mean of this process can’t be <em>infinite</em> or <em>unreal</em>.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p></li>
+</ol>
+<ol start="5" style="list-style-type: decimal">
+<li>The series has a finite variance <span class="math inline">\(\sigma^2 = \mbox{Var}(X_i) &lt; \infty\)</span><a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></li>
 </ol>
 <p>Based on this set of conditions, we can then start talking about the <em>sample mean</em>.</p>
 <p>Let <span class="math inline">\(\overline{X}\)</span> denote the average of a sample of the <span class="math inline">\(X_i\)</span>’s, i.e.,
 <span class="math display">\[
-\overline{X} = \frac{1}{n}\sum_{i=1}^n X_i 
-\]</span></p>
-<p>This is just maths for ’grab the Excel formula <code>AVG()</code>.</p>
-<p>Then for for large enough <span class="math inline">\(n\)</span><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> we have
+\overline{X} = \frac{1}{n}\sum_{i=1}^n X_i.
+\]</span>
+<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a></p>
+<p>Then for for large enough <span class="math inline">\(n\)</span><a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a> we have
 <span class="math display">\[
-\overline{X} \stackrel{D}{\to} N\left(\mu,\frac{\sigma^2}{n} \right)
+\overline{X} \stackrel{D}{\to} N\left(\mu,\frac{\sigma^2}{n} \right).
 \]</span>
 where <span class="math inline">\(\stackrel{D}{\to}\)</span> means <em>convergence in distribution</em>.</p>
 </div>
-<div id="understanding-the-convergence-in-distribution-bit-im-up-to-here-john" class="section level1">
-<h1>Understanding the convergence in distribution bit I’M UP TO HERE JOHN</h1>
-<p>To give some intuition about what “convergence in distribution” means suppose
-we have <span class="math inline">\(N\)</span> collections of samples (of the same size <span class="math inline">\(n\)</span> and assumptions (1) to (5)),
+</div>
+<div id="understanding-the-convergence-in-distribution-bit" class="section level1">
+<h1>Understanding the convergence in distribution bit</h1>
+<p>To give you some idea about what “convergence in distribution” means suppose
+we have <span class="math inline">\(N\)</span> collections of samples (of the same size <span class="math inline">\(n\)</span> and with the ‘not totally bonkers’ distributional assumptions 1. to 5.),
 that is,</p>
 <ul>
 <li><p><span class="math inline">\({\bf X}^{(1)} = (X_1^{(1)},\ldots,X_n^{(1)})\)</span></p></li>
@@ -131,75 +166,55 @@ that is,</p>
 <li><p><span class="math inline">\(\ldots\)</span></p></li>
 <li><p><span class="math inline">\(\overline{\bf X}^{(N)} = \frac{1}{n}\sum_{i=1}^n X_i^{(N)}\)</span></p></li>
 </ul>
-<p>then the collection of these <span class="math inline">\(\overline{\bf X}^{(1)},\ldots, \overline{\bf X}^{(N)}\)</span>
+<p>then the collection of these
+<span class="math display">\[
+\overline{\bf X}^{(1)},\ldots, \overline{\bf X}^{(N)}
+\]</span>
 will be approximately normally distributed with mean <span class="math inline">\(\mu\)</span> and variance
 <span class="math inline">\(\sigma^2/n\)</span>.</p>
-<p>We want to show how the CLT works…. but on a distribution which is not normally
-distributed.</p>
+<p><em>Warning: Avengers Endgame spoilers:</em> Yes, we went there. Remember how Dr Strange said he looked at all 14 billion (or something to that effect) futures? That’s what we’re doing.</p>
+<p>We’re looking into a whole group of possible samples that may or may not ever happen. Because of our ‘not totally weird’ set of distribution assumptions, these quantities behave in predictable ways even though we don’t observe them.</p>
+<p>We can make <strong>inferences</strong> about how our own real sample (timeline, whatever) is behaving based on the bits we can see. <em>Even though we can’t see the mechanism (distribution) that generated the randomness.</em></p>
+<p>This is the point of the central limit theorems - to basically, be a nattily dressed wizard in a sea of technologically over-powered heroes who lack guidance. Or something.<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a></p>
 </div>
 <div id="the-clt-in-action" class="section level1">
 <h1>The CLT in action</h1>
-<p>We will want to do this same thing multiple times so let’s put it in a
-generic function.</p>
-<pre class="r"><code>generate_plot_data &lt;- function(N,n_val,rdist,...)
-{  
-  # Initialize data for N datasets of size n
-  X_mat &lt;- matrix(rdist(N*n_val, ...),N,n_val)
-  
-  # Calculate the means
-  x_bar &lt;- apply(X_mat,1,mean)
-
-  # Approximate the distribution of x_bar
-  dens &lt;- density(x_bar)
-  
-  # Stores the data
-  dat1 &lt;- cbind(x=dens$x,y=dens$y, n_val)
-  colnames(dat1) &lt;- c(&quot;x&quot;,&quot;y&quot;,&quot;n_val&quot;)
-  
-  # Approximate the mean and variance of the distribution
-  mu &lt;- mean(X_mat)
-  sigma2 &lt;- var(as.vector(X_mat))
-  
-  # Calculate the parameters of the CLT distribution
-  mu_CLT     &lt;- mu
-  sigma2_CLT &lt;- sigma2/n_val
-  sigma_CLT  &lt;- sqrt(sigma2_CLT)
-  
-  # 
-  xg &lt;- seq(mu_CLT - 5*sigma_CLT,mu_CLT + 5*sigma_CLT,,1000)
-  fg &lt;- dnorm(xg,mu_CLT,sigma_CLT)
-  dat2 &lt;- cbind(xg,fg,n_val)
-  colnames(dat2) &lt;- c(&quot;x&quot;,&quot;y&quot;,&quot;n_val&quot;)
-
-  tib1 &lt;- as_tibble(dat1)
-  tib2 &lt;- as_tibble(dat2)
-  tib1 &lt;- tib1 %&gt;% add_column(method=&quot;exact&quot;)
-  tib2 &lt;- tib2 %&gt;% add_column(method=&quot;CLT&quot;)
-  tib &lt;- bind_rows(tib1,tib2)
-  
-  return(tib)
-}</code></pre>
-<p>Plot the the case when <span class="math inline">\(n=5\)</span></p>
-<pre class="r"><code>k &lt;- 1.1
-lambda &lt;- 10
-
-# Call the function
-tib &lt;- generate_plot_data(N=100000,n_val=2, rweibull, shape=k, scale=lambda)  %&gt;% add_column(dist=&quot;weibull&quot;)</code></pre>
-<pre class="r"><code># Plot the results
-g &lt;- ggplot(tib,aes(x=x,y=y,color=method)) +
-  geom_line(size=1.5) +
-  theme_bw() +
-  labs(color=&quot;Methods&quot;,x=&#39;X bar&#39;,y=&#39;density&#39;)
-g </code></pre>
+<p>The thing about the CLT is that it can make normality contagious. It can make the familiar z-statistic, built from the sample mean, act normally - even when the underlying distribution (mechanism) generating the random numbers is not normal. This is a really useful property that we use alot in hypothesis tests, models and a whole bunch of other use cases.<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a></p>
+<p>Let’s try it out for a few non-normal distributions and see if it actually works.</p>
+<p>Here are our distributions:</p>
+<ul>
+<li><p><span class="math inline">\(X_i \sim \chi_2^2\)</span></p></li>
+<li><p><span class="math inline">\(X_i \sim \mbox{Weibull}(shape=1.1,scale=10)\)</span></p></li>
+<li><p><span class="math inline">\(X_i \sim t_4\)</span>.</p></li>
+<li><p><span class="math inline">\(X_i \sim t_2\)</span>.</p></li>
+<li><p><span class="math inline">\(X_i \sim \mbox{Cauchy}\)</span>.</p></li>
+<li><p><span class="math inline">\(X_i \sim B_i \times N(-1,1) + (1 - B_i) N(1,1)\)</span>
+where <span class="math inline">\(B_i \sim \mbox{Bernoulli}(1/2)\)</span>.</p></li>
+</ul>
+<p>Here’s what they look like:</p>
+<p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>Let’s plot the the case when <span class="math inline">\(n=5\)</span> for the Weibull distribution:</p>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p>The code used to create the animation below can be found<br />
-<a href="CLT_supp.html">here</a>.</p>
+<p>OK so it works!</p>
+<p>But that was just one distribution, for one sample size.</p>
+<p>We really want to understand what will happen for each of our distributions, over many sample sizes.</p>
 <center>
 <img src="two_by_three.gif" style="width:75%">
 </center>
+<p>The code used to create the animation above can be found<br />
+<a href="CLT_supp.html">here</a>.</p>
 </div>
-<div id="a-practical-example" class="section level1">
-<h1>A practical example</h1>
+<div id="conclusion---john-i-think-we-should-end-it-here-and-break-the-next-two-subsections-off-into-their-own-posts." class="section level1">
+<h1>Conclusion - JOHN I THINK WE SHOULD END IT HERE AND BREAK THE NEXT TWO SUBSECTIONS OFF INTO THEIR OWN POSTS.</h1>
+<p>So what did we get out of all of this?</p>
+<ol style="list-style-type: decimal">
+<li>The central limit theorem <em>works</em>. We saw it happen. As the sample size gets big, the z-statistic acts in a predictable way.</li>
+<li>It works only because we have the <em>not totally bonkers</em> distributional assumptions in play. There are certain rules and without them, the whole thing breaks.</li>
+</ol>
+<p>The most important thing to take away from this post is that while the central limit theorem is powerful, generalisable to many different scenarios and is the bedrock of alot of what we do in statistics and machine learning: <em>it’s not infallible</em>.</p>
+</div>
+<div id="a-practical-example---john-what-are-we-getting-at-in-this-section-this-is-getting-really-long-should-we-break-this-material-off-into-a-separate-post-i-think-we-could-have-a-good-5-minutes-read-just-on-this-section-alone." class="section level1">
+<h1>A practical example - John what are we getting at in this section? This is getting really long should we break this material off into a separate post? I think we could have a good 5 minutes read just on this section alone.</h1>
 <pre class="r"><code>library(Ecdat)</code></pre>
 <pre><code>## Loading required package: Ecfun</code></pre>
 <pre><code>## 
@@ -270,451 +285,451 @@ for (k in 1:ncol(X))
     plot(vn,mErr[,k],type=&quot;l&quot;) 
   }
 }</code></pre>
-<pre><code>## 1 1 10 pharvis 0.1828665 
-## 2 1 15 pharvis 0.1593729 
-## 3 1 20 pharvis 0.1327541 
-## 4 1 25 pharvis 0.1260699 
-## 5 1 30 pharvis 0.1149613 
-## 6 1 35 pharvis 0.09551499 
-## 7 1 40 pharvis 0.1258864 
-## 8 1 45 pharvis 0.1052346 
-## 9 1 50 pharvis 0.1083818 
-## 10 1 55 pharvis 0.09202548 
-## 11 1 60 pharvis 0.09894423 
-## 12 1 65 pharvis 0.106095 
-## 13 1 70 pharvis 0.0863909 
-## 14 1 75 pharvis 0.08404542 
-## 15 1 80 pharvis 0.08538005 
-## 16 1 85 pharvis 0.07705171 
-## 17 1 90 pharvis 0.06252924 
-## 18 1 95 pharvis 0.09003062 
-## 19 1 100 pharvis 0.07682404 
-## 20 1 105 pharvis 0.07508646 
-## 21 1 110 pharvis 0.09175523 
-## 22 1 115 pharvis 0.06377045 
-## 23 1 120 pharvis 0.06138987 
-## 24 1 125 pharvis 0.05655031 
-## 25 1 130 pharvis 0.04263543 
-## 26 1 135 pharvis 0.05754709 
-## 27 1 140 pharvis 0.04721017 
-## 28 1 145 pharvis 0.04233888 
-## 29 1 150 pharvis 0.06706791 
-## 30 1 155 pharvis 0.06039721 
-## 31 1 160 pharvis 0.06555821 
-## 32 1 165 pharvis 0.06730412 
-## 33 1 170 pharvis 0.0731288 
-## 34 1 175 pharvis 0.04404 
-## 35 1 180 pharvis 0.0682443 
-## 36 1 185 pharvis 0.04460442 
-## 37 1 190 pharvis 0.04580113 
-## 38 1 195 pharvis 0.05844029 
-## 39 1 200 pharvis 0.07182936</code></pre>
+<pre><code>## 1 1 10 pharvis 0.1734129 
+## 2 1 15 pharvis 0.1380985 
+## 3 1 20 pharvis 0.1360752 
+## 4 1 25 pharvis 0.1430454 
+## 5 1 30 pharvis 0.1295446 
+## 6 1 35 pharvis 0.123966 
+## 7 1 40 pharvis 0.1300887 
+## 8 1 45 pharvis 0.1009248 
+## 9 1 50 pharvis 0.09333006 
+## 10 1 55 pharvis 0.1038534 
+## 11 1 60 pharvis 0.09612714 
+## 12 1 65 pharvis 0.08836505 
+## 13 1 70 pharvis 0.04837352 
+## 14 1 75 pharvis 0.07327164 
+## 15 1 80 pharvis 0.07235167 
+## 16 1 85 pharvis 0.08768632 
+## 17 1 90 pharvis 0.07543649 
+## 18 1 95 pharvis 0.07282524 
+## 19 1 100 pharvis 0.07720911 
+## 20 1 105 pharvis 0.05897656 
+## 21 1 110 pharvis 0.08598392 
+## 22 1 115 pharvis 0.08729119 
+## 23 1 120 pharvis 0.05675747 
+## 24 1 125 pharvis 0.07585786 
+## 25 1 130 pharvis 0.08613049 
+## 26 1 135 pharvis 0.05652848 
+## 27 1 140 pharvis 0.03933358 
+## 28 1 145 pharvis 0.06118268 
+## 29 1 150 pharvis 0.05827491 
+## 30 1 155 pharvis 0.06226904 
+## 31 1 160 pharvis 0.06486067 
+## 32 1 165 pharvis 0.06161831 
+## 33 1 170 pharvis 0.05625902 
+## 34 1 175 pharvis 0.04745773 
+## 35 1 180 pharvis 0.06156077 
+## 36 1 185 pharvis 0.05408714 
+## 37 1 190 pharvis 0.07921613 
+## 38 1 195 pharvis 0.0556123 
+## 39 1 200 pharvis 0.0601593</code></pre>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<pre><code>## 1 2 10 lnhhexp 0.02858385 
-## 2 2 15 lnhhexp 0.02268682 
-## 3 2 20 lnhhexp 0.0237148 
-## 4 2 25 lnhhexp 0.03349921 
-## 5 2 30 lnhhexp 0.03364062 
-## 6 2 35 lnhhexp 0.0359205 
-## 7 2 40 lnhhexp 0.03953959 
-## 8 2 45 lnhhexp 0.02230228 
-## 9 2 50 lnhhexp 0.02706833 
-## 10 2 55 lnhhexp 0.0286123 
-## 11 2 60 lnhhexp 0.02500035 
-## 12 2 65 lnhhexp 0.03580943 
-## 13 2 70 lnhhexp 0.02265368 
-## 14 2 75 lnhhexp 0.02508498 
-## 15 2 80 lnhhexp 0.03137443 
-## 16 2 85 lnhhexp 0.03456398 
-## 17 2 90 lnhhexp 0.03065574 
-## 18 2 95 lnhhexp 0.02630332 
-## 19 2 100 lnhhexp 0.02051842 
-## 20 2 105 lnhhexp 0.03661474 
-## 21 2 110 lnhhexp 0.04745824 
-## 22 2 115 lnhhexp 0.027486 
-## 23 2 120 lnhhexp 0.02607828 
-## 24 2 125 lnhhexp 0.02697429 
-## 25 2 130 lnhhexp 0.03958545 
-## 26 2 135 lnhhexp 0.03041166 
-## 27 2 140 lnhhexp 0.03734235 
-## 28 2 145 lnhhexp 0.05629619 
-## 29 2 150 lnhhexp 0.04118259 
-## 30 2 155 lnhhexp 0.03411006 
-## 31 2 160 lnhhexp 0.03143088 
-## 32 2 165 lnhhexp 0.01568343 
-## 33 2 170 lnhhexp 0.01823139 
-## 34 2 175 lnhhexp 0.03715915 
-## 35 2 180 lnhhexp 0.03197391 
-## 36 2 185 lnhhexp 0.03256736 
-## 37 2 190 lnhhexp 0.02747832 
-## 38 2 195 lnhhexp 0.02958646 
-## 39 2 200 lnhhexp 0.03641624</code></pre>
+<pre><code>## 1 2 10 lnhhexp 0.03556837 
+## 2 2 15 lnhhexp 0.02680532 
+## 3 2 20 lnhhexp 0.02000992 
+## 4 2 25 lnhhexp 0.04487118 
+## 5 2 30 lnhhexp 0.0302839 
+## 6 2 35 lnhhexp 0.02555468 
+## 7 2 40 lnhhexp 0.04630937 
+## 8 2 45 lnhhexp 0.03198611 
+## 9 2 50 lnhhexp 0.03933007 
+## 10 2 55 lnhhexp 0.03257306 
+## 11 2 60 lnhhexp 0.0284222 
+## 12 2 65 lnhhexp 0.0216851 
+## 13 2 70 lnhhexp 0.04524071 
+## 14 2 75 lnhhexp 0.03404 
+## 15 2 80 lnhhexp 0.03045358 
+## 16 2 85 lnhhexp 0.02336701 
+## 17 2 90 lnhhexp 0.02749136 
+## 18 2 95 lnhhexp 0.03053392 
+## 19 2 100 lnhhexp 0.04140073 
+## 20 2 105 lnhhexp 0.02254656 
+## 21 2 110 lnhhexp 0.0387887 
+## 22 2 115 lnhhexp 0.02994849 
+## 23 2 120 lnhhexp 0.036257 
+## 24 2 125 lnhhexp 0.02922328 
+## 25 2 130 lnhhexp 0.02012783 
+## 26 2 135 lnhhexp 0.01956822 
+## 27 2 140 lnhhexp 0.02106341 
+## 28 2 145 lnhhexp 0.01907746 
+## 29 2 150 lnhhexp 0.02272846 
+## 30 2 155 lnhhexp 0.03045507 
+## 31 2 160 lnhhexp 0.03834426 
+## 32 2 165 lnhhexp 0.02609438 
+## 33 2 170 lnhhexp 0.02697922 
+## 34 2 175 lnhhexp 0.02493435 
+## 35 2 180 lnhhexp 0.04181206 
+## 36 2 185 lnhhexp 0.02193406 
+## 37 2 190 lnhhexp 0.03234559 
+## 38 2 195 lnhhexp 0.03963302 
+## 39 2 200 lnhhexp 0.02427919</code></pre>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
-<pre><code>## 1 3 10 age 0.06005602 
-## 2 3 15 age 0.04604646 
-## 3 3 20 age 0.05987001 
-## 4 3 25 age 0.0359188 
-## 5 3 30 age 0.0331612 
-## 6 3 35 age 0.05767375 
-## 7 3 40 age 0.02660182 
-## 8 3 45 age 0.02281899 
-## 9 3 50 age 0.03889688 
-## 10 3 55 age 0.03996309 
-## 11 3 60 age 0.0370044 
-## 12 3 65 age 0.03969197 
-## 13 3 70 age 0.04328204 
-## 14 3 75 age 0.01722285 
-## 15 3 80 age 0.03111729 
-## 16 3 85 age 0.05047663 
-## 17 3 90 age 0.022043 
-## 18 3 95 age 0.0328243 
-## 19 3 100 age 0.03596133 
-## 20 3 105 age 0.03533892 
-## 21 3 110 age 0.04506135 
-## 22 3 115 age 0.03759997 
-## 23 3 120 age 0.02928963 
-## 24 3 125 age 0.0270009 
-## 25 3 130 age 0.0226759 
-## 26 3 135 age 0.03032116 
-## 27 3 140 age 0.05340585 
-## 28 3 145 age 0.03442817 
-## 29 3 150 age 0.02805355 
-## 30 3 155 age 0.03271991 
-## 31 3 160 age 0.04334077 
-## 32 3 165 age 0.03670621 
-## 33 3 170 age 0.03176882 
-## 34 3 175 age 0.02797582 
-## 35 3 180 age 0.04377991 
-## 36 3 185 age 0.02965952 
-## 37 3 190 age 0.03530327 
-## 38 3 195 age 0.02034863 
-## 39 3 200 age 0.03757573</code></pre>
+<pre><code>## 1 3 10 age 0.04889853 
+## 2 3 15 age 0.0333789 
+## 3 3 20 age 0.0342367 
+## 4 3 25 age 0.03374179 
+## 5 3 30 age 0.0262123 
+## 6 3 35 age 0.04064533 
+## 7 3 40 age 0.02199373 
+## 8 3 45 age 0.02941588 
+## 9 3 50 age 0.03329656 
+## 10 3 55 age 0.04231893 
+## 11 3 60 age 0.02646847 
+## 12 3 65 age 0.02440652 
+## 13 3 70 age 0.02891246 
+## 14 3 75 age 0.03267409 
+## 15 3 80 age 0.03239447 
+## 16 3 85 age 0.02196678 
+## 17 3 90 age 0.03385246 
+## 18 3 95 age 0.02933737 
+## 19 3 100 age 0.03358477 
+## 20 3 105 age 0.03097656 
+## 21 3 110 age 0.02500413 
+## 22 3 115 age 0.02815196 
+## 23 3 120 age 0.03147693 
+## 24 3 125 age 0.03036753 
+## 25 3 130 age 0.032164 
+## 26 3 135 age 0.02470165 
+## 27 3 140 age 0.02814363 
+## 28 3 145 age 0.02810798 
+## 29 3 150 age 0.02787117 
+## 30 3 155 age 0.03096726 
+## 31 3 160 age 0.01842522 
+## 32 3 165 age 0.033381 
+## 33 3 170 age 0.01740461 
+## 34 3 175 age 0.02491238 
+## 35 3 180 age 0.02051467 
+## 36 3 185 age 0.02398346 
+## 37 3 190 age 0.04251476 
+## 38 3 195 age 0.01556508 
+## 39 3 200 age 0.02496206</code></pre>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
-<pre><code>## 1 5 10 married 0.07766958 
-## 2 5 15 married 0.07689595 
-## 3 5 20 married 0.04197932 
-## 4 5 25 married 0.02731548 
-## 5 5 30 married 0.02546879 
-## 6 5 35 married 0.05798646 
-## 7 5 40 married 0.02991558 
-## 8 5 45 married 0.0247856 
-## 9 5 50 married 0.04279186 
-## 10 5 55 married 0.0316752 
-## 11 5 60 married 0.04097558 
-## 12 5 65 married 0.03041101 
-## 13 5 70 married 0.0266947 
-## 14 5 75 married 0.02432966 
-## 15 5 80 married 0.03537033 
-## 16 5 85 married 0.02280966 
-## 17 5 90 married 0.04760328 
-## 18 5 95 married 0.03952596 
-## 19 5 100 married 0.03668578 
-## 20 5 105 married 0.02566679 
-## 21 5 110 married 0.05612692 
-## 22 5 115 married 0.04484489 
-## 23 5 120 married 0.03767158 
-## 24 5 125 married 0.03299078 
-## 25 5 130 married 0.02312951 
-## 26 5 135 married 0.04231115 
-## 27 5 140 married 0.01739545 
-## 28 5 145 married 0.01917237 
-## 29 5 150 married 0.02559492 
-## 30 5 155 married 0.02966021 
-## 31 5 160 married 0.03650651 
-## 32 5 165 married 0.0404065 
-## 33 5 170 married 0.02817811 
-## 34 5 175 married 0.0345113 
-## 35 5 180 married 0.02026841 
-## 36 5 185 married 0.03283529 
-## 37 5 190 married 0.03153192 
-## 38 5 195 married 0.01984509 
-## 39 5 200 married 0.01652906</code></pre>
+<pre><code>## 1 5 10 married 0.08003671 
+## 2 5 15 married 0.08112704 
+## 3 5 20 married 0.07591933 
+## 4 5 25 married 0.02443801 
+## 5 5 30 married 0.0319745 
+## 6 5 35 married 0.04175146 
+## 7 5 40 married 0.02661096 
+## 8 5 45 married 0.04554289 
+## 9 5 50 married 0.03071732 
+## 10 5 55 married 0.05223476 
+## 11 5 60 married 0.02440529 
+## 12 5 65 married 0.03349014 
+## 13 5 70 married 0.0178443 
+## 14 5 75 married 0.0454924 
+## 15 5 80 married 0.03497378 
+## 16 5 85 married 0.02252323 
+## 17 5 90 married 0.02184668 
+## 18 5 95 married 0.02482914 
+## 19 5 100 married 0.02772831 
+## 20 5 105 married 0.03464813 
+## 21 5 110 married 0.02787378 
+## 22 5 115 married 0.02851713 
+## 23 5 120 married 0.01985162 
+## 24 5 125 married 0.0348737 
+## 25 5 130 married 0.0182607 
+## 26 5 135 married 0.04722555 
+## 27 5 140 married 0.02406777 
+## 28 5 145 married 0.02159373 
+## 29 5 150 married 0.02711026 
+## 30 5 155 married 0.02182442 
+## 31 5 160 married 0.03337866 
+## 32 5 165 married 0.03255615 
+## 33 5 170 married 0.04060644 
+## 34 5 175 married 0.02920097 
+## 35 5 180 married 0.01737628 
+## 36 5 185 married 0.03341343 
+## 37 5 190 married 0.03664696 
+## 38 5 195 married 0.01693399 
+## 39 5 200 married 0.03351795</code></pre>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-4-4.png" width="672" /></p>
-<pre><code>## 1 6 10 educ 0.02442119 
-## 2 6 15 educ 0.0369141 
-## 3 6 20 educ 0.04578768 
-## 4 6 25 educ 0.03130477 
-## 5 6 30 educ 0.02978334 
-## 6 6 35 educ 0.03611878 
-## 7 6 40 educ 0.02760543 
-## 8 6 45 educ 0.0381212 
-## 9 6 50 educ 0.02527684 
-## 10 6 55 educ 0.02679559 
-## 11 6 60 educ 0.04416787 
-## 12 6 65 educ 0.02153537 
-## 13 6 70 educ 0.03396963 
-## 14 6 75 educ 0.05003604 
-## 15 6 80 educ 0.03056716 
-## 16 6 85 educ 0.03726238 
-## 17 6 90 educ 0.0339134 
-## 18 6 95 educ 0.0337129 
-## 19 6 100 educ 0.01643456 
-## 20 6 105 educ 0.02879363 
-## 21 6 110 educ 0.03033641 
-## 22 6 115 educ 0.03758668 
-## 23 6 120 educ 0.025365 
-## 24 6 125 educ 0.02202368 
-## 25 6 130 educ 0.02065265 
-## 26 6 135 educ 0.02460571 
-## 27 6 140 educ 0.03723142 
-## 28 6 145 educ 0.02011694 
-## 29 6 150 educ 0.02697472 
-## 30 6 155 educ 0.01930626 
-## 31 6 160 educ 0.02554213 
-## 32 6 165 educ 0.02691153 
-## 33 6 170 educ 0.03209842 
-## 34 6 175 educ 0.01904031 
-## 35 6 180 educ 0.02797094 
-## 36 6 185 educ 0.03443833 
-## 37 6 190 educ 0.04285174 
-## 38 6 195 educ 0.02854382 
-## 39 6 200 educ 0.0364633</code></pre>
+<pre><code>## 1 6 10 educ 0.04475072 
+## 2 6 15 educ 0.03450972 
+## 3 6 20 educ 0.02775592 
+## 4 6 25 educ 0.03869305 
+## 5 6 30 educ 0.04193179 
+## 6 6 35 educ 0.03238733 
+## 7 6 40 educ 0.01458553 
+## 8 6 45 educ 0.01811879 
+## 9 6 50 educ 0.0341196 
+## 10 6 55 educ 0.02272701 
+## 11 6 60 educ 0.02603288 
+## 12 6 65 educ 0.04735056 
+## 13 6 70 educ 0.03183593 
+## 14 6 75 educ 0.01869219 
+## 15 6 80 educ 0.03753404 
+## 16 6 85 educ 0.02056032 
+## 17 6 90 educ 0.04190693 
+## 18 6 95 educ 0.02259245 
+## 19 6 100 educ 0.03023099 
+## 20 6 105 educ 0.02481418 
+## 21 6 110 educ 0.02633739 
+## 22 6 115 educ 0.02843427 
+## 23 6 120 educ 0.04045806 
+## 24 6 125 educ 0.04780918 
+## 25 6 130 educ 0.01912311 
+## 26 6 135 educ 0.01853027 
+## 27 6 140 educ 0.02735125 
+## 28 6 145 educ 0.04431757 
+## 29 6 150 educ 0.01973153 
+## 30 6 155 educ 0.03324462 
+## 31 6 160 educ 0.02768621 
+## 32 6 165 educ 0.04544438 
+## 33 6 170 educ 0.02505805 
+## 34 6 175 educ 0.03278507 
+## 35 6 180 educ 0.03625556 
+## 36 6 185 educ 0.03020413 
+## 37 6 190 educ 0.02642162 
+## 38 6 195 educ 0.03662061 
+## 39 6 200 educ 0.02296005</code></pre>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-4-5.png" width="672" /></p>
-<pre><code>## 1 7 10 illness 0.0495483 
-## 2 7 15 illness 0.07553944 
-## 3 7 20 illness 0.06727432 
-## 4 7 25 illness 0.039403 
-## 5 7 30 illness 0.05484281 
-## 6 7 35 illness 0.03270475 
-## 7 7 40 illness 0.04136437 
-## 8 7 45 illness 0.05485486 
-## 9 7 50 illness 0.0339591 
-## 10 7 55 illness 0.03680073 
-## 11 7 60 illness 0.047732 
-## 12 7 65 illness 0.06885375 
-## 13 7 70 illness 0.0484034 
-## 14 7 75 illness 0.04025948 
-## 15 7 80 illness 0.01761142 
-## 16 7 85 illness 0.03115657 
-## 17 7 90 illness 0.04050294 
-## 18 7 95 illness 0.04524012 
-## 19 7 100 illness 0.02397938 
-## 20 7 105 illness 0.03064558 
-## 21 7 110 illness 0.02649993 
-## 22 7 115 illness 0.02289549 
-## 23 7 120 illness 0.04406765 
-## 24 7 125 illness 0.01941848 
-## 25 7 130 illness 0.03897186 
-## 26 7 135 illness 0.04261174 
-## 27 7 140 illness 0.05024244 
-## 28 7 145 illness 0.02604727 
-## 29 7 150 illness 0.0243997 
-## 30 7 155 illness 0.03369603 
-## 31 7 160 illness 0.0351548 
-## 32 7 165 illness 0.02363816 
-## 33 7 170 illness 0.02615788 
-## 34 7 175 illness 0.02895967 
-## 35 7 180 illness 0.0231767 
-## 36 7 185 illness 0.0395803 
-## 37 7 190 illness 0.0196493 
-## 38 7 195 illness 0.02488213 
-## 39 7 200 illness 0.03072223</code></pre>
+<pre><code>## 1 7 10 illness 0.06028727 
+## 2 7 15 illness 0.06617745 
+## 3 7 20 illness 0.05418451 
+## 4 7 25 illness 0.04258367 
+## 5 7 30 illness 0.04758214 
+## 6 7 35 illness 0.02793043 
+## 7 7 40 illness 0.04342794 
+## 8 7 45 illness 0.03242897 
+## 9 7 50 illness 0.04152551 
+## 10 7 55 illness 0.04417311 
+## 11 7 60 illness 0.03658554 
+## 12 7 65 illness 0.05455976 
+## 13 7 70 illness 0.03067467 
+## 14 7 75 illness 0.03680577 
+## 15 7 80 illness 0.05240894 
+## 16 7 85 illness 0.03589984 
+## 17 7 90 illness 0.02924712 
+## 18 7 95 illness 0.04656536 
+## 19 7 100 illness 0.02737017 
+## 20 7 105 illness 0.01856022 
+## 21 7 110 illness 0.02954204 
+## 22 7 115 illness 0.03922701 
+## 23 7 120 illness 0.03211209 
+## 24 7 125 illness 0.033415 
+## 25 7 130 illness 0.03584372 
+## 26 7 135 illness 0.04404039 
+## 27 7 140 illness 0.0448163 
+## 28 7 145 illness 0.03002282 
+## 29 7 150 illness 0.02313312 
+## 30 7 155 illness 0.03577317 
+## 31 7 160 illness 0.02945657 
+## 32 7 165 illness 0.02967855 
+## 33 7 170 illness 0.02159768 
+## 34 7 175 illness 0.03232604 
+## 35 7 180 illness 0.02339788 
+## 36 7 185 illness 0.03159474 
+## 37 7 190 illness 0.01612483 
+## 38 7 195 illness 0.02200279 
+## 39 7 200 illness 0.01996372</code></pre>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-4-6.png" width="672" /></p>
-<pre><code>## 1 8 10 injury 0.5708244 
-## 2 8 15 injury 0.5506738 
-## 3 8 20 injury 0.5234225 
-## 4 8 25 injury 0.5040409 
-## 5 8 30 injury 0.4666167 
-## 6 8 35 injury 0.4574701 
-## 7 8 40 injury 0.4343682 
-## 8 8 45 injury 0.4334686 
-## 9 8 50 injury 0.3982207 
-## 10 8 55 injury 0.3799664 
-## 11 8 60 injury 0.3853136 
-## 12 8 65 injury 0.3818913 
-## 13 8 70 injury 0.3751098 
-## 14 8 75 injury 0.3778316 
-## 15 8 80 injury 0.3750655 
-## 16 8 85 injury 0.3745797 
-## 17 8 90 injury 0.3777972 
-## 18 8 95 injury 0.3771116 
-## 19 8 100 injury 0.2733045 
-## 20 8 105 injury 0.3786382 
-## 21 8 110 injury 0.2624557 
-## 22 8 115 injury 0.2287668 
-## 23 8 120 injury 0.2440037 
-## 24 8 125 injury 0.2251326 
-## 25 8 130 injury 0.2101805 
-## 26 8 135 injury 0.2290993 
-## 27 8 140 injury 0.1945024 
-## 28 8 145 injury 0.1948162 
-## 29 8 150 injury 0.3763687 
-## 30 8 155 injury 0.3731588 
-## 31 8 160 injury 0.3705809 
-## 32 8 165 injury 0.37421 
-## 33 8 170 injury 0.3731425 
-## 34 8 175 injury 0.3705177 
-## 35 8 180 injury 0.1358498 
-## 36 8 185 injury 0.139248 
-## 37 8 190 injury 0.1468159 
-## 38 8 195 injury 0.1476047 
-## 39 8 200 injury 0.1283169</code></pre>
+<pre><code>## 1 8 10 injury 0.568341 
+## 2 8 15 injury 0.5482434 
+## 3 8 20 injury 0.5134945 
+## 4 8 25 injury 0.5063285 
+## 5 8 30 injury 0.4732156 
+## 6 8 35 injury 0.4604921 
+## 7 8 40 injury 0.4172019 
+## 8 8 45 injury 0.423203 
+## 9 8 50 injury 0.3993693 
+## 10 8 55 injury 0.3836096 
+## 11 8 60 injury 0.3813194 
+## 12 8 65 injury 0.3737819 
+## 13 8 70 injury 0.3826188 
+## 14 8 75 injury 0.3804098 
+## 15 8 80 injury 0.3794398 
+## 16 8 85 injury 0.3756174 
+## 17 8 90 injury 0.3775315 
+## 18 8 95 injury 0.3786349 
+## 19 8 100 injury 0.272582 
+## 20 8 105 injury 0.2601107 
+## 21 8 110 injury 0.2475698 
+## 22 8 115 injury 0.2424674 
+## 23 8 120 injury 0.2456849 
+## 24 8 125 injury 0.223694 
+## 25 8 130 injury 0.2107709 
+## 26 8 135 injury 0.2091322 
+## 27 8 140 injury 0.1793541 
+## 28 8 145 injury 0.3743702 
+## 29 8 150 injury 0.3738577 
+## 30 8 155 injury 0.3735158 
+## 31 8 160 injury 0.3737635 
+## 32 8 165 injury 0.371514 
+## 33 8 170 injury 0.3726705 
+## 34 8 175 injury 0.2792913 
+## 35 8 180 injury 0.1522594 
+## 36 8 185 injury 0.3765746 
+## 37 8 190 injury 0.1235285 
+## 38 8 195 injury 0.129468 
+## 39 8 200 injury 0.1202149</code></pre>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-4-7.png" width="672" /></p>
-<pre><code>## 1 9 10 illdays 0.1201853 
-## 2 9 15 illdays 0.1189809 
-## 3 9 20 illdays 0.1092106 
-## 4 9 25 illdays 0.06463426 
-## 5 9 30 illdays 0.08657401 
-## 6 9 35 illdays 0.06508944 
-## 7 9 40 illdays 0.07391458 
-## 8 9 45 illdays 0.06591695 
-## 9 9 50 illdays 0.06305761 
-## 10 9 55 illdays 0.04809549 
-## 11 9 60 illdays 0.04433832 
-## 12 9 65 illdays 0.0623081 
-## 13 9 70 illdays 0.05754355 
-## 14 9 75 illdays 0.03083813 
-## 15 9 80 illdays 0.03217911 
-## 16 9 85 illdays 0.02826183 
-## 17 9 90 illdays 0.05968018 
-## 18 9 95 illdays 0.06617412 
-## 19 9 100 illdays 0.05519053 
-## 20 9 105 illdays 0.02827084 
-## 21 9 110 illdays 0.03396736 
-## 22 9 115 illdays 0.05930657 
-## 23 9 120 illdays 0.0547335 
-## 24 9 125 illdays 0.04082126 
-## 25 9 130 illdays 0.04465386 
-## 26 9 135 illdays 0.03225221 
-## 27 9 140 illdays 0.03251059 
-## 28 9 145 illdays 0.04622059 
-## 29 9 150 illdays 0.03903891 
-## 30 9 155 illdays 0.04166697 
-## 31 9 160 illdays 0.04741654 
-## 32 9 165 illdays 0.03316501 
-## 33 9 170 illdays 0.02965199 
-## 34 9 175 illdays 0.06060091 
-## 35 9 180 illdays 0.04076304 
-## 36 9 185 illdays 0.03211816 
-## 37 9 190 illdays 0.04682974 
-## 38 9 195 illdays 0.02838235 
-## 39 9 200 illdays 0.02412357</code></pre>
+<pre><code>## 1 9 10 illdays 0.1441485 
+## 2 9 15 illdays 0.08705726 
+## 3 9 20 illdays 0.1017823 
+## 4 9 25 illdays 0.07530396 
+## 5 9 30 illdays 0.07308164 
+## 6 9 35 illdays 0.05277106 
+## 7 9 40 illdays 0.0776147 
+## 8 9 45 illdays 0.05755379 
+## 9 9 50 illdays 0.05886493 
+## 10 9 55 illdays 0.04433873 
+## 11 9 60 illdays 0.05055045 
+## 12 9 65 illdays 0.05896533 
+## 13 9 70 illdays 0.04157788 
+## 14 9 75 illdays 0.04875478 
+## 15 9 80 illdays 0.04655239 
+## 16 9 85 illdays 0.04464605 
+## 17 9 90 illdays 0.03973803 
+## 18 9 95 illdays 0.03042397 
+## 19 9 100 illdays 0.03748827 
+## 20 9 105 illdays 0.04070339 
+## 21 9 110 illdays 0.05453154 
+## 22 9 115 illdays 0.0531761 
+## 23 9 120 illdays 0.03034308 
+## 24 9 125 illdays 0.03180225 
+## 25 9 130 illdays 0.03001389 
+## 26 9 135 illdays 0.04020668 
+## 27 9 140 illdays 0.02791516 
+## 28 9 145 illdays 0.04742953 
+## 29 9 150 illdays 0.04776347 
+## 30 9 155 illdays 0.0470352 
+## 31 9 160 illdays 0.03036372 
+## 32 9 165 illdays 0.03903903 
+## 33 9 170 illdays 0.04115633 
+## 34 9 175 illdays 0.0491442 
+## 35 9 180 illdays 0.04406626 
+## 36 9 185 illdays 0.04455724 
+## 37 9 190 illdays 0.02676404 
+## 38 9 195 illdays 0.04416185 
+## 39 9 200 illdays 0.03654161</code></pre>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-4-8.png" width="672" /></p>
-<pre><code>## 1 10 10 actdays 0.4820809 
-## 2 10 15 actdays 0.4795024 
-## 3 10 20 actdays 0.4755247 
-## 4 10 25 actdays 0.4493262 
-## 5 10 30 actdays 0.4326796 
-## 6 10 35 actdays 0.4694989 
-## 7 10 40 actdays 0.5933227 
-## 8 10 45 actdays 0.6086347 
-## 9 10 50 actdays 0.5351186 
-## 10 10 55 actdays 0.5179336 
-## 11 10 60 actdays 0.5104708 
-## 12 10 65 actdays 0.4780555 
-## 13 10 70 actdays 0.4627004 
-## 14 10 75 actdays 0.4460461 
-## 15 10 80 actdays 0.4645414 
-## 16 10 85 actdays 0.4324279 
-## 17 10 90 actdays 0.4119209 
-## 18 10 95 actdays 0.4180139 
-## 19 10 100 actdays 0.3726742 
-## 20 10 105 actdays 0.3995021 
-## 21 10 110 actdays 0.4013277 
-## 22 10 115 actdays 0.3753143 
-## 23 10 120 actdays 0.3484557 
-## 24 10 125 actdays 0.3674577 
-## 25 10 130 actdays 0.3429206 
-## 26 10 135 actdays 0.3668906 
-## 27 10 140 actdays 0.3215619 
-## 28 10 145 actdays 0.3150897 
-## 29 10 150 actdays 0.3014786 
-## 30 10 155 actdays 0.2739514 
-## 31 10 160 actdays 0.2904161 
-## 32 10 165 actdays 0.3075803 
-## 33 10 170 actdays 0.3092657 
-## 34 10 175 actdays 0.2735007 
-## 35 10 180 actdays 0.2672726 
-## 36 10 185 actdays 0.2575972 
-## 37 10 190 actdays 0.2689494 
-## 38 10 195 actdays 0.2623027 
-## 39 10 200 actdays 0.2672</code></pre>
+<pre><code>## 1 10 10 actdays 0.4905559 
+## 2 10 15 actdays 0.4800671 
+## 3 10 20 actdays 0.4933863 
+## 4 10 25 actdays 0.4503846 
+## 5 10 30 actdays 0.4706007 
+## 6 10 35 actdays 0.4646276 
+## 7 10 40 actdays 0.5990638 
+## 8 10 45 actdays 0.4370334 
+## 9 10 50 actdays 0.5371124 
+## 10 10 55 actdays 0.5380369 
+## 11 10 60 actdays 0.5183559 
+## 12 10 65 actdays 0.4786836 
+## 13 10 70 actdays 0.4685964 
+## 14 10 75 actdays 0.4603343 
+## 15 10 80 actdays 0.4439715 
+## 16 10 85 actdays 0.4340348 
+## 17 10 90 actdays 0.4114707 
+## 18 10 95 actdays 0.4018715 
+## 19 10 100 actdays 0.3900954 
+## 20 10 105 actdays 0.3926266 
+## 21 10 110 actdays 0.3872283 
+## 22 10 115 actdays 0.3536099 
+## 23 10 120 actdays 0.3877258 
+## 24 10 125 actdays 0.3523966 
+## 25 10 130 actdays 0.3434651 
+## 26 10 135 actdays 0.3116938 
+## 27 10 140 actdays 0.3431087 
+## 28 10 145 actdays 0.3144191 
+## 29 10 150 actdays 0.3106292 
+## 30 10 155 actdays 0.2911569 
+## 31 10 160 actdays 0.2988649 
+## 32 10 165 actdays 0.2999433 
+## 33 10 170 actdays 0.2811199 
+## 34 10 175 actdays 0.2800829 
+## 35 10 180 actdays 0.2681528 
+## 36 10 185 actdays 0.2582718 
+## 37 10 190 actdays 0.2524747 
+## 38 10 195 actdays 0.2425603 
+## 39 10 200 actdays 0.2476336</code></pre>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-4-9.png" width="672" /></p>
-<pre><code>## 1 11 10 insurance 0.3704532 
-## 2 11 15 insurance 0.1248356 
-## 3 11 20 insurance 0.09372333 
-## 4 11 25 insurance 0.08411136 
-## 5 11 30 insurance 0.0665754 
-## 6 11 35 insurance 0.02369982 
-## 7 11 40 insurance 0.04942983 
-## 8 11 45 insurance 0.04272258 
-## 9 11 50 insurance 0.04540087 
-## 10 11 55 insurance 0.0250178 
-## 11 11 60 insurance 0.03227212 
-## 12 11 65 insurance 0.03716307 
-## 13 11 70 insurance 0.02513862 
-## 14 11 75 insurance 0.02449695 
-## 15 11 80 insurance 0.03306872 
-## 16 11 85 insurance 0.02655837 
-## 17 11 90 insurance 0.0297081 
-## 18 11 95 insurance 0.02916112 
-## 19 11 100 insurance 0.02468415 
-## 20 11 105 insurance 0.02960588 
-## 21 11 110 insurance 0.03369973 
-## 22 11 115 insurance 0.05416351 
-## 23 11 120 insurance 0.0300696 
-## 24 11 125 insurance 0.03296473 
-## 25 11 130 insurance 0.04512319 
-## 26 11 135 insurance 0.02987727 
-## 27 11 140 insurance 0.0284041 
-## 28 11 145 insurance 0.03788011 
-## 29 11 150 insurance 0.02680373 
-## 30 11 155 insurance 0.03212679 
-## 31 11 160 insurance 0.03365495 
-## 32 11 165 insurance 0.05150302 
-## 33 11 170 insurance 0.05028667 
-## 34 11 175 insurance 0.02987331 
-## 35 11 180 insurance 0.02616723 
-## 36 11 185 insurance 0.03203886 
-## 37 11 190 insurance 0.0284823 
-## 38 11 195 insurance 0.03632698 
-## 39 11 200 insurance 0.0404972</code></pre>
+<pre><code>## 1 11 10 insurance 0.3743033 
+## 2 11 15 insurance 0.1021974 
+## 3 11 20 insurance 0.09504401 
+## 4 11 25 insurance 0.08369629 
+## 5 11 30 insurance 0.08422666 
+## 6 11 35 insurance 0.06504602 
+## 7 11 40 insurance 0.06259868 
+## 8 11 45 insurance 0.06869816 
+## 9 11 50 insurance 0.04468823 
+## 10 11 55 insurance 0.03692131 
+## 11 11 60 insurance 0.04635409 
+## 12 11 65 insurance 0.03429364 
+## 13 11 70 insurance 0.04621357 
+## 14 11 75 insurance 0.05014793 
+## 15 11 80 insurance 0.05445153 
+## 16 11 85 insurance 0.03120093 
+## 17 11 90 insurance 0.04104692 
+## 18 11 95 insurance 0.01878072 
+## 19 11 100 insurance 0.03609514 
+## 20 11 105 insurance 0.04983171 
+## 21 11 110 insurance 0.01266768 
+## 22 11 115 insurance 0.02567927 
+## 23 11 120 insurance 0.03140275 
+## 24 11 125 insurance 0.03507118 
+## 25 11 130 insurance 0.02579087 
+## 26 11 135 insurance 0.02749478 
+## 27 11 140 insurance 0.04100802 
+## 28 11 145 insurance 0.0370777 
+## 29 11 150 insurance 0.03188051 
+## 30 11 155 insurance 0.02702248 
+## 31 11 160 insurance 0.02379372 
+## 32 11 165 insurance 0.03730831 
+## 33 11 170 insurance 0.02918881 
+## 34 11 175 insurance 0.03972806 
+## 35 11 180 insurance 0.03936151 
+## 36 11 185 insurance 0.02570101 
+## 37 11 190 insurance 0.04231216 
+## 38 11 195 insurance 0.03820159 
+## 39 11 200 insurance 0.02001826</code></pre>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-4-10.png" width="672" /></p>
-<pre><code>## 1 12 10 commune 0.01951257 
-## 2 12 15 commune 0.02838196 
-## 3 12 20 commune 0.03097052 
-## 4 12 25 commune 0.03221967 
-## 5 12 30 commune 0.03276158 
-## 6 12 35 commune 0.04287274 
-## 7 12 40 commune 0.02918231 
-## 8 12 45 commune 0.03321548 
-## 9 12 50 commune 0.023123 
-## 10 12 55 commune 0.03331904 
-## 11 12 60 commune 0.02683258 
-## 12 12 65 commune 0.03710526 
-## 13 12 70 commune 0.03110304 
-## 14 12 75 commune 0.03866229 
-## 15 12 80 commune 0.02898625 
-## 16 12 85 commune 0.03445611 
-## 17 12 90 commune 0.03266507 
-## 18 12 95 commune 0.03205339 
-## 19 12 100 commune 0.04171347 
-## 20 12 105 commune 0.05353885 
-## 21 12 110 commune 0.0278453 
-## 22 12 115 commune 0.02493967 
-## 23 12 120 commune 0.02759683 
-## 24 12 125 commune 0.02784632 
-## 25 12 130 commune 0.02862106 
-## 26 12 135 commune 0.02693666 
-## 27 12 140 commune 0.02834403 
-## 28 12 145 commune 0.03235948 
-## 29 12 150 commune 0.03280565 
-## 30 12 155 commune 0.03042818 
-## 31 12 160 commune 0.02873496 
-## 32 12 165 commune 0.0394425 
-## 33 12 170 commune 0.02233814 
-## 34 12 175 commune 0.03317316 
-## 35 12 180 commune 0.04371201 
-## 36 12 185 commune 0.01431567 
-## 37 12 190 commune 0.0314957 
-## 38 12 195 commune 0.03235681 
-## 39 12 200 commune 0.02800398</code></pre>
+<pre><code>## 1 12 10 commune 0.02635862 
+## 2 12 15 commune 0.04266241 
+## 3 12 20 commune 0.04079995 
+## 4 12 25 commune 0.02093696 
+## 5 12 30 commune 0.03398826 
+## 6 12 35 commune 0.02919158 
+## 7 12 40 commune 0.0438724 
+## 8 12 45 commune 0.03980876 
+## 9 12 50 commune 0.0301956 
+## 10 12 55 commune 0.02571833 
+## 11 12 60 commune 0.05945502 
+## 12 12 65 commune 0.03874077 
+## 13 12 70 commune 0.02526869 
+## 14 12 75 commune 0.02370318 
+## 15 12 80 commune 0.03955813 
+## 16 12 85 commune 0.0275772 
+## 17 12 90 commune 0.04663175 
+## 18 12 95 commune 0.03941225 
+## 19 12 100 commune 0.01748355 
+## 20 12 105 commune 0.04369375 
+## 21 12 110 commune 0.03551313 
+## 22 12 115 commune 0.03539293 
+## 23 12 120 commune 0.02131031 
+## 24 12 125 commune 0.02854803 
+## 25 12 130 commune 0.02758134 
+## 26 12 135 commune 0.02506707 
+## 27 12 140 commune 0.01840941 
+## 28 12 145 commune 0.03240712 
+## 29 12 150 commune 0.02689548 
+## 30 12 155 commune 0.05157151 
+## 31 12 160 commune 0.03061273 
+## 32 12 165 commune 0.0190746 
+## 33 12 170 commune 0.03027934 
+## 34 12 175 commune 0.02247337 
+## 35 12 180 commune 0.03125476 
+## 36 12 185 commune 0.02345656 
+## 37 12 190 commune 0.033996 
+## 38 12 195 commune 0.03803161 
+## 39 12 200 commune 0.02196801</code></pre>
 <p><img src="/post/CLT_orig_files/figure-html/unnamed-chunk-4-11.png" width="672" /></p>
 </div>
-<div id="why-it-works---part-1" class="section level1">
-<h1>Why it works - Part 1</h1>
-<p>Assume <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> exists.
-Define
+<div id="why-it-works---part-111-i-think-this-should-be-a-separate-post-john-its-awesome-but-too-much-in-this-context." class="section level1">
+<h1>Why it works - Part 1<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a> I THINK THIS SHOULD BE A SEPARATE POST JOHN! IT’S AWESOME BUT TOO MUCH IN THIS CONTEXT.</h1>
+<p>Assume <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> exists.<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
+<p>Define
 <span class="math display">\[
 Y_i = \frac{X_i - \mu}{\sigma}
 \]</span>
@@ -722,13 +737,14 @@ Define
 <span class="math display">\[
 Z = \frac{1}{\sqrt{n}} \sum_{i=1}^n Y_i
 \]</span>
-Using properties of expectations and variances it can be shown
+Using properties of expectations and variances it can be shown[^13]
 <span class="math display">\[
 {\mathbb E}(Z) = 0 
 \qquad \mbox{and} \qquad 
 \mbox{Var}(Z) = 1. 
 \]</span>
-We are going to use two special functions</p>
+[^13]: Don’t worry about the maths for now, think about it logically - if you take the mean away from a sum of n random variables n times, then you get zero. Same with the variance but with quadratic equations, basically.</p>
+<p>We are going to use two special functions</p>
 <ul>
 <li><p><strong>Moment generating functions</strong>: The moment generating function (MGF)
 of a RV <span class="math inline">\(X\)</span> as a function of <span class="math inline">\(t\)</span> is defined as
@@ -783,7 +799,7 @@ K_Y&#39;&#39;(0) = \mbox{Var}(Y) = 1.
 \]</span></p>
 <pre class="marginfigure"><code>__L&#39;Hopital&#39;s rule__ (under appropriate conditions) that
 that for differentiable functions $f(x)$ and $g(x)$ 
-that if $\lim_{x\to c} f(x)/g(x),$
+that if $\lim_{x\to c} f(x)/g(x)$
 is an indetermiant form, e.g., $0/0$, $\infty/\infty$
 then
 $$
@@ -818,9 +834,21 @@ Hence, the CGF of <span class="math inline">\(Z\)</span> approaches that of a no
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Children are the ultimate random variables. They have their moments. You can see why we’re obsessed with behaviour.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Our forthcoming parenting book <em>Parenting by the numbers</em> is due out any time now. All we need is a publisher. It’s going to be a hit.<a href="#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p>Remember you need enough kids before they entertain themselves. That’s what we mean about ‘large enough n’: a big enough sample size.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>John, just to get this straight, any time you quote L’Hopital’s rule, it’s not a simple explanation, I’m just saying. - Steph.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Children are the ultimate random variables. They have their moments.
+This is a stats joke and it’s Steph’s fault.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Our forthcoming parenting book <em>Parenting by the numbers</em> is due out
+any time now. All we need is a publisher. It’s going to be a hit.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>We should do a text classifier one day to try and work out who wrote which bits after the fact, John. A key feature for discrimination will be footnotes. - Steph<a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p>Think of this as the assumption that requires the process generating these random numbers not to be too weird.<a href="#fnref5" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p>This is the ‘not totally weird assmumption, Part II’.<a href="#fnref6" class="footnote-back">↩</a></p></li>
+<li id="fn7"><p>This mathematics translates into normal-human readable language roughly as ‘grab the Excel formula <code>AVG()</code>’.<a href="#fnref7" class="footnote-back">↩</a></p></li>
+<li id="fn8"><p>Remember you need enough kids before they entertain themselves.
+That’s what we mean about ‘large enough n’: a big enough sample size.<a href="#fnref8" class="footnote-back">↩</a></p></li>
+<li id="fn9"><p>I want this to be a deep and meaningful metaphor on the synergies and conflicts between the machine learning and statistics disciplines, but I’m running out of laptop battery. Sorry.<a href="#fnref9" class="footnote-back">↩</a></p></li>
+<li id="fn10"><p>There are other use cases, right John?<a href="#fnref10" class="footnote-back">↩</a></p></li>
+<li id="fn11"><p>OK we’re going the full stats on you here. But if maths terrifies you <em>that’s ok</em>. You can use these things without having to engage with the maths. We 100% give you permission to skip over this part if you think it’s boring.<a href="#fnref11" class="footnote-back">↩</a></p></li>
+<li id="fn12"><p>‘Not totally bonkers’ distributional assumptions again. The bonkers ones really do exist.<a href="#fnref12" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

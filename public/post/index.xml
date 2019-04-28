@@ -7,10 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2019 Steph de Silva &amp; John Ormerod</copyright>
-    <lastBuildDate>Thu, 04 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 28 Apr 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How to break a t-test</title>
+      <link>/2019/04/28/how-to-break-a-t-test/</link>
+      <pubDate>Sun, 28 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/04/28/how-to-break-a-t-test/</guid>
+      <description>Intro Banter Steph: How about we take one from the fans this week?
+John: I’m up for it. Let’s go.
+Steph: Here is a question from Dean.
+Ok so dont all jump on this at once, but thoughts on transforming non-normal data to satisfy assumptions of a t-test? #rstats #stats — Dean Marchiori (@deanmarchiori) April 9, 2019   John: Let’s start by reviewing the two sample t-test and then let’s break it.</description>
+    </item>
     
     <item>
       <title>The Central Limit Theorem</title>
@@ -19,7 +31,7 @@
       
       <guid>/2019/04/04/p-values/</guid>
       <description>Why are we here and how did this become a blog about theoretical statistics? Most people find theoretical statistics garbage. Both Steph and John have stopped many a dinner party in its tracks with long and passionate discourses on the subject. However, we’ve both found a lot of value under the years in understanding what’s going on under the hood.
-* When do statistics break? (We like to break things alot around here) * When can we expect them to work?</description>
+ When do statistics break? (We like to break things alot around here.</description>
     </item>
     
     <item>
