@@ -338,42 +338,50 @@ ggsave("DevilDist.png")
 # Do outliers kill the two sample t-test?
 
 $$
-X_i \sim SN\left( -\sqrt{\frac{2}{\pi}}\frac{\alpha}{\sqrt{1 + \alpha^2}}, 1, \alpha\right)
+X_i \sim N(0,1), \qquad 1\le i\le n_X
 $$
-
 and 
 $$
-Y_i \sim B_i N(0,1) + (1 - B_i) N(4,1) \quad \mbox{with} \quad B_i \sim \mbox{Bernoulli}(0.99)
+Y_i \sim \left\{
+\begin{array}{ll}
+N(0,1)+z, & i = 1 \\
+N(0,1), & 2\le i\le n_Y
+\end{array}
+\right.
 $$
-That is the $Y_i$'s except for a set of cases where an outlier
-is normal with mean 4 and variance 1 with 5\% chance.
+where $z$ is the size of the outlier. We will run a simulation
+for a grid of $z$ values and record the proportion of $p$-values
+below $0.05$ as $z$ increases.
+
+ 
 
 ```{r}
-N <- 100000
-nx <- 100
-ny <- 100
+N <- 10000
+nx <- 25
+ny <- 25
 
-t_vec <- c()
-for (i in 1:N)
+zg <- seq(0,20,,100)
+P <- matrix(0,N,length(zg))
+
+for (j in 1:length(zg))
 {
-  x <- rsn(nx,xi=-mu,alpha= alpha)
-  b <- rbinom(ny,1,0.99)
-  y <- b*rnorm(ny) + (1 - b)*rnorm(ny,4,1)
-  t_vec[i] <- t_stat(x,y)
+  t_vec <- c()
+  for (i in 1:N)
+  {
+    x <- rnorm(nx)
+    y <- rnorm(ny)
+    y[1] <- y[1] + zg[j]
+    P[i,j] <- t.test(x,y)$p.value
+  }
 }
-
-p_vec <- 2*pnorm(abs(t_vec),lower.tail=FALSE)
 ```
 
 
 ```{r}
-dens <- density(t_vec) 
-tib1 <- tibble(x=dens$x,y=dens$y,method="simulated")
-tib2 <- tibble(x=dens$x,y=dnorm(dens$x),method="normal")
-tib <- bind_rows(tib1,tib2)   
+tib <- tibble(x=zg,y=apply(P>0.05,2,mean))
 
 g <- tib %>% 
-  ggplot(aes(x=x,y=y,color=method))  +
+  ggplot(aes(x=x,y=y))  +
   geom_line(size=1.5)   
 g
 

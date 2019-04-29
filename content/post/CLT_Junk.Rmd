@@ -1,0 +1,89 @@
+---
+title: "Junk"
+author: "Me"
+date: "29/04/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+# A practical example - John what are we getting at in this section? This is getting really long should we break this material off into a separate post? I think we could have a good 5 minutes read just on this section alone.
+
+
+```{r}
+library(Ecdat)
+
+N <- 1000
+
+trapint <- function(xgrid, fgrid) 
+{
+	ng <- length(xgrid)
+	xvec <- xgrid[2:ng] - xgrid[1:(ng - 1)]
+	fvec <- fgrid[1:(ng - 1)] + fgrid[2:ng]
+	integ <- sum(xvec * fvec)/2
+	return(integ)
+}
+
+X <- VietNamI %>% na.omit()
+
+vn <- seq(10,200,by=5)
+mErr <- matrix(0,length(vn),ncol(X))
+
+for (k in 1:ncol(X))
+{
+  if (is.numeric(X[,k])) {
+    
+    x <- X[,k]
+    n <- length(x)
+    
+    
+    
+    mu <- mean(x)
+    sigma2 <- var(x)
+    
+    
+    for (j in 1:length(vn))
+    {
+      x.bar <- c()
+      for (i in 1:N)
+      {
+        inds <- sample(n,vn[j])
+        x.samp <- x[inds]
+        x.bar[i] <- mean(x.samp)
+      }
+      
+      dens <- density(x.bar)
+      #plot(dens)
+      
+      mu_CLT <- mu
+      sigma2_CLT <- sigma2/vn[j]
+      sigma_CLT <- sqrt(sigma2_CLT)
+      
+      xg <- dens$x
+      yg <- dnorm(xg,mu_CLT,sigma_CLT)
+      #lines(x,y,col="red",lwd=2)
+    
+      mErr[j,k] <- 0.5*trapint(xg,abs(yg - dens$y))
+      
+      cat(j,k,vn[j],colnames(X)[k],mErr[j,k],"\n")
+    }
+    
+    plot(vn,mErr[,k],type="l") 
+  }
+}
+
+```

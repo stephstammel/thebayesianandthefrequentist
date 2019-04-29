@@ -242,3 +242,121 @@ image_write(new_gif,"two_by_three.gif")
 </center>
  
 
+# Why it works - Part 1[^11] I THINK THIS SHOULD BE A SEPARATE POST JOHN! IT'S AWESOME BUT TOO MUCH IN THIS CONTEXT.
+
+[^11]: OK we're going the full stats on you here. But if maths terrifies you _that's ok_. You can use these things without having to engage with the maths. We 100% give you permission to skip over this part if you think it's boring.
+ 
+Assume $\mu$ and $\sigma^2$ exists.[^12]
+
+[^12]: 'Not totally bonkers' distributional assumptions again. The bonkers ones really do exist.
+
+Define
+$$
+Y_i = \frac{X_i - \mu}{\sigma}
+$$
+Define
+$$
+Z = \frac{1}{\sqrt{n}} \sum_{i=1}^n Y_i
+$$
+Using properties of expectations and variances it can be shown[^13]
+$$
+{\mathbb E}(Z) = 0 
+\qquad \mbox{and} \qquad 
+\mbox{Var}(Z) = 1. 
+$$
+[^13]: Don't worry about the maths for now, think about it logically - if you take the mean away from a sum of n random variables n times, then you get zero. Same with the variance but with quadratic equations, basically.
+
+We are going to use two special functions
+
+* __Moment generating functions__: The moment generating function (MGF)
+of a RV $X$ as a function of $t$ is defined as 
+$$
+M_X(t) = {\mathbb E}\left[ \exp(tX) \right]
+$$
+
+* __Cumulant generating functions__: The cumulant generating function (CGF)
+of a RV $X$ as a function of $t$ is defined as 
+$$
+K_X(t) = \log M_X(t)
+$$
+
+Some useful properties of MGFs and CGFs include:
+
+* The MGF and CGF uniquely identify a distribution.
+
+* The CGF for the $X\sim N(0,1)$ is $K_X(t) = t^2/2$.
+
+* $K_Y'(0) = {\mathbb E}(Y)$  and K_Y''(0) = \mbox{Var}(Y)$.
+
+Now the MGF of $Z$ defined above is:
+$$
+\begin{array}{rl}
+M_{Z}(t) 
+& \displaystyle = {\mathbb E}\left[ \exp(tZ) \right]
+& \qquad \mbox{(Definition)}
+\\
+& \displaystyle = {\mathbb E}\left[ \exp\left( \frac{t}{\sqrt{n}} \sum_{i=1}^n Y_i  \right) \right]
+& \qquad \mbox{(Definition)}
+\\
+& \displaystyle = \prod_{i=1}^n {\mathbb E}\left[ \exp\left( \frac{t}{\sqrt{n}}  Y_i  \right) \right]
+& \qquad \mbox{(Independence and properties of exp)}
+\\
+& \displaystyle = \prod_{i=1}^n  \left[  M_Y\left( \frac{t}{\sqrt{n}} \right) \right]^n 
+& \qquad \mbox{(Identically distributed)}
+\end{array} 
+$$
+Hence, the CGF of $Z$ satisfies:
+$$
+\begin{array}{rll}
+K_Z(t) 
+& = \log M_{Z}(t)  & \mbox{(Definition)}
+\\
+& = n \log M_Y\left( \frac{t}{\sqrt{n}} \right) & \mbox{(From Above)}
+\\ 
+& = n K_Y\left( \frac{t}{\sqrt{n}} \right) & \mbox{(Definition)}
+\end{array}
+$$
+
+We can also establish that:
+$$
+K_Y'(0) = {\mathbb E}(Y) = 0 
+\qquad \mbox{and} \qquad 
+K_Y''(0) = \mbox{Var}(Y) = 1. 
+$$
+
+
+```{marginfigure}
+__L'Hopital's rule__ (under appropriate conditions) that
+that for differentiable functions $f(x)$ and $g(x)$ 
+that if $\lim_{x\to c} f(x)/g(x)$
+is an indetermiant form, e.g., $0/0$, $\infty/\infty$
+then
+$$
+\displaystyle \lim_{x\to c} \frac{f(x)}{g(x)} = \lim_{x\to c} \frac{f'(x)}{g'(x)}.
+$$
+  
+assuming the right hand side exists.
+```
+
+Now we use 
+[L'Hopital's rule](https://en.wikipedia.org/wiki/L%27H%C3%B4pital%27s_rule)
+twice to obtain
+$$
+\begin{array}{rl}
+\displaystyle \lim_{n\to\infty} K_Z(t)
+& \displaystyle = \lim_{n\to\infty} n K_Y\left( \frac{t}{\sqrt{n}} \right) 
+\\
+& \displaystyle = \lim_{\Delta\to 0} \frac{ K_Y\left( \Delta t \right)}{\Delta^2} 
+\\
+& \displaystyle = \lim_{\Delta\to 0} \frac{ t K_Y'\left( \Delta t \right)}{2\Delta} \qquad \mbox{(L'Hopital's rule)} 
+\\
+& \displaystyle = \lim_{\Delta\to 0} \frac{ t^2 K_Y''\left( \Delta t \right)}{2} \qquad \mbox{(L'Hopital's rule)}
+\\
+& = \displaystyle \frac{t^2}{2}
+\end{array}
+$$
+
+which is the cumulant generating function of the nomral distribution.
+Hence, the CGF of $Z$ approaches that of a normal distirubiton.
+
+ 

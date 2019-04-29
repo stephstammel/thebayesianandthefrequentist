@@ -132,15 +132,15 @@ We're saying that the mean of this process can't be _infinite_ or _unreal_.[^5]
 
 Based on this set of conditions, we can then start talking about the _sample mean_.
 
-Let $\overline{X}$ denote the average of a sample of the $X_i$'s, i.e.,
+Let $\overline{X}$ denote the average of a sample of the $X_i$'s, i.e.,[^7]
 $$
 \overline{X} = \frac{1}{n}\sum_{i=1}^n X_i.
 $$
-[^7]
+
 
 [^7]: This mathematics translates into normal-human readable language roughly as 'grab the Excel formula `AVG()`'.
 
-Then for for large enough $n$[^8] we have
+Then for for large enough $n$ we have[^8]
 $$
 \overline{X} \stackrel{D}{\to} N\left(\mu,\frac{\sigma^2}{n} \right).
 $$
@@ -210,7 +210,7 @@ Here are our distributions:
 
 * $X_i \sim \mbox{Cauchy}$.
 
-* $X_i \sim B_i \times N(-1,1)  + (1 - B_i) N(1,1)$
+* $X_i \sim B_i \times N(-1,1)  + (1 - B_i) \times N(1,1)$
 where $B_i \sim \mbox{Bernoulli}(1/2)$.
 
 Here's what they look like:
@@ -327,15 +327,33 @@ But that was just one distribution, for one sample size.
 
 We really want to understand what will happen for each of our distributions, over many sample sizes.
 
-<center>
-<img src="two_by_three.gif" style="width:75%">
-</center>
+
+<img src="two_by_three.gif" style="width:250%">
+
 
 
 The code used to create the animation above can be found  
 [here](CLT_supp.html).
 
-# Conclusion - JOHN  I THINK WE SHOULD END IT HERE AND BREAK THE NEXT TWO SUBSECTIONS OFF INTO THEIR OWN POSTS.
+So for some of the cases above we see that it works and others that
+it doesn't.
+
+* It works for the  $\chi_2^2$, Weibull,
+$t_4$, and bimodal cases. That is when the sample size
+gets large enough the CLT approximation closely  matches
+the sampling distribution of $\overline{X}$.
+
+* It donesn't work for the $t_2$, the exact sampling distribution
+of $\overline{X}$ is jumping around in the plot. This is because
+variance of the $t_2$ distribution is not finite (see Assumption 4.)
+
+* It donesn't work for the cauchy distribution. This is because
+neither the mean of the variance exist for this distribution 
+(see Assumptions 4. and 5.)
+ 
+ 
+
+# Conclusion 
 
 So what did we get out of all of this?
 
@@ -345,204 +363,23 @@ So what did we get out of all of this?
 The most important thing to take away from this post is that while the central limit theorem is powerful, generalisable to many different scenarios and is the bedrock of alot of what we do in statistics and machine learning: _it's not infallible_. 
 
 
+There are other bits we would like to discuss. We would like to give a practical
+example, a closer look at rules of thumb for telling when the CLT kicks in,
+and what happens to statistical tests when
 
 
 
 
 
 
-# A practical example - John what are we getting at in this section? This is getting really long should we break this material off into a separate post? I think we could have a good 5 minutes read just on this section alone.
 
 
-```{r}
-library(Ecdat)
-
-N <- 1000
-
-trapint <- function(xgrid, fgrid) 
-{
-	ng <- length(xgrid)
-	xvec <- xgrid[2:ng] - xgrid[1:(ng - 1)]
-	fvec <- fgrid[1:(ng - 1)] + fgrid[2:ng]
-	integ <- sum(xvec * fvec)/2
-	return(integ)
-}
-
-X <- VietNamI %>% na.omit()
-
-vn <- seq(10,200,by=5)
-mErr <- matrix(0,length(vn),ncol(X))
-
-for (k in 1:ncol(X))
-{
-  if (is.numeric(X[,k])) {
-    
-    x <- X[,k]
-    n <- length(x)
-    
-    
-    
-    mu <- mean(x)
-    sigma2 <- var(x)
-    
-    
-    for (j in 1:length(vn))
-    {
-      x.bar <- c()
-      for (i in 1:N)
-      {
-        inds <- sample(n,vn[j])
-        x.samp <- x[inds]
-        x.bar[i] <- mean(x.samp)
-      }
-      
-      dens <- density(x.bar)
-      #plot(dens)
-      
-      mu_CLT <- mu
-      sigma2_CLT <- sigma2/vn[j]
-      sigma_CLT <- sqrt(sigma2_CLT)
-      
-      xg <- dens$x
-      yg <- dnorm(xg,mu_CLT,sigma_CLT)
-      #lines(x,y,col="red",lwd=2)
-    
-      mErr[j,k] <- 0.5*trapint(xg,abs(yg - dens$y))
-      
-      cat(j,k,vn[j],colnames(X)[k],mErr[j,k],"\n")
-    }
-    
-    plot(vn,mErr[,k],type="l") 
-  }
-}
-
-```
 
 
-# Why it works - Part 1[^11] I THINK THIS SHOULD BE A SEPARATE POST JOHN! IT'S AWESOME BUT TOO MUCH IN THIS CONTEXT.
-
-[^11]: OK we're going the full stats on you here. But if maths terrifies you _that's ok_. You can use these things without having to engage with the maths. We 100% give you permission to skip over this part if you think it's boring.
- 
-Assume $\mu$ and $\sigma^2$ exists.[^12]
-
-[^12]: 'Not totally bonkers' distributional assumptions again. The bonkers ones really do exist.
-
-Define
-$$
-Y_i = \frac{X_i - \mu}{\sigma}
-$$
-Define
-$$
-Z = \frac{1}{\sqrt{n}} \sum_{i=1}^n Y_i
-$$
-Using properties of expectations and variances it can be shown[^13]
-$$
-{\mathbb E}(Z) = 0 
-\qquad \mbox{and} \qquad 
-\mbox{Var}(Z) = 1. 
-$$
-[^13]: Don't worry about the maths for now, think about it logically - if you take the mean away from a sum of n random variables n times, then you get zero. Same with the variance but with quadratic equations, basically.
-
-We are going to use two special functions
-
-* __Moment generating functions__: The moment generating function (MGF)
-of a RV $X$ as a function of $t$ is defined as 
-$$
-M_X(t) = {\mathbb E}\left[ \exp(tX) \right]
-$$
-
-* __Cumulant generating functions__: The cumulant generating function (CGF)
-of a RV $X$ as a function of $t$ is defined as 
-$$
-K_X(t) = \log M_X(t)
-$$
-
-Some useful properties of MGFs and CGFs include:
-
-* The MGF and CGF uniquely identify a distribution.
-
-* The CGF for the $X\sim N(0,1)$ is $K_X(t) = t^2/2$.
-
-* $K_Y'(0) = {\mathbb E}(Y)$  and K_Y''(0) = \mbox{Var}(Y)$.
-
-Now the MGF of $Z$ defined above is:
-$$
-\begin{array}{rl}
-M_{Z}(t) 
-& \displaystyle = {\mathbb E}\left[ \exp(tZ) \right]
-& \qquad \mbox{(Definition)}
-\\
-& \displaystyle = {\mathbb E}\left[ \exp\left( \frac{t}{\sqrt{n}} \sum_{i=1}^n Y_i  \right) \right]
-& \qquad \mbox{(Definition)}
-\\
-& \displaystyle = \prod_{i=1}^n {\mathbb E}\left[ \exp\left( \frac{t}{\sqrt{n}}  Y_i  \right) \right]
-& \qquad \mbox{(Independence and properties of exp)}
-\\
-& \displaystyle = \prod_{i=1}^n  \left[  M_Y\left( \frac{t}{\sqrt{n}} \right) \right]^n 
-& \qquad \mbox{(Identically distributed)}
-\end{array} 
-$$
-Hence, the CGF of $Z$ satisfies:
-$$
-\begin{array}{rll}
-K_Z(t) 
-& = \log M_{Z}(t)  & \mbox{(Definition)}
-\\
-& = n \log M_Y\left( \frac{t}{\sqrt{n}} \right) & \mbox{(From Above)}
-\\ 
-& = n K_Y\left( \frac{t}{\sqrt{n}} \right) & \mbox{(Definition)}
-\end{array}
-$$
-
-We can also establish that:
-$$
-K_Y'(0) = {\mathbb E}(Y) = 0 
-\qquad \mbox{and} \qquad 
-K_Y''(0) = \mbox{Var}(Y) = 1. 
-$$
 
 
-```{marginfigure}
-__L'Hopital's rule__ (under appropriate conditions) that
-that for differentiable functions $f(x)$ and $g(x)$ 
-that if $\lim_{x\to c} f(x)/g(x)$
-is an indetermiant form, e.g., $0/0$, $\infty/\infty$
-then
-$$
-\displaystyle \lim_{x\to c} \frac{f(x)}{g(x)} = \lim_{x\to c} \frac{f'(x)}{g'(x)}.
-$$
-  
-assuming the right hand side exists.
-```
-
-Now we use 
-[L'Hopital's rule](https://en.wikipedia.org/wiki/L%27H%C3%B4pital%27s_rule)
-twice to obtain
-$$
-\begin{array}{rl}
-\displaystyle \lim_{n\to\infty} K_Z(t)
-& \displaystyle = \lim_{n\to\infty} n K_Y\left( \frac{t}{\sqrt{n}} \right) 
-\\
-& \displaystyle = \lim_{\Delta\to 0} \frac{ K_Y\left( \Delta t \right)}{\Delta^2} 
-\\
-& \displaystyle = \lim_{\Delta\to 0} \frac{ t K_Y'\left( \Delta t \right)}{2\Delta} \qquad \mbox{(L'Hopital's rule)} 
-\\
-& \displaystyle = \lim_{\Delta\to 0} \frac{ t^2 K_Y''\left( \Delta t \right)}{2} \qquad \mbox{(L'Hopital's rule)}
-\\
-& = \displaystyle \frac{t^2}{2}
-\end{array}
-$$
-
-which is the cumulant generating function of the nomral distribution.
-Hence, the CGF of $Z$ approaches that of a normal distirubiton.
-
- 
 
 
  
-
-<div align="center">
-   <iframe width="560" height="315" src="https://player.vimeo.com/video/75089338" frameborder="0" allowfullscreen>
-   </iframe>
-</div>
+ 
 
